@@ -1,0 +1,22 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+/dataSources/
+/compiler.xml
+/dataSources.local.xml
+/sonarlint/
+/geor_photos_obliques_backend.iml
+/encodings.xml
+/workspace.xml
+/jarRepositories.xml
+/vcs.xml
+/.gitignore
+/uiDesigner.xml
+/jpa-buddy.xml
+/misc.xml
+/dataSources.xml
