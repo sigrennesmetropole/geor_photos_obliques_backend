@@ -1,0 +1,697 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"description": "API Photos Obliques",
+		"version": "1.0.0",
+		"title": "photos-obliques-api",
+		"termsOfService": "http://swagger.io/terms/",
+		"contact": {
+			"email": "thomas.brule@open-groupe.com"
+		},
+		"license": {
+			"name": "Apache 2.0",
+			"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+		}
+	},
+	"paths": {},
+	"components": {
+		"schemas": {
+			"ApiError": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string"
+					},
+					"label": {
+						"type": "string"
+					}
+				}
+			},
+			"ApplicationConfiguration": {
+				"type": "object",
+				"properties": {
+					"version": {
+						"type": "string",
+						"description": "Numéro de version de l'application"
+					},
+					"comment": {
+						"type": "string",
+						"description": "Description de la version de l'application"
+					},
+					"geoserverWorkspace": {
+						"type": "string",
+						"description": "Espace de traval du geoserver"
+					},
+					"geoserverNamespace": {
+						"type": "string",
+						"description": "Espace de nommage du geoserver"
+					},
+					"geoserverDefaultSRID": {
+						"type": "string",
+						"description": "Projection par défaut"
+					}
+				}
+			},
+			"Tokens": {
+				"type": "object",
+				"properties": {
+					"jwt": {
+						"type": "string"
+					},
+					"xToken": {
+						"type": "string"
+					}
+				}
+			},
+			"AbstractId": {
+				"type": "object",
+				"properties": {
+					"uuid": {
+						"type": "string",
+						"format": "uuid",
+						"description": "UUID de l'objet"
+					}
+				}
+			},
+			"AbstractCode": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AbstractId"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"code": {
+								"type": "string",
+								"description": "Code métier de l'objet"
+							}
+						}
+					}
+				]
+			},
+			"AbstractLabelized": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AbstractCode"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"label": {
+								"type": "string",
+								"description": "Libellé long de l'objet métier"
+							}
+						}
+					}
+				]
+			},
+			"AbstractOrdered": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AbstractLabelized"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"order": {
+								"type": "integer",
+								"format": "int32",
+								"description": "Numéro d'ordre pour le tri des éléments. Plus la valeur est faible plus l'élément a une priorité forte"
+							}
+						}
+					}
+				]
+			},
+			"AbstractStamped": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AbstractOrdered"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"openingDate": {
+								"type": "string",
+								"format": "date-time",
+								"description": "Date à partir de laquelle l'élément est actif."
+							},
+							"closingDate": {
+								"type": "string",
+								"format": "date-time",
+								"description": "Date au délà de laquelle l'élément n'est plus actif."
+							}
+						}
+					}
+				]
+			},
+			"AbstractRestricted": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AbstractId"
+					},
+					{
+						"type": "object",
+						"required": [
+							"restricted"
+						],
+						"properties": {
+							"restricted": {
+								"type": "boolean",
+								"description": "indique si une donnée est DR (true) ou NP (false)"
+							}
+						}
+					}
+				]
+			},
+			"HistoricDataType": {
+				"type": "string",
+				"enum": [
+					"CREATE",
+					"REMOVE",
+					"UPDATE",
+					"DELETE",
+					"ADD"
+				]
+			},
+			"HistoricInformation": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"executionId": {
+						"type": "string"
+					},
+					"startTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"endTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"duration": {
+						"type": "integer",
+						"format": "int64"
+					},
+					"activityName": {
+						"type": "string"
+					},
+					"activityType": {
+						"type": "string"
+					},
+					"assignee": {
+						"type": "string"
+					},
+					"deleteReason": {
+						"type": "string"
+					}
+				}
+			},
+			"AsyncStatus": {
+				"type": "string",
+				"enum": [
+					"IN_PROGRESS",
+					"DONE",
+					"ERROR"
+				]
+			},
+			"AsyncInformation": {
+				"type": "object",
+				"properties": {
+					"uuid": {
+						"type": "string",
+						"format": "uuid",
+						"description": "UUID de l'objet"
+					},
+					"status": {
+						"$ref": "#/components/schemas/AsyncStatus",
+						"description": "Etat global"
+					},
+					"message": {
+						"type": "string",
+						"description": "Message d'erreur"
+					},
+					"progression": {
+						"type": "integer",
+						"format": "int32",
+						"description": "Etat d'avancement"
+					}
+				}
+			},
+			"HistoricData": {
+				"type": "object",
+				"description": "Élément d'historique",
+				"properties": {
+					"which": {
+						"description": "UUID de l'élément impacté",
+						"type": "string",
+						"format": "uuid"
+					},
+					"what": {
+						"type": "string",
+						"description": "Action réalisée",
+						"$ref": "#/components/schemas/HistoricDataType"
+					},
+					"when": {
+						"description": "Date et heure de la modification",
+						"type": "string",
+						"format": "date-time"
+					},
+					"who": {
+						"description": "Login de l'auteur de l'action",
+						"type": "string"
+					},
+					"fullWho": {
+						"description": "Libellé complet de l'auteur de l'action",
+						"type": "string"
+					},
+					"whichType": {
+						"description": "Classe de l'objet",
+						"type": "string"
+					}
+				}
+			},
+			"HistoricDataPageResult": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/PageResult"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"elements": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/HistoricData"
+								}
+							}
+						}
+					}
+				]
+			},
+			"PageResult": {
+				"type": "object",
+				"properties": {
+					"total": {
+						"type": "integer",
+						"format": "int64"
+					}
+				}
+			},
+			"ReportItem": {
+				"type": "object",
+				"properties": {
+					"line": {
+						"type": "int"
+					},
+					"message": {
+						"type": "string",
+						"description": "Le message de l'item du rapport"
+					}
+				}
+			},
+			"ReportInformation": {
+				"type": "object",
+				"properties": {
+					"status": {
+						"$ref": "#/components/schemas/AsyncStatus",
+						"description": "Etat global"
+					},
+					"message": {
+						"type": "string",
+						"description": "Le message du rapport"
+					},
+					"items": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ReportItem"
+						}
+					}
+				}
+			},
+			"Role": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AbstractStamped"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"codeLdap": {
+								"type": "string",
+								"description": "Code métier correspondant dans le ldap"
+							}
+						}
+					}
+				]
+			},
+			"FeatureScopeItem": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string"
+					},
+					"mode": {
+						"$ref": "#/components/schemas/FeatureScope"
+					}
+				}
+			},
+			"UserType": {
+				"description": "Type d'utilisateur (personne, robot)",
+				"type": "string",
+				"enum": [
+					"PERSON",
+					"ROBOT"
+				]
+			},
+			"User": {
+				"description": "Utilisateur",
+				"type": "object",
+				"properties": {
+					"uuid": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"login": {
+						"type": "string",
+						"description": "Login de l'utilisateur"
+					},
+					"lastname": {
+						"type": "string",
+						"description": "Nom de l'utilisateur"
+					},
+					"firstname": {
+						"type": "string",
+						"description": "Prénom de l'utilisateur"
+					},
+					"type": {
+						"$ref": "#/components/schemas/UserType",
+						"required": "true"
+					},
+					"email": {
+						"type": "string"
+					},
+					"restricted": {
+						"type": "boolean"
+					},
+					"roles": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"organization": {
+						"type": "string",
+						"description": "Nom de l'organisation de l'utilisateur"
+					}
+				}
+			},
+			"UserCustomConfiguration": {
+				"description": "Configuration Utilisateur",
+				"type": "object",
+				"properties": {
+					"landing_page": {
+						"type": "string"
+					}
+				}
+			},
+			"FeatureScope": {
+				"type": "string",
+				"enum": [
+					"READ",
+					"READ_WRITE",
+					"READ_WRITE_DELETE"
+				]
+			},
+			"Feature": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AbstractStamped"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"availablescope": {
+								"$ref": "#/components/schemas/FeatureScope"
+							}
+						}
+					}
+				]
+			},
+			"RoleFeature": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AbstractId"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"feature": {
+								"$ref": "#/components/schemas/Feature"
+							},
+							"scope": {
+								"$ref": "#/components/schemas/FeatureScope"
+							}
+						}
+					}
+				]
+			},
+			"InternationalAbstract": {
+				"type": "object",
+				"properties": {
+					"fr": {
+						"type": "string"
+					},
+					"en": {
+						"type": "string"
+					},
+					"de": {
+						"type": "string"
+					}
+				}
+			},
+			"LibelleUuidBean": {
+				"type": "object",
+				"properties": {
+					"uuid": {
+						"type": "string",
+						"format": "uuid",
+						"description": "Identifiant de l'objet."
+					},
+					"libelle": {
+						"type": "string",
+						"description": "Libelle de l'objet."
+					}
+				}
+			},
+			"LibelleCodeUuidBean": {
+				"type": "object",
+				"properties": {
+					"uuid": {
+						"type": "string",
+						"format": "uuid",
+						"description": "Identifiant de l'objet."
+					},
+					"libelle": {
+						"type": "string",
+						"description": "Libelle de l'objet."
+					},
+					"code": {
+						"type": "string",
+						"description": "Code de l'objet."
+					}
+				}
+			},
+			"GeographicType": {
+				"type": "string",
+				"description": "Type géographic",
+				"enum": [
+					"POINT",
+					"LINE",
+					"POLYGON"
+				]
+			},
+			"GeometryType": {
+				"type": "string",
+				"description": "the geometry type",
+				"enum": [
+					"Point",
+					"LineString",
+					"Polygon",
+					"MultiPoint",
+					"MultiLineString",
+					"MultiPolygon"
+				]
+			},
+			"Geometry": {
+				"type": "object",
+				"description": "GeoJSon geometry",
+				"discriminator": {
+					"propertyName": "type"
+				},
+				"properties": {
+					"type": {
+						"type": "object",
+						"$ref": "#/components/schemas/GeometryType"
+					}
+				}
+			},
+			"Point2D": {
+				"type": "array",
+				"maxItems": 2,
+				"minItems": 2,
+				"items": {
+					"type": "number"
+				}
+			},
+			"Point": {
+				"type": "object",
+				"description": "GeoJSon geometry",
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/Geometry"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"coordinates": {
+								"$ref": "#/components/schemas/Point2D"
+							}
+						}
+					}
+				]
+			},
+			"LineString": {
+				"type": "object",
+				"description": "GeoJSon geometry",
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/Geometry"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"coordinates": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/Point2D"
+								}
+							}
+						}
+					}
+				]
+			},
+			"Polygon": {
+				"type": "object",
+				"description": "GeoJSon geometry",
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/Geometry"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"coordinates": {
+								"type": "array",
+								"items": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Point2D"
+									}
+								}
+							}
+						}
+					}
+				]
+			},
+			"MultiPoint": {
+				"type": "object",
+				"description": "GeoJSon geometry",
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/Geometry"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"coordinates": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/Point2D"
+								}
+							}
+						}
+					}
+				]
+			},
+			"MultiLineString": {
+				"type": "object",
+				"description": "GeoJSon geometry",
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/Geometry"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"coordinates": {
+								"type": "array",
+								"items": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Point2D"
+									}
+								}
+							}
+						}
+					}
+				]
+			},
+			"MultiPolygon": {
+				"type": "object",
+				"description": "GeoJSon geometry",
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/Geometry"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"coordinates": {
+								"type": "array",
+								"items": {
+									"type": "array",
+									"items": {
+										"type": "array",
+										"items": {
+											"$ref": "#/components/schemas/Point2D"
+										}
+									}
+								}
+							}
+						}
+					}
+				]
+			},
+			"GeometryCollection": {
+				"type": "object",
+				"description": "GeoJSon geometry collection",
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": [
+							"GeometryCollection"
+						]
+					},
+					"geometries": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Geometry"
+						}
+					}
+				}
+			}
+		}
+	}
+}

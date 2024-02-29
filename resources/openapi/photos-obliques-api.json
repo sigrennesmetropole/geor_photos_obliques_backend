@@ -1,0 +1,874 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"description": "Georchestra - Plugin Photos Obliques API",
+		"version": "0.0.1",
+		"title": "photos-obliques-api",
+		"termsOfService": "http://swagger.io/terms/",
+		"contact": {
+			"email": "thomas.brule@open-groupe.com"
+		},
+		"license": {
+			"name": "Apache 2.0",
+			"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+		}
+	},
+	"servers": [
+		{
+			"url": "/{basePath}",
+			"description": "Georchestra - Plugin Photos Obliques API",
+			"variables": {
+				"basePath": {
+					"default": "api/v1"
+				}
+			}
+		}
+	],
+	"tags": [
+	    {
+			"name": "miscellaneous",
+			"description": "Services divers"
+		},
+		{
+			"name": "administration",
+			"description": "Services d'administration"
+		},
+		{
+			"name": "acl",
+			"description": "Services de gestion des droits"
+		},
+		{
+			"name": "historicdata",
+			"description": "Service de gestion de l'historique"
+		}
+
+	],
+	"paths": {
+		"/configuration": {
+			"get": {
+				"tags": [
+					"miscellaneous"
+				],
+				"summary": "Récupération de la configuration applicative",
+				"description": "Récupération des diférentes propriétés applicatives",
+				"operationId": "getConfiguration",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApplicationConfiguration"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/healthCheck": {
+			"get": {
+				"tags": [
+					"miscellaneous"
+				],
+				"summary": "Test de vie de l'application'",
+				"description": "Test de vie de l'application",
+				"operationId": "checkHealth",
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/me": {
+			"get": {
+				"tags": [
+					"user"
+				],
+				"summary": "Extraction des données de l'utilisateur connecté",
+				"description": "Extraction des données de l'utilisateur connecté",
+				"operationId": "getMe",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/User"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/authenticated": {
+			"get": {
+				"tags": [
+					"user"
+				],
+				"summary": "Indique si l'utilisateur est authentifié'",
+				"description": "Indique si l'utilisateur est authentifié",
+				"operationId": "isAuthenticated",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/authenticate": {
+			"get": {
+				"tags": [
+					"user"
+				],
+				"summary": "Demande d'authentification de l'utilisateur",
+				"description": "Demande d'authentification de l'utilisateur",
+				"operationId": "authenticate",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "token",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"description": "L'access token reçu lors de la redirection"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/Tokens"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/refreshToken": {
+			"get": {
+				"tags": [
+					"user"
+				],
+				"summary": "Demande de refraichisement du token jwt",
+				"description": "Demande de refraichisement du token jwt",
+				"operationId": "refreshToken",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/Tokens"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/logout": {
+			"post": {
+				"tags": [
+					"user"
+				],
+				"summary": "Déconnexion de l'utilisateur",
+				"description": "Déconnexion de l'utilisateur",
+				"operationId": "logout",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/roles": {
+			"get": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Retourne la liste des rôles",
+				"description": "Retourne la liste des rôles",
+				"operationId": "searchRoles",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "active",
+						"required": false,
+						"schema": {
+							"type": "boolean",
+							"description": "Si on cherche les roles actifs ou non"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Les données pour générer le rapport",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "photos-obliques-model.json#/components/schemas/Role"
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Ajout d'un nouveau role d'utilisateurs",
+				"description": "Permet d'ajouter un nouveau role d'utilisateurs",
+				"operationId": "createRole",
+				"requestBody": {
+					"description": "info role",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "photos-obliques-model.json#/components/schemas/Role"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/Role"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Mise à jour d'un role d'utilisateurs",
+				"description": "Mise à jour d'un role d'utilisateurs",
+				"operationId": "updateRole",
+				"requestBody": {
+					"description": "info role",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "photos-obliques-model.json#/components/schemas/Role"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/Role"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/roles/{role-uuid}": {
+			"get": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Retourne un rôle",
+				"description": "Retourne un rôle",
+				"operationId": "getRole",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "role-uuid",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid",
+							"description": "L'uuid du rôle"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Les données pour générer le rapport",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/Role"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/features": {
+			"get": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Retourne la liste des features",
+				"description": "Retourne la liste des features",
+				"operationId": "searchFeatures",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "active",
+						"required": false,
+						"schema": {
+							"type": "boolean",
+							"description": "Si on cherche les formes juridiques actives ou non"
+						}
+					},
+					{
+						"in": "query",
+						"name": "code",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "Si on cherche les formes juridiques par code"
+						}
+					},
+					{
+						"in": "query",
+						"name": "label",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "Si on cherche les formes juridiques par label"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Les features",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "photos-obliques-model.json#/components/schemas/Feature"
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Ajout d'une feature",
+				"description": "Permet d'ajouter une feature",
+				"operationId": "createFeature",
+				"requestBody": {
+					"description": "info feature",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "photos-obliques-model.json#/components/schemas/Feature"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/Feature"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Mise à jour d'une feature",
+				"description": "Mise à jour d'une feature",
+				"operationId": "updateFeature",
+				"requestBody": {
+					"description": "info feature",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "photos-obliques-model.json#/components/schemas/Feature"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/Feature"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/features/{feature-uuid}": {
+			"get": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Retourne une feature",
+				"description": "Retourne  une feature à partir de son uuid",
+				"operationId": "getFeature",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "feature-uuid",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid",
+							"description": "L'uuid de la feature"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "La feature",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/Feature"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Supprime une feature",
+				"description": "Supprime  une feature",
+				"operationId": "deleteFeature",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "feature-uuid",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid",
+							"description": "L'uuid de la feature"
+						}
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "La feature a été supprimée"
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/roles-feature": {
+			"get": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Retourne la liste des roles de features",
+				"description": "Retourne la liste des roles de features",
+				"operationId": "searchRolesFeature",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "scope",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "Si on cherche les roles de features par scope"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Les roles de features",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "photos-obliques-model.json#/components/schemas/RoleFeature"
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Ajout d'un role de feature",
+				"description": "Permet d'ajouter un role de feature",
+				"operationId": "createRoleFeature",
+				"requestBody": {
+					"description": "info role feature",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "photos-obliques-model.json#/components/schemas/RoleFeature"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/RoleFeature"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Mise à jour d'un role de feature",
+				"description": "Mise à jour d'un role de feature",
+				"operationId": "updateRoleFeature",
+				"requestBody": {
+					"description": "info  role feature",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "photos-obliques-model.json#/components/schemas/RoleFeature"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/RoleFeature"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/roles-feature/{role-feature-uuid}": {
+			"get": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Retourne un role de feature",
+				"description": "Retourne  un role feature à partir de son uuid",
+				"operationId": "getRoleFeature",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "role-feature-uuid",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid",
+							"description": "L'uuid du role feature"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Le role feature",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/RoleFeature"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"acl"
+				],
+				"summary": "Supprime un role de feature",
+				"description": "Supprime un role feature",
+				"operationId": "deleteRoleFeature",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "role-feature-uuid",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid",
+							"description": "L'uuid du role feature"
+						}
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "Le role de feature a été supprimé"
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
