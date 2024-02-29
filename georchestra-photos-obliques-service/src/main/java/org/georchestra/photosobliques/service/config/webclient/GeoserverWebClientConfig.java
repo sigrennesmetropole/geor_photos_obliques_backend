@@ -1,7 +1,6 @@
 package org.georchestra.photosobliques.service.config.webclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.georchestra.photosobliques.service.helper.common.HttpClientHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import javax.net.ssl.SSLException;
  *
  */
 @Component
-@AllArgsConstructor
 public class GeoserverWebClientConfig extends AbstractWebClientConfig {
 
 	@Getter
@@ -39,7 +37,8 @@ public class GeoserverWebClientConfig extends AbstractWebClientConfig {
 	@Value("${photos_obliques.geoserver.trust-all-certs:true}")
 	private boolean trustAllCerts;
 
-	private final HttpClientHelper httpClientHelper;
+	@Autowired
+	private HttpClientHelper httpClientHelper;
 
 	@Bean(name = "geoserver_webclient_builder")
 	public WebClient.Builder webClientBuilder() throws SSLException {

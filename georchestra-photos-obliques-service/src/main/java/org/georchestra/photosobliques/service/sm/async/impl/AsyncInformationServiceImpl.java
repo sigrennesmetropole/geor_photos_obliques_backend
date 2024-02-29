@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import lombok.AllArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.georchestra.photosobliques.core.bean.AsyncInformation;
@@ -44,7 +43,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @Service
 @Transactional(readOnly = true)
-@AllArgsConstructor
 public class AsyncInformationServiceImpl implements AsyncInformationService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsyncInformationServiceImpl.class);
@@ -55,13 +53,17 @@ public class AsyncInformationServiceImpl implements AsyncInformationService {
 	@Value("${photosobliques.async.inprogress.retention:180}")
 	private int inProgressRetention;
 
-	private final AsyncInformationRepository asyncInformationRepository;
+	@Autowired
+	private AsyncInformationRepository asyncInformationRepository;
 
-	private final ACLHelper utilContextHelper;
+	@Autowired
+	private ACLHelper utilContextHelper;
 
-	private final AsyncInformationMapper asyncInformationMapper;
+	@Autowired
+	private AsyncInformationMapper asyncInformationMapper;
 
-	private final ObjectMapper objectMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Override
 	public AsyncInformation getAsyncInformation(UUID uuid) throws AppServiceException {

@@ -6,7 +6,6 @@ package org.georchestra.photosobliques.service.helper.acl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.georchestra.photosobliques.core.bean.UserCustomConfiguration;
@@ -25,12 +24,12 @@ import java.util.Iterator;
  */
 @Component
 @Slf4j
-@AllArgsConstructor
 public class UserCustomConfigurationHelper {
 
 	private static final String DEFAULT_CUSTOM_CONFIGURATION = "default_custom_configuration.json";
 
-	private final ObjectMapper objectMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	private ObjectNode defaultConfiguration = null;
 
