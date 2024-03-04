@@ -869,6 +869,410 @@
 					}
 				}
 			}
+		},
+		"/photos": {
+			"get":{
+				"tags": [
+					"photos"
+				],
+				"summary": "Recherche photos",
+				"description": "Recherche des photos",
+				"operationId": "searchPhoto",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "geometry",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"description": "Géométrie WKT de l'emprise de recherche"
+						}
+					},
+					{
+						"in": "query",
+						"name": "startDate",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "Date de début de la recherche"
+						}
+					},
+					{
+						"in": "query",
+						"name": "endDate",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "Date de fin de la recherche"
+						}
+					},
+					{
+						"in": "query",
+						"name": "angleDegre",
+						"description": "Index de début",
+						"required": false,
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"in": "query",
+						"name": "provider",
+						"description": "todo",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"format": "int32"
+						}
+					},
+					{
+						"in": "query",
+						"name": "owner",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "todo"
+						}
+					},
+					{
+						"in": "query",
+						"name": "offset",
+						"description": "Index de début",
+						"required": false,
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"description": "Nombre de résultats à retourner",
+						"required": false,
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"in": "query",
+						"name": "order",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "liste des tris à réaliser. Exemple :  code,-libelle"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/PhotoObliquePageResult"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/photos/count": {
+			"get":{
+				"tags": [
+					"photos"
+				],
+				"summary": "Count photos",
+				"description": "Compte le nombre de photos correspondant à une recherche",
+				"operationId": "countPhotos",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "geometry",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"description": "Géométrie WKT de l'emprise de recherche"
+						}
+					},
+					{
+						"in": "query",
+						"name": "startDate",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "Date de début de la recherche"
+						}
+					},
+					{
+						"in": "query",
+						"name": "endDate",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "Date de fin de la recherche"
+						}
+					},
+					{
+						"in": "query",
+						"name": "angleDegre",
+						"description": "Index de début",
+						"required": false,
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"in": "query",
+						"name": "provider",
+						"description": "todo",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"format": "int32"
+						}
+					},
+					{
+						"in": "query",
+						"name": "owner",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"description": "todo"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/PhotoCount"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/photos/download": {
+			"get": {
+				"tags": [
+					"photos"
+				],
+				"summary": "Download photos",
+				"description": "Génère et renvoie un zip contenant les photos et les informations correspondantes",
+				"operationId": "downloadPhotos",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "photoUuids",
+						"description": "Les photos à télécharger",
+						"required": true,
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"format": "uuid"
+							}
+						}
+					},
+					{
+						"in": "query",
+						"name": "zipName",
+						"description": "nom du zip généré",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "prefix",
+						"description": "prefix du zip généré",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/octet-stream": {
+								"schema": {
+									"type": "string",
+									"format": "binary"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/years": {
+			"get": {
+				"tags": [
+					"years"
+				],
+				"summary": "Available years",
+				"description": "Renvoie les années disponibles pour une emprise donnée",
+				"operationId": "availableYears",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "geometry",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"description": "Géométrie WKT de l'emprise de recherche"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/AvailableYears"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/providers": {
+			"get": {
+				"tags": [
+					"years"
+				],
+				"summary": "Available providers",
+				"description": "Renvoie les prestataires disponibles pour une emprise donnée",
+				"operationId": "availableProviders",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "geometry",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"description": "Géométrie WKT de l'emprise de recherche"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/AvailableProviders"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/owners": {
+			"get": {
+				"tags": [
+					"years"
+				],
+				"summary": "Available Owners",
+				"description": "Renvoie les propriétaire disponibles pour une emprise donnée",
+				"operationId": "availableOwners",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "geometry",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"description": "Géométrie WKT de l'emprise de recherche"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/AvailableProviders"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -691,6 +691,111 @@
 						}
 					}
 				}
+			},
+			"PhotoObliquePageResult": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/PageResult"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"elements": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/PhotoOblique"
+								}
+							}
+						}
+					}
+				]
+			},
+			"PhotoOblique": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "fichier": {
+                        "type": "string"
+                    },
+                    "annee": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "date": {
+                        "type": "string"
+                    },
+                    "heure": {
+                       "type": "string"
+                    },
+                    "angleDegre": {
+                        "type": "string"
+                    },
+                    "angleGradient": {
+                        "type": "string"
+                    },
+                    "presta": {
+                        "type": "string"
+                    },
+                    "proprio": {
+                        "type": "string"
+                    },
+                    "mention": {
+                       "type": "string"
+                    },
+                    "commune": {
+                        "type": "string"
+                    },
+                    "shape": {
+                       "type": "object"
+                    },
+                    "tailleFichier": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "pertinence": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "utlVignette": {
+                        "type": "string"
+                    },
+                    "urlApercu": {
+                        "type": "string"
+                    }
+                }
+			},
+			"PhotoCount": {
+				"type": "object",
+				"properties": {
+					"numberOfResult": {
+						"type": "integer",
+						"format": "int32"
+					}
+				}
+			},
+			"AvailableYears": {
+				"type": "object",
+				"properties": {
+					"availableDates": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"AvailableProviders": {
+				"type": "object",
+				"properties": {
+					"availableDates": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				}
 			}
 		}
 	}
