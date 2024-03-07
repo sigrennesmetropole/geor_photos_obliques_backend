@@ -38,111 +38,32 @@
 						"type": "string",
 						"description": "Description de la version de l'application"
 					},
-					"geoserverWorkspace": {
+					"serverPort": {
 						"type": "string",
-						"description": "Espace de traval du geoserver"
+						"description": "Port sur lequel le serveur d'applications est en cours d'exécution"
 					},
-					"geoserverNamespace": {
+					"toleranceAngle": {
 						"type": "string",
-						"description": "Espace de nommage du geoserver"
+						"description": "Tolérance (en degré) d'acceptation de photo selon leur angle de prise de vue"
 					},
-					"geoserverDefaultSRID": {
+					"urlVignette": {
 						"type": "string",
-						"description": "Projection par défaut"
+						"description": "Url du point de montage public d'accès aux vignettes des photos"
+					},
+					"urlApercu": {
+						"type": "string",
+						"description": "Url du point de montage public d'accès aux aperçus des photos"
+					},
+					"accesPhotosHD": {
+						"type": "string",
+						"description": "Espace de stockage contenant les fichiers sources des photos (HD)"
+					},
+					"tailleMaxPanier": {
+						"type": "integer",
+						"format": "int4",
+						"description": "Nombre maximal de photo que l'on peut télécharger"
 					}
 				}
-			},
-			"Tokens": {
-				"type": "object",
-				"properties": {
-					"jwt": {
-						"type": "string"
-					},
-					"xToken": {
-						"type": "string"
-					}
-				}
-			},
-			"AbstractId": {
-				"type": "object",
-				"properties": {
-					"uuid": {
-						"type": "string",
-						"format": "uuid",
-						"description": "UUID de l'objet"
-					}
-				}
-			},
-			"AbstractCode": {
-				"allOf": [
-					{
-						"$ref": "#/components/schemas/AbstractId"
-					},
-					{
-						"type": "object",
-						"properties": {
-							"code": {
-								"type": "string",
-								"description": "Code métier de l'objet"
-							}
-						}
-					}
-				]
-			},
-			"AbstractLabelized": {
-				"allOf": [
-					{
-						"$ref": "#/components/schemas/AbstractCode"
-					},
-					{
-						"type": "object",
-						"properties": {
-							"label": {
-								"type": "string",
-								"description": "Libellé long de l'objet métier"
-							}
-						}
-					}
-				]
-			},
-			"AbstractOrdered": {
-				"allOf": [
-					{
-						"$ref": "#/components/schemas/AbstractLabelized"
-					},
-					{
-						"type": "object",
-						"properties": {
-							"order": {
-								"type": "integer",
-								"format": "int32",
-								"description": "Numéro d'ordre pour le tri des éléments. Plus la valeur est faible plus l'élément a une priorité forte"
-							}
-						}
-					}
-				]
-			},
-			"AbstractStamped": {
-				"allOf": [
-					{
-						"$ref": "#/components/schemas/AbstractOrdered"
-					},
-					{
-						"type": "object",
-						"properties": {
-							"openingDate": {
-								"type": "string",
-								"format": "date-time",
-								"description": "Date à partir de laquelle l'élément est actif."
-							},
-							"closingDate": {
-								"type": "string",
-								"format": "date-time",
-								"description": "Date au délà de laquelle l'élément n'est plus actif."
-							}
-						}
-					}
-				]
 			},
 			"PageResult": {
 				"type": "object",

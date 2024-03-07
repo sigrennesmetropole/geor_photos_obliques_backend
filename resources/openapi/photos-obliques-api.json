@@ -90,7 +90,7 @@
 				],
 				"summary": "Recherche photos",
 				"description": "Recherche des photos",
-				"operationId": "searchPhoto",
+				"operationId": "searchPhotos",
 				"parameters": [
 					{
 						"in": "query",
