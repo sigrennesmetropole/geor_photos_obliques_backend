@@ -179,8 +179,9 @@
                         "format": "int32"
                     },
                     "pertinence": {
-                        "type": "integer",
-                        "format": "int32"
+						"type": "number",
+						"format": "double",
+						"multipleOf": 0.1
                     },
                     "urlVignette": {
                         "type": "string"

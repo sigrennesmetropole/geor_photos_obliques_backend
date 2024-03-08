@@ -4,7 +4,7 @@ create table if not exists photo_oblique
     objectId       int         not null,
     fichier        varchar(50),
     annee          int4,
-    date           date,
+    date           timestamp,
     comment        varchar(1000),
     presta         varchar(220),
     proprio        varchar(220),
@@ -13,6 +13,7 @@ create table if not exists photo_oblique
     commune        varchar(500),
     shape          public.geometry,
     taille_fichier int4,
+    angle          numeric(18,3),
     primary key (id)
 );
 
