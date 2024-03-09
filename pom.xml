@@ -61,7 +61,7 @@
         <activiti.version>7.1.0.M6</activiti.version>
         <maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
         <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
-        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <compiler.plugin.version>3.10.1</compiler.plugin.version>
         <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
         <ant.plugin.version>3.1.0</ant.plugin.version>
