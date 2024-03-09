@@ -79,7 +79,7 @@
         <!-- Configuration SONAR -->
         <sonar.projectKey>${env.SONAR_KEY}${project.artifactId}</sonar.projectKey>
         <sonar.projectName>${project.artifactId}</sonar.projectName>
-        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
         <sonar.coverage.exclusions>
             **/*Entity.java,
