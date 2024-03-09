@@ -40,7 +40,7 @@
         <flyway.version>9.15.0</flyway.version>
         <log4j2.version>2.19.0</log4j2.version>
         <geotools.version>28.2</geotools.version>
-        <javamelody.version>1.91.0</javamelody.version>
+        <javamelody.version>2.1.0</javamelody.version>
         <commons-cli.version>1.5.0</commons-cli.version>
         <commons.text.version>1.10.0</commons.text.version>
         <opencsv.version>5.7.1</opencsv.version>
