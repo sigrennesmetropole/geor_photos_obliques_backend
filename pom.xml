@@ -38,7 +38,7 @@
         <lombok.version>1.18.26</lombok.version>
         <swagger.codegen.version>3.0.21</swagger.codegen.version>
         <flyway.version>9.15.0</flyway.version>
-        <log4j2.version>2.19.0</log4j2.version>
+        <log4j2.version>2.23.1</log4j2.version>
         <geotools.version>28.2</geotools.version>
         <javamelody.version>1.91.0</javamelody.version>
         <commons-cli.version>1.5.0</commons-cli.version>
