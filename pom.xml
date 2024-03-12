@@ -34,7 +34,7 @@
         <openapi.jackson.version>0.2.5</openapi.jackson.version>
         <apache.directory.api.version>2.1.2</apache.directory.api.version>
         <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
-        <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
         <swagger.codegen.version>3.0.21</swagger.codegen.version>
         <flyway.version>9.15.0</flyway.version>
