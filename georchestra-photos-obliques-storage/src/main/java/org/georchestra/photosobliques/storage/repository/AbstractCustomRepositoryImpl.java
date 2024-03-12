@@ -225,10 +225,17 @@ public class AbstractCustomRepositoryImpl<E, C> {
 		}
 	}
 
-	protected void predicateYearCriteria(Integer anneeDebut, Integer anneeFin, String type, List<Predicate> predicates,
-			CriteriaBuilder builder, Root<?> root) {
 
-		predicateBetweenCriteria(anneeDebut, anneeFin, type, predicates, builder, root);
+	protected void predicateLessThanCriteria(Integer end, String type, List<Predicate> predicates,
+											 CriteriaBuilder builder, Root<?> root) {
+
+		predicateBetweenCriteria(null, end, type, predicates, builder, root);
+	}
+
+	protected void predicateGreaterThanCriteria(Integer start, String type, List<Predicate> predicates,
+												CriteriaBuilder builder, Root<?> root) {
+
+		predicateBetweenCriteria(start, null, type, predicates, builder, root);
 	}
 
 	protected void predicateCodeAndLabel(String codeAndLibelle, List<String> fields, List<Predicate> predicates,
@@ -265,8 +272,8 @@ public class AbstractCustomRepositoryImpl<E, C> {
 	protected void predicateGeographicArea(String codeAndLibelle, String fieldNameCode, String fieldNameLabel,
 			List<Predicate> predicates, CriteriaBuilder builder, Root<?> root) {
 		predicateGeographicArea(codeAndLibelle,
-				StringUtils.isNotEmpty(fieldNameCode) ? Arrays.asList(fieldNameCode) : null,
-				StringUtils.isNotEmpty(fieldNameLabel) ? Arrays.asList(fieldNameLabel) : null, predicates, builder,
+				StringUtils.isNotEmpty(fieldNameCode) ? List.of(fieldNameCode) : null,
+				StringUtils.isNotEmpty(fieldNameLabel) ? List.of(fieldNameLabel) : null, predicates, builder,
 				root);
 	}
 

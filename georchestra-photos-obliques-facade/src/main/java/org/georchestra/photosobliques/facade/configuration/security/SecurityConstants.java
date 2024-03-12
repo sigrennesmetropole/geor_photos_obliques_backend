@@ -24,5 +24,6 @@ public final class SecurityConstants {
 	public static final String HEALTH_CHECK_URL = "/api/v1/healthCheck";
 
 	public static final String CONFIGURATION_URL = "/api/v1/configuration";
+	public static final String PHOTO_URL = "/api/v1/photos";
 
 }
