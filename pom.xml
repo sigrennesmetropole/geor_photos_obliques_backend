@@ -44,7 +44,7 @@
         <commons-cli.version>1.5.0</commons-cli.version>
         <commons.text.version>1.11.0</commons.text.version>
         <opencsv.version>5.7.1</opencsv.version>
-        <freemarker.version>2.3.31</freemarker.version>
+        <freemarker.version>2.3.32</freemarker.version>
         <xdocreport.version>2.0.4</xdocreport.version>
         <openapi-generator-version>7.4.0</openapi-generator-version>
         <tika.version>2.7.0</tika.version>
