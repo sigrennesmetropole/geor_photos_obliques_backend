@@ -1,23 +1,23 @@
 {
-	"openapi": "3.0.0",
 	"info": {
-		"description": "API Photos Obliques",
-		"version": "1.0.0",
-		"title": "photos-obliques-api",
-		"termsOfService": "http://swagger.io/terms/",
 		"contact": {
-			"email": "thomas.brule@open-groupe.com"
+			"email": "r.goffinet@rennesmetropole.fr"
 		},
+		"description": "API Photos Obliques",
 		"license": {
 			"name": "Apache 2.0",
 			"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-		}
+		},
+		"termsOfService": "http://swagger.io/terms/",
+		"title": "photos-obliques-api",
+		"version": "1.0.0"
 	},
-	"paths": {},
+	"openapi": "3.0.0",
+	"paths": {
+	},
 	"components": {
 		"schemas": {
 			"ApiError": {
-				"type": "object",
 				"properties": {
 					"code": {
 						"type": "string"
@@ -25,92 +25,160 @@
 					"label": {
 						"type": "string"
 					}
-				}
+				},
+				"type": "object"
 			},
 			"ApplicationConfiguration": {
-				"type": "object",
 				"properties": {
-					"version": {
-						"type": "string",
-						"description": "Numéro de version de l'application"
-					},
-					"comment": {
-						"type": "string",
-						"description": "Description de la version de l'application"
-					},
-					"serverPort": {
-						"type": "string",
-						"description": "Port sur lequel le serveur d'applications est en cours d'exécution"
-					},
-					"toleranceAngle": {
-						"type": "string",
-						"description": "Tolérance (en degré) d'acceptation de photo selon leur angle de prise de vue"
-					},
-					"urlVignette": {
-						"type": "string",
-						"description": "Url du point de montage public d'accès aux vignettes des photos"
-					},
-					"urlApercu": {
-						"type": "string",
-						"description": "Url du point de montage public d'accès aux aperçus des photos"
-					},
 					"accesPhotosHD": {
-						"type": "string",
-						"description": "Espace de stockage contenant les fichiers sources des photos (HD)"
-					},
-					"tailleMaxPanier": {
-						"type": "integer",
-						"format": "int4",
-						"description": "Nombre maximal de photo que l'on peut télécharger"
-					}
-				}
-			},
-			"PageResult": {
-				"type": "object",
-				"properties": {
-					"total": {
-						"type": "integer",
-						"format": "int64"
-					}
-				}
-			},
-			"User": {
-				"description": "Utilisateur",
-				"type": "object",
-				"properties": {
-					"uuid": {
-						"type": "string",
-						"format": "uuid"
-					},
-					"login": {
-						"type": "string",
-						"description": "Login de l'utilisateur"
-					},
-					"lastname": {
-						"type": "string",
-						"description": "Nom de l'utilisateur"
-					},
-					"firstname": {
-						"type": "string",
-						"description": "Prénom de l'utilisateur"
-					},
-					"email": {
+						"description": "Espace de stockage contenant les fichiers sources des photos (HD)",
 						"type": "string"
 					},
-					"restricted": {
-						"type": "boolean"
+					"comment": {
+						"description": "Description de la version de l'application",
+						"type": "string"
 					},
-					"roles": {
-						"type": "array",
+					"serverPort": {
+						"description": "Port sur lequel le serveur d'applications est en cours d'exécution",
+						"type": "string"
+					},
+					"maxCartSize": {
+						"description": "Nombre maximal de photo que l'on peut télécharger",
+						"format": "int4",
+						"type": "integer"
+					},
+					"toleranceAngle": {
+						"description": "Tolérance (en degré) d'acceptation de photo selon leur angle de prise de vue",
+						"format": "double",
+						"multipleOf": 0.001,
+						"type": "number"
+					},
+					"urlOverview": {
+						"description": "Url du point de montage public d'accès aux aperçus des photos",
+						"type": "string"
+					},
+					"urlThumbnail": {
+						"description": "Url du point de montage public d'accès aux vignettes des photos",
+						"type": "string"
+					},
+					"version": {
+						"description": "Numéro de version de l'application",
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"AvailableOwners": {
+				"properties": {
+					"availableDates": {
 						"items": {
 							"type": "string"
-						}
-					},
-					"organization": {
-						"type": "string",
-						"description": "Nom de l'organisation de l'utilisateur"
+						},
+						"type": "array"
 					}
-				}
+				},
+				"type": "object"
+			},
+			"AvailableProviders": {
+				"properties": {
+					"availableDates": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"AvailableYears": {
+				"properties": {
+					"availableDates": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"PageResult": {
+				"properties": {
+					"total": {
+						"format": "int64",
+						"type": "integer"
+					}
+				},
+				"type": "object"
+			},
+			"PhotoOblique": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"angleDegre": {
+						"format": "double",
+						"multipleOf": 0.001,
+						"type": "number"
+					},
+					"angleGradient": {
+						"format": "double",
+						"multipleOf": 0.001,
+						"type": "number"
+					},
+					"year": {
+						"format": "int4",
+						"type": "integer"
+					},
+					"town": {
+						"type": "string"
+					},
+					"date": {
+						"type": "string"
+					},
+					"file": {
+						"type": "string"
+					},
+					"time": {
+						"type": "string"
+					},
+					"mention": {
+						"type": "string"
+					},
+					"relevance": {
+						"format": "double",
+						"multipleOf": 0.1,
+						"type": "number"
+					},
+					"provider": {
+						"type": "string"
+					},
+					"owner": {
+						"type": "string"
+					},
+					"shape": {
+						"type": "string"
+					},
+					"fileSize": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"urlOverview": {
+						"type": "string"
+					},
+					"urlThumbnail": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"PhotosCount": {
+				"properties": {
+					"numberOfResult": {
+						"format": "int32",
+						"type": "integer"
+					}
+				},
+				"type": "object"
 			},
 			"PhotosObliquesPageResult": {
 				"allOf": [
@@ -118,120 +186,52 @@
 						"$ref": "#/components/schemas/PageResult"
 					},
 					{
-						"type": "object",
 						"properties": {
 							"elements": {
-								"type": "array",
 								"items": {
 									"$ref": "#/components/schemas/PhotoOblique"
-								}
+								},
+								"type": "array"
 							}
-						}
+						},
+						"type": "object"
 					}
 				]
 			},
-			"PhotoOblique": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "fichier": {
-                        "type": "string"
-                    },
-                    "annee": {
-                        "type": "integer",
-                        "format": "int4"
-                    },
-                    "date": {
-                        "type": "string"
-                    },
-                    "heure": {
-                       "type": "string"
-                    },
-                    "angleDegre": {
-						"type": "number",
-						"format": "double",
-						"multipleOf": 0.001
-                    },
-                    "angleGradient": {
-						"type": "number",
-						"format": "double",
-						"multipleOf": 0.001
-                    },
-                    "presta": {
-                        "type": "string"
-                    },
-                    "proprio": {
-                        "type": "string"
-                    },
-                    "mention": {
-                       "type": "string"
-                    },
-                    "commune": {
-                        "type": "string"
-                    },
-                    "shape": {
-                       "type": "string"
-                    },
-                    "tailleFichier": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "pertinence": {
-						"type": "number",
-						"format": "double",
-						"multipleOf": 0.1
-                    },
-                    "urlVignette": {
-                        "type": "string"
-                    },
-                    "urlApercu": {
-                        "type": "string"
-                    }
-                }
-			},
-			"PhotosCount": {
-				"type": "object",
+			"User": {
+				"description": "Utilisateur",
 				"properties": {
-					"numberOfResult": {
-						"type": "integer",
-						"format": "int32"
-					}
-				}
-			},
-			"AvailableYears": {
-				"type": "object",
-				"properties": {
-					"availableDates": {
-						"type": "array",
+					"email": {
+						"type": "string"
+					},
+					"firstname": {
+						"description": "Prénom de l'utilisateur",
+						"type": "string"
+					},
+					"lastname": {
+						"description": "Nom de l'utilisateur",
+						"type": "string"
+					},
+					"login": {
+						"description": "Login de l'utilisateur",
+						"type": "string"
+					},
+					"organization": {
+						"description": "Nom de l'organisation de l'utilisateur",
+						"type": "string"
+					},
+					"roles": {
 						"items": {
 							"type": "string"
-						}
+						},
+						"type": "array"
+					},
+					"uuid": {
+						"format": "uuid",
+						"type": "string"
 					}
-				}
-			},
-			"AvailableProviders": {
-				"type": "object",
-				"properties": {
-					"availableDates": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					}
-				}
-			},
-			"AvailableOwners": {
-				"type": "object",
-				"properties": {
-					"availableDates": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					}
-				}
+				},
+				"type": "object"
 			}
 		}
 	}
