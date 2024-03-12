@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.georchestra.photosobliques.core.bean.User;
-import org.georchestra.photosobliques.service.sm.acl.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -42,7 +41,6 @@ public class PreAuthenticationFilter extends OncePerRequestFilter implements Fil
 	// Controle des patterns des URL
 	private AntPathMatcher pathMatcher;
 
-	private UserService userService;
 
 	// Liste des URL à exclure
 	private Collection<String> excludeUrlPatterns;
@@ -52,11 +50,9 @@ public class PreAuthenticationFilter extends OncePerRequestFilter implements Fil
 	/**
 	 *
 	 * @param excludeUrlPatterns
-	 * @param userService
 	 */
-	public PreAuthenticationFilter(final String[] excludeUrlPatterns, UserService userService) {
+	public PreAuthenticationFilter(final String[] excludeUrlPatterns) {
 		super();
-		this.userService = userService;
 		this.excludeUrlPatterns = Arrays.asList(excludeUrlPatterns);
 		pathMatcher = new AntPathMatcher();
 	}
@@ -104,18 +100,11 @@ public class PreAuthenticationFilter extends OncePerRequestFilter implements Fil
 			rolesSet.addAll(roles);
 		}
 		try {
-			User user = userService.getUserByLogin(username);
-			if (user == null) {
-				user = new User();
+
+				User user = new User();
 				user.setLogin(username);
 				assignUserData(user, httpServletRequest, roles);
-				user = userService.createUser(user);
-			} else {
-				boolean updated = assignUserData(user, httpServletRequest, roles);
-				if (updated) {
-					user = userService.updateUser(user);
-				}
-			}
+
 			return new PreAuthenticationToken(username, user, rolesSet);
 		} catch (Exception e) {
 			LOGGER.debug("Mise à jour ou création d'utilisateur en erreur :{}", e.getMessage());
