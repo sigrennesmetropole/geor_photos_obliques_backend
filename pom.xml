@@ -75,7 +75,7 @@
         <jaxb-impl.version>2.3.1</jaxb-impl.version>
         <swagger.version>2.2.8</swagger.version>
         <graalvm.version>22.3.1</graalvm.version>
-        <httpclient5.version>5.2.1</httpclient5.version>
+        <httpclient5.version>5.3.1</httpclient5.version>
         <!-- Configuration SONAR -->
         <sonar.projectKey>${env.SONAR_KEY}${project.artifactId}</sonar.projectKey>
         <sonar.projectName>${project.artifactId}</sonar.projectName>
