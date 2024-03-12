@@ -28,11 +28,11 @@
         <json.simple.version>1.1.1</json.simple.version>
         <javax.validation.version>2.0.1.Final</javax.validation.version>
         <springfox.version>3.0.0</springfox.version>
-        <openapi.version>1.6.14</openapi.version>
+        <openapi.version>1.7.0</openapi.version>
         <openapi-web.version>2.3.0</openapi-web.version>
-        <openapi.plugin.version>6.2.0</openapi.plugin.version>
-        <openapi.jackson.version>0.2.5</openapi.jackson.version>
-        <apache.directory.api.version>2.1.2</apache.directory.api.version>
+        <openapi.plugin.version>7.4.0</openapi.plugin.version>
+        <openapi.jackson.version>0.2.6</openapi.jackson.version>
+        <apache.directory.api.version>2.1.6</apache.directory.api.version>
         <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
