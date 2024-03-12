@@ -24,19 +24,17 @@
         <commons.io.version>2.15.1</commons.io.version>
         <commons.collections4.version>4.4</commons.collections4.version>
         <commons.lang3.version>3.14.0</commons.lang3.version>
-        <httpclient.version>4.5.2</httpclient.version>
         <json.simple.version>1.1.1</json.simple.version>
-        <javax.validation.version>2.0.1.Final</javax.validation.version>
         <springfox.version>3.0.0</springfox.version>
         <openapi.version>1.7.0</openapi.version>
-        <openapi-web.version>2.0.1</openapi-web.version>
-        <openapi.plugin.version>7.4.0</openapi.plugin.version>
+        <openapi-web.version>2.3.0</openapi-web.version>
+        <openapi.plugin.version>7.2.0</openapi.plugin.version><!--7.4.0-->
         <openapi.jackson.version>0.2.6</openapi.jackson.version>
+        <openapi-generator-version>7.4.0</openapi-generator-version>
         <apache.directory.api.version>2.1.6</apache.directory.api.version>
         <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
-        <swagger.codegen.version>3.0.21</swagger.codegen.version>
         <log4j2.version>2.23.1</log4j2.version>
         <geotools.version>28.2</geotools.version>
         <javamelody.version>2.1.0</javamelody.version>
@@ -45,11 +43,9 @@
         <opencsv.version>5.7.1</opencsv.version>
         <freemarker.version>2.3.32</freemarker.version>
         <xdocreport.version>2.0.4</xdocreport.version>
-        <openapi-generator-version>7.4.0</openapi-generator-version>
         <tika.version>2.7.0</tika.version>
         <jackson-datatype-threetenbp.version>2.15.2</jackson-datatype-threetenbp.version>
         <servlet-api.version>2.5</servlet-api.version>
-        <jsoup.version>1.17.2</jsoup.version>
         <swagger-annotations.version>2.1.4</swagger-annotations.version>
         <findbugs.version>3.0.2</findbugs.version>
         <bouncy.version>1.77</bouncy.version>
@@ -436,7 +432,7 @@
             <dependency>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-cli</artifactId>
-                <version>${openapi-generator-version}</version>
+                <version>${openapi.plugin.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tika</groupId>
@@ -454,12 +450,6 @@
                 <artifactId>servlet-api</artifactId>
                 <version>${servlet-api.version}</version>
                 <scope>provided</scope>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
-            <dependency>
-                <groupId>org.jsoup</groupId>
-                <artifactId>jsoup</artifactId>
-                <version>${jsoup.version}</version>
             </dependency>
             <!-- Annotations Nonnull et Nullable du package javax.annotation -->
             <dependency>
