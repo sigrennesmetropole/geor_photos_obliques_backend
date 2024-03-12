@@ -14,14 +14,23 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	@Value("${application.comment}")
 	private String applicationComment;
 
-	@Value("${photos_obliques.geoserver.workspace:photos_obliques}")
-	private String geoserverWorkspace;
+	@Value("${server.port}")
+	private String serverPort;
 
-	@Value("${photos_obliques.geoserver.namespace:http://www.georchestra.fr/photos_obliques}")
-	private String geoserverNamespace;
+	@Value("${photos-obliques.tolerance.angle:20}")
+	private Double configToleranceAngle;
 
-	@Value("${photos_obliques.geoserver.srid.default:EPSG:3948}")
-	private String geoserverDefaultSRID;
+	@Value("${photos-obliques.url.vignette}")
+	private String confUrlVignette;
+
+	@Value("${photos-obliques.url.apercu}")
+	private String confUrlApercu;
+
+	@Value("${photos-obliques.acces.photohd}")
+	private String confAccesPhotosHD;
+
+	@Value("${photos-obliques.panier.max.photos:200}")
+	private Integer maxPhotos;
 
 	/**
 	 * Permet de récupérer la configuration
@@ -34,9 +43,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 		result.setVersion(applicationVersion);
 		result.setComment(applicationComment);
-		result.setGeoserverWorkspace(geoserverWorkspace);
-		result.setGeoserverNamespace(geoserverNamespace);
-		result.setGeoserverDefaultSRID(geoserverDefaultSRID);
+		result.setToleranceAngle(configToleranceAngle);
+		result.setUrlOverview(confUrlApercu);
+		result.setUrlThumbnail(confUrlVignette);
+		result.setAccesPhotosHD(confAccesPhotosHD);
+		result.setServerPort(serverPort);
+		result.setMaxCartSize(maxPhotos);
 
 		return result;
 

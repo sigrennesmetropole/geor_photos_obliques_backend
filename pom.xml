@@ -37,7 +37,6 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
         <swagger.codegen.version>3.0.21</swagger.codegen.version>
-        <flyway.version>10.9.1</flyway.version>
         <log4j2.version>2.23.1</log4j2.version>
         <geotools.version>28.2</geotools.version>
         <javamelody.version>2.1.0</javamelody.version>
@@ -205,12 +204,6 @@
                 <groupId>javax.annotation</groupId>
                 <artifactId>javax.annotation-api</artifactId>
                 <version>${javax.annotation-api.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
-            <dependency>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-core</artifactId>
-                <version>${flyway.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.apache.jclouds.api/ec2 -->
             <dependency>
