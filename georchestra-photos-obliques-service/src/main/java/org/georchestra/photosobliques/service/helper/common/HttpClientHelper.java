@@ -8,11 +8,12 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslProtocols;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.ssl.TrustStrategy;
 import org.springframework.stereotype.Component;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import java.security.KeyManagementException;
@@ -45,10 +46,10 @@ public class HttpClientHelper {
 			SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
 					.loadTrustMaterial(null, acceptingTrustStrategy).build();
 
-			clientBuilder.setSSLContext(sslContext);
+			clientBuilder.setSslcontext(sslContext);
 
-			HostnameVerifier allHostsValid = (hostname, session) -> trustAllCerts;
-			clientBuilder.setSSLHostnameVerifier(allHostsValid);
+			X509HostnameVerifier allHostsValid = new AllowAllHostnameVerifier();
+			clientBuilder.setHostnameVerifier(allHostsValid);
 		}
 		return clientBuilder.build();
 	}

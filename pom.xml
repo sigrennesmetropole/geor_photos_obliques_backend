@@ -26,7 +26,6 @@
         <commons.lang3.version>3.14.0</commons.lang3.version>
         <httpclient.version>4.5.2</httpclient.version>
         <json.simple.version>1.1.1</json.simple.version>
-        <javax.validation.version>2.0.1.Final</javax.validation.version>
         <springfox.version>3.0.0</springfox.version>
         <openapi.version>1.8.0</openapi.version>
         <openapi-web.version>2.4.0</openapi-web.version>
@@ -36,8 +35,6 @@
         <jsonwebtoken.version>0.12.5</jsonwebtoken.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
-        <swagger.codegen.version>3.0.21</swagger.codegen.version>
-        <flyway.version>10.9.1</flyway.version>
         <log4j2.version>2.23.1</log4j2.version>
         <geotools.version>28.2</geotools.version>
         <javamelody.version>2.1.0</javamelody.version>
@@ -46,12 +43,9 @@
         <opencsv.version>5.9</opencsv.version>
         <freemarker.version>2.3.32</freemarker.version>
         <xdocreport.version>2.0.4</xdocreport.version>
-        <openapi-generator-version>7.4.0</openapi-generator-version>
         <tika.version>2.9.1</tika.version>
         <jackson-datatype-threetenbp.version>2.15.2</jackson-datatype-threetenbp.version>
         <servlet-api.version>2.5</servlet-api.version>
-        <jsoup.version>1.17.2</jsoup.version>
-        <swagger-annotations.version>2.1.4</swagger-annotations.version>
         <findbugs.version>3.0.2</findbugs.version>
         <bouncy.version>1.77</bouncy.version>
         <jasig.cas.client.version>3.6.4</jasig.cas.client.version>
@@ -63,9 +57,7 @@
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <compiler.plugin.version>3.12.1</compiler.plugin.version>
-        <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
         <ant.plugin.version>3.1.0</ant.plugin.version>
-        <easy-random.version>5.0.0</easy-random.version>
         <hibernate-spatial.version>6.4.4.Final</hibernate-spatial.version>
         <ehcache.version>3.10.8</ehcache.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
@@ -76,8 +68,6 @@
         <swagger.version>2.2.20</swagger.version>
         <graalvm.version>23.0.3</graalvm.version>
         <httpclient5.version>5.3.1</httpclient5.version>
-        <!-- Configuration SONAR -->
-        <sonar.projectKey>${env.SONAR_KEY}${project.artifactId}</sonar.projectKey>
         <sonar.projectName>${project.artifactId}</sonar.projectName>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
@@ -205,12 +195,6 @@
                 <groupId>javax.annotation</groupId>
                 <artifactId>javax.annotation-api</artifactId>
                 <version>${javax.annotation-api.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
-            <dependency>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-core</artifactId>
-                <version>${flyway.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.apache.jclouds.api/ec2 -->
             <dependency>
@@ -443,7 +427,7 @@
             <dependency>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-cli</artifactId>
-                <version>${openapi-generator-version}</version>
+                <version>${openapi.plugin.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tika</groupId>
@@ -461,12 +445,6 @@
                 <artifactId>servlet-api</artifactId>
                 <version>${servlet-api.version}</version>
                 <scope>provided</scope>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
-            <dependency>
-                <groupId>org.jsoup</groupId>
-                <artifactId>jsoup</artifactId>
-                <version>${jsoup.version}</version>
             </dependency>
             <!-- Annotations Nonnull et Nullable du package javax.annotation -->
             <dependency>
@@ -515,6 +493,11 @@
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
                 <version>${jaxb-impl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
