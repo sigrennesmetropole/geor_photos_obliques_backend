@@ -1,14 +1,21 @@
 package org.georchestra.photosobliques.storage.repository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.From;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.georchestra.photosobliques.storage.common.RepositoryConstants;
+import org.georchestra.photosobliques.storage.entity.PhotoObliqueEntity;
+import org.locationtech.jts.geom.Geometry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @param <E> type des entités manipulées
@@ -34,6 +39,15 @@ public class AbstractCustomRepositoryImpl<E, C> {
 
 	@Getter(value = AccessLevel.PROTECTED)
 	private final Class<E> entitiesClass;
+
+	protected static final int SRID = 3948;
+
+	protected static final String FONCTION_ST_AREA = "public.st_area";
+	protected static final String FONCTION_GEOM_FEOM_TEXT = "public.st_geomfromtext";
+	protected static final String FONCTION_ST_INTERSECTION = "public.st_intersection";
+	protected static final String FONCTION_ST_INTERSECTS = "public.st_intersects";
+	protected static final String FONCTION_GREATEST = "GREATEST";
+	protected static final String FONCTION_ST_SET_SRID = "public.st_setSRID";
 
 	protected Page<E> search(@Nullable C searchCriteria, Pageable pageable) {
 
@@ -90,6 +104,38 @@ public class AbstractCustomRepositoryImpl<E, C> {
 		if (StringUtils.isNotEmpty(criteria)) {
 			predicates.add(buildPredicateStringCriteria(criteria, type, unaccent, builder, root));
 		}
+	}
+
+
+	protected void predicateAngleCriteria(Double angleRecherche, Double tolerance, String type, List<Predicate> predicates,
+			CriteriaBuilder builder, From<?, ?> root) {
+		Predicate angleInTolerencePredicate = builder.between(
+				root.get(type),
+				builder.literal(angleRecherche - tolerance),
+				builder.literal(angleRecherche + tolerance)
+		);
+		Predicate angleLessThanTolerencePredicate = builder.and(
+				builder.lessThanOrEqualTo(builder.literal(angleRecherche), builder.literal(tolerance)),
+				builder.greaterThanOrEqualTo(root.get(type), builder.literal(360-tolerance+angleRecherche))
+		);
+
+		Predicate angleGreaterThanTolerencePredicate = builder.and(
+				builder.greaterThanOrEqualTo(builder.literal(angleRecherche), builder.literal(360-tolerance)),
+				builder.lessThanOrEqualTo(root.get(type), builder.literal(tolerance - 360 + angleRecherche))
+		);
+
+
+		predicates.add(builder.or(angleInTolerencePredicate, angleLessThanTolerencePredicate, angleGreaterThanTolerencePredicate));
+	}
+
+	protected void predicateEqualsCriteria(Integer integer, String type,
+										   List<Predicate> predicates, CriteriaBuilder builder, From<?, ?> root) {
+		predicates.add(
+				builder.equal(
+						builder.literal(integer),
+						root.get(type)
+				)
+		);
 	}
 
 	protected void predicateStringCriteria(List<String> criterias, String type, boolean unaccent,
@@ -179,52 +225,6 @@ public class AbstractCustomRepositoryImpl<E, C> {
 
 	}
 
-	protected void predicateUuidCriteria(UUID uuid, String type, List<Predicate> predicates, CriteriaBuilder builder,
-			Root<?> root) {
-		if (uuid != null) {
-			predicates.add(builder.equal(root.get(type), uuid));
-		}
-	}
-
-	/**
-	 *
-	 * @param uuids      la liste de valeurs
-	 * @param type       le type cible
-	 * @param predicates les prédicats
-	 * @param builder    le builder
-	 * @param root       la racine
-	 */
-	protected void predicateUuidsCriteria(List<UUID> uuids, String type, List<Predicate> predicates,
-			CriteriaBuilder builder, From<?, ?> root) {
-		if (CollectionUtils.isNotEmpty(uuids)) {
-			predicates.add(root.get(type).in(uuids));
-		}
-	}
-
-	protected void predicateCriteriaNullOrNot(Boolean criteria, String type, List<Predicate> predicates,
-			CriteriaBuilder builder, Root<?> root) {
-
-		if (Boolean.TRUE.equals(criteria)) {
-			predicates.add(builder.isNull(root.get(type)));
-		} else {
-			predicates.add(builder.isNotNull(root.get(type)));
-		}
-
-	}
-
-	protected void predicateBooleanOrGreaterThanIntegerCriteria(Boolean criteria, Integer lowerValue,
-			List<String> types, List<Predicate> predicates, CriteriaBuilder builder, Root<?> root) {
-		if (Boolean.TRUE.equals(criteria)) {
-			Predicate[] predicatesGreater = types.stream().map(type -> builder.greaterThan(root.get(type), lowerValue))
-					.toArray(Predicate[]::new);
-			predicates.add(builder.or(predicatesGreater));
-		} else {
-			Predicate[] predicatesLess = types.stream()
-					.map(type -> builder.lessThanOrEqualTo(root.get(type), lowerValue)).toArray(Predicate[]::new);
-			predicates.add(builder.and(predicatesLess));
-		}
-	}
-
 
 	protected void predicateLessThanCriteria(Integer end, String type, List<Predicate> predicates,
 											 CriteriaBuilder builder, Root<?> root) {
@@ -236,6 +236,37 @@ public class AbstractCustomRepositoryImpl<E, C> {
 												CriteriaBuilder builder, Root<?> root) {
 
 		predicateBetweenCriteria(start, null, type, predicates, builder, root);
+	}
+
+	protected void predicateIntersectGeometries(String geometryWKT, String type, List<Predicate> predicates, CriteriaBuilder builder, Root<PhotoObliqueEntity> root) {
+
+		Expression<Geometry> searchGeometry = builder.function(
+				FONCTION_GEOM_FEOM_TEXT,
+				Geometry.class,
+				builder.literal(geometryWKT).as(String.class),
+				builder.literal(SRID)
+		);
+		Expression<Geometry> photoGeometry = builder.function(
+				FONCTION_ST_SET_SRID,
+				Geometry.class,
+				root.get(type),
+				builder.literal(SRID)
+		);
+		Expression<Geometry> searchGeometry2 = builder.function(
+				FONCTION_ST_SET_SRID,
+				Geometry.class,
+				searchGeometry,
+				builder.literal(SRID)
+		);
+
+		Expression<Boolean> expression = builder.function(
+				FONCTION_ST_INTERSECTS,
+				Boolean.class,
+				photoGeometry,
+				searchGeometry2
+		);
+		predicates.add(builder.isTrue(expression));
+
 	}
 
 	protected void predicateCodeAndLabel(String codeAndLibelle, List<String> fields, List<Predicate> predicates,
@@ -256,120 +287,7 @@ public class AbstractCustomRepositoryImpl<E, C> {
 		}
 	}
 
-	protected void predicateCodeAndLabel(String codeAndLibelle, List<Predicate> predicates, CriteriaBuilder builder,
-			Root<?> root) {
-		predicateCodeAndLabel(codeAndLibelle,
-				Arrays.asList(RepositoryConstants.FIELD_CODE, RepositoryConstants.FIELD_LABEL), predicates, builder,
-				root);
-	}
 
-	protected void predicateGeographicArea(String codeAndLibelle, List<Predicate> predicates, CriteriaBuilder builder,
-			Root<?> root) {
-		predicateGeographicArea(codeAndLibelle, RepositoryConstants.FIELD_CODE, RepositoryConstants.FIELD_LABEL,
-				predicates, builder, root);
-	}
-
-	protected void predicateGeographicArea(String codeAndLibelle, String fieldNameCode, String fieldNameLabel,
-			List<Predicate> predicates, CriteriaBuilder builder, Root<?> root) {
-		predicateGeographicArea(codeAndLibelle,
-				StringUtils.isNotEmpty(fieldNameCode) ? List.of(fieldNameCode) : null,
-				StringUtils.isNotEmpty(fieldNameLabel) ? List.of(fieldNameLabel) : null, predicates, builder,
-				root);
-	}
-
-	/**
-	 * Ajoute des prédicats de comparaison sur le champ code et libellé <br/>
-	 * Cette méthode considère que le code est un numérique correspondant à un code
-	 * insee
-	 *
-	 * @param codeAndLibelle Texte sur lequel faire la comparaison
-	 * @param predicates     Liste dans laquelle on ajoute les prédicats
-	 * @param builder        Le builder de la requête
-	 * @param root           Le root de la requête
-	 */
-	protected void predicateGeographicArea(String codeAndLibelle, List<String> fieldNameCodes,
-			List<String> fieldNameLabels, List<Predicate> predicates, CriteriaBuilder builder, Root<?> root) {
-
-		if (StringUtils.isNotEmpty(codeAndLibelle)) {
-			// on enlève ce qui n'est pas lettre et chiffre et espace et on remplace les
-			// accents par les caractères non accentués
-			String normalized = normalize(codeAndLibelle);
-			// on coupe sur les espaces
-			String[] parts = normalized.split(" ");
-			List<String> codes = collectCodes(parts);
-
-			predicateGeographicAreaCodes(codes, fieldNameCodes, predicates, builder, root);
-
-			// on enlève tous les codes détectés comme insee
-			normalized = removeCodes(normalized, codes);
-			// on ajoute un critère ilike sur le libelle et on vérifie bien que ce n'est pas
-			// qu'un espace sinon ça fait **
-			if (StringUtils.isNotEmpty(normalized) && !normalized.equalsIgnoreCase(" ")) {
-				// on utilise le reste commme du texte de libellé
-				normalized = "*" + normalized.replace(" ", "*") + "*";
-				if (CollectionUtils.isNotEmpty(fieldNameLabels)) {
-					for (String fieldNameLabel : fieldNameLabels) {
-						predicateStringCriteria(normalized, fieldNameLabel, true, predicates, builder, root);
-					}
-				}
-			}
-		}
-	}
-
-	private void predicateGeographicAreaCodes(List<String> codes, List<String> fieldNameCodes,
-			List<Predicate> predicates, CriteriaBuilder builder, Root<?> root) {
-		List<Predicate> predicateCodes = new ArrayList<>();
-		if (CollectionUtils.isNotEmpty(fieldNameCodes)) {
-			for (String code : codes) {
-				String value = code + "%";
-				for (String fieldNameCode : fieldNameCodes) {
-					predicateCodes.add(builder.like(root.get(fieldNameCode), value));
-				}
-			}
-		}
-
-		// on utilise tous les critères en ET
-		if (CollectionUtils.isNotEmpty(predicateCodes)) {
-			predicates.add(builder.or(predicateCodes.toArray(Predicate[]::new)));
-		}
-	}
-
-	private List<String> collectCodes(String[] parts) {
-		List<String> codes = new ArrayList<>();
-		for (String part : parts) {
-			// si c'est une sorte de code insee
-			if (part.matches("\\d.*")) {
-				codes.add(part);
-			}
-		}
-		return codes;
-	}
-
-	private String removeCodes(String normalized, List<String> codes) {
-		for (String code : codes) {
-			normalized = normalized.replaceAll(code, "");
-		}
-		return normalized.trim();
-	}
-
-	protected void predicateUsers(String firstnameAndLastName, List<Predicate> predicates, CriteriaBuilder builder,
-			Root<?> root) {
-		if (StringUtils.isNotEmpty(firstnameAndLastName)) {
-			String normalized = normalize(firstnameAndLastName).replace("-", " ");
-			String[] parts = normalized.split(" ");
-			List<Predicate> predicateName = new ArrayList<>();
-			for (String part : parts) {
-				String partTrim = "*" + part.trim() + "*";
-				predicateName.add(buildPredicateStringCriteria(partTrim, RepositoryConstants.FIELD_FIRSTNAME, true,
-						builder, root));
-				predicateName.add(buildPredicateStringCriteria(partTrim, RepositoryConstants.FIELD_LASTNAME, true,
-						builder, root));
-			}
-			if (CollectionUtils.isNotEmpty(predicateName)) {
-				predicates.add(builder.or(predicateName.toArray(Predicate[]::new)));
-			}
-		}
-	}
 
 	protected Predicate buildPredicateStringCriteria(String criteria, String type, boolean unaccent,
 			CriteriaBuilder builder, From<?, ?> root) {
@@ -383,7 +301,7 @@ public class AbstractCustomRepositoryImpl<E, C> {
 
 			if (unaccent) {
 				criteria = normalize(criteria).toLowerCase();
-				expression = builder.function("unaccent", String.class, builder.lower(root.get(type)));
+				expression = builder.function("public.unaccent", String.class, builder.lower(root.get(type)));
 			} else {
 				expression = root.get(type);
 			}

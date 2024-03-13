@@ -4,13 +4,13 @@
 package org.georchestra.photosobliques.service.helper.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.georchestra.photosobliques.service.exception.GeometryException;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.WKTReader;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
-import org.georchestra.photosobliques.service.exception.GeometryException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,6 +25,7 @@ public class GeometryHelper {
 	public static final double M2_TO_HECTARE = 10000.0d;
 	public static final double M2_TO_KM2 = 1000000.0d;
 	public static final String EPSG_4326 = "EPSG:4326";
+	public static final String EPSG_3948 = "EPSG:3948";
 	public static final String EPSG_32632 = "EPSG:32632";
 
 	/**
@@ -48,7 +49,7 @@ public class GeometryHelper {
 
 	public Double computeSurfaceWGS84(Geometry geometry)
 			throws GeometryException {
-		return computeSurface(geometry, EPSG_4326);
+		return computeSurface(geometry, EPSG_3948);
 	}
 
 	/**

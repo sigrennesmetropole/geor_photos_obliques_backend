@@ -9,7 +9,7 @@ public class PhotosObliquesOpenApiSwaggerConfig extends OpenApiSwaggerConfig {
 
 	@Bean
 	public GroupedOpenApi publicApi() {
-		return GroupedOpenApi.builder().group("photos-obliques-back").packagesToScan("org.georchestra.photosobliques.facade.controller")
+		return GroupedOpenApi.builder().group("geor_photos_obliques_backend").packagesToScan("org.georchestra.photosobliques.facade.controller")
 				.build();
 	}
 
