@@ -28,6 +28,7 @@ public class OpenApiSwaggerConfig {
 	protected Components apiComponents() {
 		return new Components().addSecuritySchemes("basicauth", securityScheme());
 	}
+
 	protected io.swagger.v3.oas.models.security.SecurityScheme securityScheme() {
 		return new io.swagger.v3.oas.models.security.SecurityScheme().type(io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP).scheme("basic");
 	}
