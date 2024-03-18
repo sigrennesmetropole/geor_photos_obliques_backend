@@ -32,6 +32,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	@Value("${photos-obliques.panier.max.photos:200}")
 	private Integer maxPhotos;
 
+	@Value("${photos-obliques.geometries.srid}")
+	private String srid;
+
 	/**
 	 * Permet de récupérer la configuration
 	 *
@@ -49,9 +52,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		result.setAccesPhotosHD(confAccesPhotosHD);
 		result.setServerPort(serverPort);
 		result.setMaxCartSize(maxPhotos);
+		result.setSrid(srid);
 
 		return result;
-
 	}
 
 }

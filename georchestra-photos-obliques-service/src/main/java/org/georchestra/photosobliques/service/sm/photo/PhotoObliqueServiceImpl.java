@@ -12,8 +12,6 @@ import org.georchestra.photosobliques.storage.entity.PhotoObliqueEntity;
 import org.georchestra.photosobliques.storage.repository.photo.PhotoObliqueCustomRepository;
 import org.georchestra.photosobliques.storage.repository.photo.PhotoObliqueRepository;
 import org.locationtech.jts.geom.Geometry;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +35,7 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 	private final ConfigurationService configurationService;
 
 	@Override
-	public Page<PhotoOblique> searchPhotoOblique(PhotoObliqueSearchCriteria photoObliqueSearchCriteria, Pageable pageable) throws AppServiceException {
+	public List<PhotoOblique> searchPhotoOblique(PhotoObliqueSearchCriteria photoObliqueSearchCriteria, Pageable pageable) throws AppServiceException {
 		Geometry geometry = geometryHelper.convertGeometry(photoObliqueSearchCriteria.getGeometry());
 		if(geometry == null) {
 			throw new AppServiceException("Aucune géométrie n'a été trouvée");
@@ -45,10 +43,10 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 		List<Tuple> photosObliquesEntities = photoObliqueCustomRepository.searchPhotosObliquesWithRelevance(photoObliqueSearchCriteria,
 				configurationService.getApplicationConfiguration().getToleranceAngle(), pageable);
 
-		return mapAndFillPhotoOblique(photosObliquesEntities, pageable);
+		return mapAndFillPhotoOblique(photosObliquesEntities);
 	}
 
-	private Page<PhotoOblique> mapAndFillPhotoOblique(List<Tuple> photosObliquesEntities, Pageable pageable) {
+	private List<PhotoOblique> mapAndFillPhotoOblique(List<Tuple> photosObliquesEntities) {
 		List<PhotoOblique> photoObliques = new ArrayList<>();
 
 		for (Tuple tuple : photosObliquesEntities) {
@@ -59,7 +57,7 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 			photoObliques.add(photoOblique);
 		}
 
-		return new PageImpl<>(photoObliques, pageable, -1);
+		return photoObliques;
 	}
 
 
@@ -69,8 +67,17 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 	}
 
 	@Override
-	public List<Integer> searchDates(PhotoObliqueSearchCriteria photoObliqueSearchCriteria) throws AppServiceException {
-		//TODO
-		return new ArrayList<>();
+	public List<String> searchOwners(String geometryWKT) throws AppServiceException {
+		return photoObliqueCustomRepository.searchOwners(geometryWKT);
+	}
+
+	@Override
+	public List<String> searchProviders(String geometryWKT) throws AppServiceException {
+		return photoObliqueCustomRepository.searchProviders(geometryWKT);
+	}
+
+	@Override
+	public List<Integer> searchYears(String geometryWKT) throws AppServiceException {
+		return photoObliqueCustomRepository.searchYears(geometryWKT);
 	}
 }

@@ -1,23 +1,19 @@
-package org.georchestra.photosobliques.facade.controller.photos;
+package org.georchestra.photosobliques.facade.controller;
 
 import lombok.AllArgsConstructor;
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.core.bean.PhotosCount;
-import org.georchestra.photosobliques.core.bean.PhotosObliquesPageResult;
 import org.georchestra.photosobliques.core.bean.photo.PhotoObliqueSearchCriteria;
 import org.georchestra.photosobliques.facade.controller.api.PhotosApi;
 import org.georchestra.photosobliques.facade.util.AbstractController;
 import org.georchestra.photosobliques.facade.util.UtilPageable;
 import org.georchestra.photosobliques.service.sm.photo.PhotoObliqueService;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author NCA20245
@@ -48,18 +44,15 @@ public class PhotosApiController extends AbstractController implements PhotosApi
     }
 
     @Override
-    public ResponseEntity<PhotosObliquesPageResult> searchPhotos(String geometry, Integer startDate, Integer endDate, Double angleDegre, String provider,
+    public ResponseEntity<List<PhotoOblique>> searchPhotos(String geometry, Integer startDate, Integer endDate, Double angleDegre, String provider,
                                                               String owner, Integer offset,  Integer limit, String order) throws Exception {
 
         Pageable pageable = utilPageable.getPageable(offset, limit, order);
 
         PhotoObliqueSearchCriteria searchCriteria = new PhotoObliqueSearchCriteria(geometry, startDate, endDate, angleDegre, provider, owner);
 
-        Page<PhotoOblique> page = photoObliqueService.searchPhotoOblique(searchCriteria, pageable);
-        PhotosObliquesPageResult result = new PhotosObliquesPageResult();
-        result.setElements(page.getContent());
-        result.setTotal(page.getTotalElements());
-        return ResponseEntity.ok(result);
+        List<PhotoOblique> photoObliques = photoObliqueService.searchPhotoOblique(searchCriteria, pageable);
+        return ResponseEntity.ok(photoObliques);
     }
 }
 
