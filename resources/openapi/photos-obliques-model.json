@@ -1,7 +1,7 @@
 {
 	"info": {
 		"contact": {
-			"email": "r.goffinet@rennesmetropole.fr"
+			"email": "sigsupport@rennesmetropole.fr"
 		},
 		"description": "API Photos Obliques",
 		"license": {
@@ -61,6 +61,10 @@
 						"description": "Url du point de montage public d'accès aux vignettes des photos",
 						"type": "string"
 					},
+					"srid": {
+						"description": "Identifiant de référence spatiale utilisé pour les géométries de l'application",
+						"type": "string"
+					},
 					"version": {
 						"description": "Numéro de version de l'application",
 						"type": "string"
@@ -69,53 +73,30 @@
 				"type": "object"
 			},
 			"AvailableOwners": {
-				"properties": {
-					"availableDates": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object"
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
 			},
 			"AvailableProviders": {
-				"properties": {
-					"availableDates": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object"
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
 			},
 			"AvailableYears": {
-				"properties": {
-					"availableDates": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object"
-			},
-			"PageResult": {
-				"properties": {
-					"total": {
-						"format": "int64",
-						"type": "integer"
-					}
-				},
-				"type": "object"
+				"type": "array",
+				"items": {
+					"format": "int4",
+					"type": "integer"
+				}
 			},
 			"PhotoOblique": {
 				"properties": {
 					"id": {
 						"type": "string"
 					},
-					"angleDegre": {
+					"angleDegree": {
 						"format": "double",
 						"multipleOf": 0.001,
 						"type": "number"
@@ -180,23 +161,11 @@
 				},
 				"type": "object"
 			},
-			"PhotosObliquesPageResult": {
-				"allOf": [
-					{
-						"$ref": "#/components/schemas/PageResult"
-					},
-					{
-						"properties": {
-							"elements": {
-								"items": {
-									"$ref": "#/components/schemas/PhotoOblique"
-								},
-								"type": "array"
-							}
-						},
-						"type": "object"
-					}
-				]
+			"PhotosObliquesResult": {
+				"items": {
+					"$ref": "#/components/schemas/PhotoOblique"
+				},
+				"type": "array"
 			},
 			"User": {
 				"description": "Utilisateur",

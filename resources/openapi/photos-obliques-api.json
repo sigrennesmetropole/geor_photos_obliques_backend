@@ -6,7 +6,7 @@
 		"title": "photos-obliques-api",
 		"termsOfService": "http://swagger.io/terms/",
 		"contact": {
-			"email": "r.goffinet@rennesmetropole.fr"
+			"email": "sigsupport@rennesmetropole.fr"
 		},
 		"license": {
 			"name": "Apache 2.0",
@@ -30,6 +30,10 @@
 			"description": "Services divers"
 		},
 		{
+			"name": "availableValues",
+			"description": "Servies permettant de listant les valeurs possibles"
+		},
+		{
 			"name": "photos",
 			"description": "Services de gestion des photos obliques"
 		}
@@ -51,6 +55,16 @@
 							"application/json": {
 								"schema": {
 									"$ref": "photos-obliques-model.json#/components/schemas/ApplicationConfiguration"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
 								}
 							}
 						}
@@ -123,7 +137,7 @@
 					},
 					{
 						"in": "query",
-						"name": "angleDegre",
+						"name": "angleDegree",
 						"description": "Index de début",
 						"required": false,
 						"schema": {
@@ -185,7 +199,17 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "photos-obliques-model.json#/components/schemas/PhotosObliquesPageResult"
+									"$ref": "photos-obliques-model.json#/components/schemas/PhotosObliquesResult"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Paramètre obligatoire manquant",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
 								}
 							}
 						}
@@ -243,7 +267,7 @@
 					},
 					{
 						"in": "query",
-						"name": "angleDegre",
+						"name": "angleDegree",
 						"description": "Index de début",
 						"required": false,
 						"schema": {
@@ -277,6 +301,16 @@
 							"application/json": {
 								"schema": {
 									"$ref": "photos-obliques-model.json#/components/schemas/PhotosCount"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Paramètre obligatoire manquant",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
 								}
 							}
 						}
@@ -346,6 +380,16 @@
 							}
 						}
 					},
+					"400": {
+						"description": "Paramètre obligatoire manquant ou ressource introuvable",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					},
 					"500": {
 						"description": "Internal server error",
 						"content": {
@@ -362,7 +406,7 @@
 		"/years": {
 			"get": {
 				"tags": [
-					"years"
+					"availableValues"
 				],
 				"summary": "Available years",
 				"description": "Renvoie les années disponibles pour une emprise donnée",
@@ -389,6 +433,16 @@
 							}
 						}
 					},
+					"400": {
+						"description": "Paramètre obligatoire manquant",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					},
 					"500": {
 						"description": "Internal server error",
 						"content": {
@@ -405,7 +459,7 @@
 		"/providers": {
 			"get": {
 				"tags": [
-					"years"
+					"availableValues"
 				],
 				"summary": "Available providers",
 				"description": "Renvoie les prestataires disponibles pour une emprise donnée",
@@ -432,6 +486,16 @@
 							}
 						}
 					},
+					"400": {
+						"description": "Paramètre obligatoire manquant",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
+								}
+							}
+						}
+					},
 					"500": {
 						"description": "Internal server error",
 						"content": {
@@ -448,7 +512,7 @@
 		"/owners": {
 			"get": {
 				"tags": [
-					"years"
+					"availableValues"
 				],
 				"summary": "Available Owners",
 				"description": "Renvoie les propriétaire disponibles pour une emprise donnée",
@@ -471,6 +535,16 @@
 							"application/json": {
 								"schema": {
 									"$ref": "photos-obliques-model.json#/components/schemas/AvailableOwners"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Paramètre obligatoire manquant",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "photos-obliques-model.json#/components/schemas/ApiError"
 								}
 							}
 						}

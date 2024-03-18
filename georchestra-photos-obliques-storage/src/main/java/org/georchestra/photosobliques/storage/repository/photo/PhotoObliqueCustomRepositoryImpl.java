@@ -10,6 +10,7 @@ import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.georchestra.photosobliques.core.bean.photo.PhotoObliqueSearchCriteria;
 import org.georchestra.photosobliques.storage.entity.PhotoObliqueEntity;
 import org.georchestra.photosobliques.storage.repository.AbstractCustomRepositoryImpl;
@@ -54,7 +55,7 @@ public class PhotoObliqueCustomRepositoryImpl
 
         Root<PhotoObliqueEntity> searchRoot = query.from(PhotoObliqueEntity.class);
 
-        buildQuery(searchCriteria, tolerence, builder, query, searchRoot);
+        buildQueryFromSeachCriteria(searchCriteria, tolerence, builder, query, searchRoot);
 
         // On sélectionne les Photos et la pertinance pour chaque résultat
         query.multiselect(searchRoot,
@@ -75,6 +76,53 @@ public class PhotoObliqueCustomRepositoryImpl
                     .getResultList();
         }
         return entities;
+    }
+
+    @Override
+    public List<String> searchOwners(String geometry) {
+
+        return getAvailableValuesFromGeometryAndField(geometry, FIELD_OWNER);
+    }
+
+    @Override
+    public List<String> searchProviders(String geometry) {
+
+        return getAvailableValuesFromGeometryAndField(geometry, FIELD_PROVIDER);
+    }
+
+    private List<String> getAvailableValuesFromGeometryAndField(String geometry, String fieldProvider) {
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+
+        CriteriaQuery<String> query = builder.createQuery(String.class);
+
+        Root<PhotoObliqueEntity> searchRoot = query.from(PhotoObliqueEntity.class);
+
+        buildQueryFromGeometry(geometry, builder, query, searchRoot);
+
+        query.groupBy(searchRoot.get(fieldProvider)).select(searchRoot.get(fieldProvider));
+
+        TypedQuery<String> typedQuery = getEntityManager().createQuery(query);
+
+        return typedQuery.getResultList();
+    }
+
+
+    @Override
+    public List<Integer> searchYears(String geometry) {
+
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+
+        CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+
+        Root<PhotoObliqueEntity> searchRoot = query.from(PhotoObliqueEntity.class);
+
+        buildQueryFromGeometry(geometry, builder, query, searchRoot);
+
+        query.groupBy(searchRoot.get(FIELD_YEAR)).select(searchRoot.get(FIELD_YEAR));
+
+        TypedQuery<Integer> typedQuery = getEntityManager().createQuery(query);
+
+        return typedQuery.getResultList();
     }
 
     private List<Order> toOrders(Sort sort, Root<PhotoObliqueEntity> searchRoot, CriteriaBuilder builder, PhotoObliqueSearchCriteria searchCriteria) {
@@ -124,7 +172,7 @@ public class PhotoObliqueCustomRepositoryImpl
 
         Root<PhotoObliqueEntity> searchRoot = query.from(PhotoObliqueEntity.class);
 
-        buildQuery(searchCriteria, tolerence, builder, query, searchRoot);
+        buildQueryFromSeachCriteria(searchCriteria, tolerence, builder, query, searchRoot);
 
         query.select(builder.count(searchRoot).as(Integer.class));
 
@@ -136,8 +184,8 @@ public class PhotoObliqueCustomRepositoryImpl
     /*
         Construction de la requête à partir du searchCriteria
      */
-    private void buildQuery(PhotoObliqueSearchCriteria searchCriteria, Double tolerence, CriteriaBuilder builder,
-                            CriteriaQuery<?> criteriaQuery, Root<PhotoObliqueEntity> root) {
+    private void buildQueryFromSeachCriteria(PhotoObliqueSearchCriteria searchCriteria, Double tolerence, CriteriaBuilder builder,
+                                             CriteriaQuery<?> criteriaQuery, Root<PhotoObliqueEntity> root) {
 
         if (searchCriteria != null) {
             List<Predicate> predicates = new ArrayList<>();
@@ -174,6 +222,26 @@ public class PhotoObliqueCustomRepositoryImpl
                 criteriaQuery.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
             }
 
+        }
+    }
+
+    /*
+        Construction de la requête à partir d'une géométrie
+     */
+    private void buildQueryFromGeometry(String geometry, CriteriaBuilder builder,
+                                             CriteriaQuery<?> criteriaQuery, Root<PhotoObliqueEntity> root) {
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        //on s'assure que l'on récupère les images téléchargeables uniquement
+        predicateEqualsCriteria(1, FIELD_DOWNLOADABLE, predicates, builder, root);
+
+        if (StringUtils.isNotEmpty(geometry)) {
+            predicateIntersectGeometries(geometry, FIELD_SHAPE, predicates, builder, root);
+        }
+
+        if (CollectionUtils.isNotEmpty(predicates)) {
+            criteriaQuery.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
         }
     }
 

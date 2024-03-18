@@ -12,6 +12,9 @@ import java.util.List;
 public interface PhotoObliqueCustomRepository {
 
     List<Tuple> searchPhotosObliquesWithRelevance(PhotoObliqueSearchCriteria searchCriteria, Double tolerence, Pageable pageable);
+    List<String> searchOwners(String geometry);
+    List<String> searchProviders(String geometry);
+    List<Integer> searchYears(String geometry);
 
     Integer countPhotosObliques(PhotoObliqueSearchCriteria searchCriteria, Double tolerence);
 }
