@@ -65,7 +65,7 @@
         <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
         <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
         <jaxb-impl.version>4.0.5</jaxb-impl.version>
-        <swagger.version>2.2.20</swagger.version>
+        <swagger.version>2.2.21</swagger.version>
         <graalvm.version>23.0.3</graalvm.version>
         <httpclient5.version>5.3.1</httpclient5.version>
         <sonar.projectName>${project.artifactId}</sonar.projectName>
