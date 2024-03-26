@@ -17,4 +17,5 @@ public interface PhotoObliqueCustomRepository {
     List<Integer> searchYears(String geometry);
 
     Integer countPhotosObliques(PhotoObliqueSearchCriteria searchCriteria, Double tolerence);
+    List<Tuple> getFilesNameById(List<String> photoIDs);
 }

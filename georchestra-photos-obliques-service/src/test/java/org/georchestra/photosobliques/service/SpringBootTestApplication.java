@@ -1,4 +1,4 @@
-package test.java.org.georchestra.photosobliques.service;
+package org.georchestra.photosobliques.service;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

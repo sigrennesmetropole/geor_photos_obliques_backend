@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Documented
 @Inherited
 @SpringBootTest
-@TestPropertySource(properties = "spring.config.name = georchestra-photos-obliques-backend")
+@TestPropertySource(properties = "spring.config.name = photos-obliques-test")
 @ActiveProfiles("test")
 public @interface PhotosObliquesSpringBootTest {
 }

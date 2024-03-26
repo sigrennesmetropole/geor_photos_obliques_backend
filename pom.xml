@@ -85,6 +85,8 @@
         <plugin.maven-jar-plugin.version>3.3.0</plugin.maven-jar-plugin.version>
         <plugin.maven-javadoc-plugin.version>3.6.3</plugin.maven-javadoc-plugin.version>
         <plugin.maven-assembly-plugin.version>3.7.0</plugin.maven-assembly-plugin.version>
+        <h2gis.org.version>2.2.1</h2gis.org.version>
+        <spring-boot-test.version>3.1.5</spring-boot-test.version>
     </properties>
     <!-- Modules du projet -->
     <modules>
@@ -498,6 +500,24 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.vaadin.external.google</groupId>
+                        <artifactId>android-json</artifactId>
+                    </exclusion>
+                </exclusions>
+                <version>${spring-boot-test.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.orbisgis/h2gis -->
+            <dependency>
+                <groupId>
+                    org.orbisgis</groupId>
+                <artifactId>h2gis</artifactId>
+                <version>${h2gis.org.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
