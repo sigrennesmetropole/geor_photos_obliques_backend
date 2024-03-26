@@ -507,24 +507,6 @@
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.vaadin.external.google</groupId>
-                        <artifactId>android-json</artifactId>
-                    </exclusion>
-                </exclusions>
-                <version>${spring-boot-test.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.orbisgis/h2gis -->
-            <dependency>
-                <groupId>
-                    org.orbisgis</groupId>
-                <artifactId>h2gis</artifactId>
-                <version>${h2gis.org.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
