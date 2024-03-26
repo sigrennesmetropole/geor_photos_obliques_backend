@@ -40,12 +40,13 @@ public class FileHelper {
 	private String temporaryDirectory = null;
 
 	public File createTemporaryFile(String prefix, String extension) throws IOException {
-		File outputFile = null;
+		File outputFile;
 		if (StringUtils.isNotEmpty(temporaryDirectory)) {
 			outputFile = File.createTempFile(prefix, extension, new File(temporaryDirectory));
 		} else {
 			outputFile = File.createTempFile(prefix, extension);
 		}
+		outputFile.deleteOnExit();
 		return outputFile;
 	}
 
@@ -157,7 +158,7 @@ public class FileHelper {
 	public DocumentContent zipFiles(String fileName, List<DocumentContent> documentContents) throws IOException {
 		File zipFile = createTemporaryFile(fileName, DocumentFormat.ZIP.getExtension());
 		DocumentContent result = new DocumentContent(fileName, DocumentFormat.ZIP.getTypeMime(), zipFile);
-		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile));) {
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile))) {
 			byte[] buffer = new byte[1024];
 			if (CollectionUtils.isNotEmpty(documentContents)) {
 				for (DocumentContent documentContent : documentContents) {

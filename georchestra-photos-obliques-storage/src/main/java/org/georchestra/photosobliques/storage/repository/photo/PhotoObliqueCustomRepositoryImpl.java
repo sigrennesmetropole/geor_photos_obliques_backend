@@ -40,6 +40,9 @@ public class PhotoObliqueCustomRepositoryImpl
     private static final String FIELD_ANGLE = "angleDegre";
     private static final String FIELD_DOWNLOADABLE = "downloadable";
     private static final String FIELD_RELEVANCE = "relevance";
+    private static final String FIELD_ID = "id";
+    private static final String FIELD_FILE = "file";
+    private static final String FIELD_MENTION = "mention";
 
     protected PhotoObliqueCustomRepositoryImpl(EntityManager entityManager) {
         super(entityManager, PhotoObliqueEntity.class);
@@ -270,4 +273,30 @@ public class PhotoObliqueCustomRepositoryImpl
         return builder.prod(builder.literal(100.0),
                 builder.quot(intersectionArea, greatestArea));
     }
+
+    @Override
+    public List<Tuple> getFilesNameById(List<String> photoIDs) {
+        List<Predicate> predicates = new ArrayList<>();
+
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+
+        CriteriaQuery<Tuple> query = builder.createTupleQuery();
+
+        Root<PhotoObliqueEntity> root = query.from(PhotoObliqueEntity.class);
+
+        predicateStringCriteria(photoIDs, FIELD_ID, false, predicates, builder, root);
+        //on s'assure que l'on récupère les images téléchargeables uniquement
+        predicateEqualsCriteria(1, FIELD_DOWNLOADABLE, predicates, builder, root);
+
+        if (CollectionUtils.isNotEmpty(predicates)) {
+            query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
+        }
+
+        query.multiselect(root.get(FIELD_FILE), root.get(FIELD_MENTION));
+
+        TypedQuery<Tuple> typedQuery = getEntityManager().createQuery(query);
+
+        return typedQuery.getResultList();
+    }
+
 }
