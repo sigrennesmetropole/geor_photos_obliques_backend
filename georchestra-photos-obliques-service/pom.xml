@@ -89,6 +89,13 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.orbisgis/h2gis -->
+        <dependency>
+            <groupId>org.orbisgis</groupId>
+            <artifactId>h2gis</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Dependances geotools -->
         <dependency>
             <groupId>org.geotools</groupId>
