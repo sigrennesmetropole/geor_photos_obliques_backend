@@ -1,0 +1,26 @@
+---
+# les documents YAML commencent toujours par "---"
+
+# le nom de l'hôte ou groupe concerné
+- hosts: all
+  vars_files:
+    - ~/photos-obliques_var.yml
+  roles:
+    - {
+      role: dockerize,
+      photosobliques_db_host: '{{db_host}}',
+      photosobliques_db_port: '{{db_port}}',
+      photosobliques_db_name: '{{db_name}}',
+      photosobliques_db_user: '{{db_user}}',
+      photosobliques_server_expose_port: '{{server_expose_port}}',
+      photosobliques_db_password: '{{db_password}}',
+      photosobliques_admin_password: '{{admin_password}}',
+      photosobliques_smtp_host: '{{smtp_host}}',
+      photosobliques_smtp_port: '{{smtp_port}}',
+      photosobliques_smtp_username: '{{smtp_username}}',
+      photosobliques_ldap_host: '{{ldap_host}}',
+      photosobliques_ldap_port: '{{ldap_port}}',
+      photosobliques_ldap_username: '{{ldap_username}}',
+      photosobliques_ldap_password: '{{ldap_password}}',
+      photosobliques_backend_url: '{{backend_url}}',
+      }

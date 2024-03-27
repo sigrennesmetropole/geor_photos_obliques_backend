@@ -1,0 +1,37 @@
+---
+# vars file for photosobliques
+
+# database 
+photosobliques_db_host: database
+photosobliques_db_name: georchestra
+photosobliques_db_port: 5432
+photosobliques_db_user: consult
+photosobliques_db_password: consult
+
+# installation
+photosobliques_image_directory: /opt/images/photosobliques
+photosobliques_war_name: georchestra-photos-obliques.war
+photosobliques_jar_name: georchestra-photos-obliques-facade.jar
+photosobliques_docker_directory: /opt/georchestra/docker
+photosobliques_config_directory: '{{photosobliques_docker_directory}}/config/'
+photosobliques_server_port: 8080
+photosobliques_server_expose_port: 8087
+#photosobliques_backend_url: http://photosobliques:{{photosobliques_server_port}}/photosobliques/
+
+photosobliques_admin_password: 4dM1nApp!
+
+photosobliques_smtp_host: REN1VML0096
+photosobliques_smtp_port: 1025
+photosobliques_smtp_username:
+photosobliques_smtp_password:
+
+photosobliques_ldap_host: ldap
+photosobliques_ldap_port: 389
+photosobliques_ldap_username: cn=admin,dc=georchestra,dc=org
+photosobliques_ldap_password: secret
+
+
+
+ 
+
+
