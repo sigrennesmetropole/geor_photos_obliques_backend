@@ -77,7 +77,7 @@ test-backend:
   needs:
     - compile
   dependencies:
-    - compile
+    - .photosobliquesapi:compile
   script:
     - >
       mvn test
