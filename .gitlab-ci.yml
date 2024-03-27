@@ -8,8 +8,7 @@ workflow:
 # Pipeline variables
 variables:
   MAVEN_PREVENT_RECOMPILE: "-Dmaven.compiler.useIncrementalCompilation=false"
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=.m2/repository --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true $MAVEN_PREVENT_RECOMPILE"
-
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=.m2/repository --update-snapshots --activate-profiles prod --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true  -DdeployAtEnd=true ${OPTS} $MAVEN_PREVENT_RECOMPILE"
   DOCKER_DISABLE: "true"
 
 # Cache policy - Share target folders between jobs - Note that key is related to a commit and is purged automatically after pipeline execution
@@ -17,43 +16,55 @@ cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - .m2/repository
-    - search-application/angular-project/node_modules
-#    - $CI_PROJECT_DIR/.m2/repository/**/*
-#    - $CI_PROJECT_DIR/**/target/**/*
+    - $CI_PROJECT_DIR/.m2/repository/**/*
+    - $CI_PROJECT_DIR/**/target/**/*
+
+include:
+  - project: 'boost/template-ci/pipelines/common'
+    file: 'docker/docker-template.yml'
+  - project: 'boost/template-ci/pipelines/common'
+    file: 'securite/oss-index/oss-index-template.yml'
+  - project: 'bots/trivy-script'
+    file: '/trivy-template-test.yml'    
+
+# - local: '.docker-build.yml'
 
 default:
   image: maven:3.9.0-eclipse-temurin-17
   before_script:
-    - apt update && apt install -y gettext-base #build-essential
+    - apt update && apt install -y gettext-base
     - envsubst '${MVN_GROUP} ${MVN_RELEASE} ${MVN_SNAPSHOTS}' < pom.xml > pom.subst && mv -f pom.subst pom.xml
 
 # Stages definition
 stages:
-  - build
+  - compile
   - test
+  - package
+  - sast
+  - pre_docker
+  - docker
 
 # Build job with maven plugin execution policies define in parent pom
-.photosobliquesapi:build:
+.photosobliquesapi:compile:
   script:
-    - mvn $MAVEN_CLI_OPTS -U clean package ${OPTS} -Pprod,mapfishapp-signalement
-  stage: build
-  tags: 
-    - iaas
+    - >
+      mvn compile
+      $MAVEN_CLI_OPTS
+  stage: compile
   artifacts:
     paths:
-      - $CI_PROJECT_DIR/georchestra-signalement-api/target/georchestra-signalement-api-*.jar
-      - $CI_PROJECT_DIR/georchestra-signalement-api/target/georchestra-signalement-api-*.war
- 
-photosobliquesapi:build:
-  extends: .photosobliquesapi:build
+      - '**/target'
+  interruptible: true
+
+photosobliquesapi:compile:
+  extends: .photosobliquesapi:compile
   except:
     refs:
       - master
       - open/master  
 
-      
-photosobliquesapi:build:master:
-  extends: .photosobliquesapi:build
+photosobliquesapi:compile:master:
+  extends: .photosobliquesapi:compile
   only:
     refs:
       - master
@@ -61,37 +72,130 @@ photosobliquesapi:build:master:
   variables:
     OPTS: "-DskipTests"  
 
-# Sonar code quality analysis - note a full test coverage report through a jacoco.exec merged file in base project folder
-.photosobliquesapi:sonar:
+test-backend:
   stage: test
-  tags: 
-    - iaas  
-  allow_failure: true
+  needs:
+    - compile
+  dependencies:
+    - compile
   script:
     - >
-      mvn $MAVEN_CLI_OPTS -U compile sonar:sonar
+      mvn test
+      $MAVEN_CLI_OPTS
+      -Dmaven.source.skip=true
+      -Dmaven.main.skip
+  artifacts:
+    paths:
+      - '**/target/jacoco.exec'
+      - '**/target/site/jacoco/**'
+    reports:
+      junit:
+        - '**/target/surefire-reports/TEST-*.xml'
+        - '**/target/surefire-reports/*.txt'        
+  interruptible: true
+
+.package:
+  stage: package
+  cache:
+    policy: pull
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .m2/repository
+  interruptible: true
+
+package-backend:
+  extends: .package
+  needs:
+    - compile
+    - test-backend
+  dependencies:
+    - compile
+  script:
+    - >
+      mvn package
+      $MAVEN_CLI_OPTS
+      -Dmaven.source.skip=true
+      -Dmaven.main.skip
+      -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - '**/target/**/*.jar'
+      - '**/target/**/*.zip'
+
+# Sonar code quality analysis - note a full test coverage report through a jacoco.exec merged file in base project folder
+.sonar:
+  stage: test
+  needs:
+    - compile
+    - test-backend
+  dependencies:
+    - compile
+    - test-backend
+  allow_failure: true
+  cache:
+    policy: pull
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .m2/repository
+      - search-application/angular-project/node_modules
+  script:
+    - >
+      mvn compile sonar:sonar
+      $MAVEN_CLI_OPTS
       -Dmaven.source.skip=true
       -Dmaven.main.skip
       -Dsonar.host.url=$SONAR_URL
       -Dsonar.login=$SONAR_TOKEN
+#      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA
+#      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+#      -Dsonar.gitlab.project_id=$CI_PROJECT_ID
+#      ${BRANCH}
+  interruptible: true
 
-photosobliquesapi:sonar:
-  extends: .photosobliquesapi:sonar
-  dependencies:
-    - photosobliquesapi:build
+sonar:
+  extends: .sonar
   except:
     refs:
       - master
       - open/master
-  variables:
-    BRANCH: -Dsonar.branch.name=$CI_COMMIT_REF_NAME
-            
+#  variables:
+#    BRANCH: -Dsonar.branch.name=$CI_COMMIT_REF_NAME
 
 # On master, do not use branch parameter
-photosobliquesapi:sonar:master:
-  extends: .photosobliquesapi:sonar
-  dependencies:
-    - photosobliquesapi:build:master
+sonar:master:
+  extends: .sonar
   only:
     refs:
       - open/master
+
+# Copie des artifacts dans les répertoires des images dockers
+pre_docker:
+  stage: pre_docker
+  needs:
+    - package-backend
+  dependencies:
+    - package-backend
+  only:
+    refs:
+      - master
+      - open/master
+      - open/develop
+      - /^release.*/
+  script:
+    - ls $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/
+    - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/photosobliques
+  artifacts:
+    paths:
+      - '$CI_PROJECT_DIR/docker/**/**.zip'
+      - '$CI_PROJECT_DIR/docker/**/**.jar'
+
+docker2:build:
+  extends: ['.docker:build']
+  needs:
+    - pre_docker
+  dependencies:
+    - pre_docker
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /.*develop/ || $CI_COMMIT_BRANCH =~ /.*master/ || $CI_COMMIT_BRANCH =~ /^release.*/'
+  timeout: 3h
+
