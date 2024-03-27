@@ -117,10 +117,8 @@ photosobliquesapi:package-backend:
   stage: test
   needs:
     - photosobliquesapi:compile
-    - photosobliquesapi:test-backend
   dependencies:
-    - compile
-    - test-backend
+    - photosobliquesapi:compile
   allow_failure: true
   cache:
     policy: pull
