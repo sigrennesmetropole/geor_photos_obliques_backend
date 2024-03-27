@@ -45,39 +45,29 @@ stages:
   - docker
 
 # Build job with maven plugin execution policies define in parent pom
-.photosobliquesapi:compile:
+photosobliquesapi:compile:
   script:
     - >
       mvn compile
       $MAVEN_CLI_OPTS
   stage: compile
+  variables:
+    OPTS: "-DskipTests"
   artifacts:
     paths:
       - '**/target'
   interruptible: true
-
-photosobliquesapi:compile:
-  extends: .photosobliquesapi:compile
+  
+photosobliquesapi:test-backend:
+  stage: test
+  needs:
+    - photosobliquesapi:compile
+  dependencies:
+    - photosobliquesapi:compile
   except:
     refs:
       - master
       - open/master  
-
-photosobliquesapi:compile:master:
-  extends: .photosobliquesapi:compile
-  only:
-    refs:
-      - master
-      - open/master   
-  variables:
-    OPTS: "-DskipTests"  
-
-test-backend:
-  stage: test
-  needs:
-    - compile
-  dependencies:
-    - .photosobliquesapi:compile
   script:
     - >
       mvn test
@@ -103,13 +93,13 @@ test-backend:
       - .m2/repository
   interruptible: true
 
-package-backend:
+photosobliquesapi:package-backend:
   extends: .package
   needs:
-    - compile
-    - test-backend
+    - photosobliquesapi:compile
+    - photosobliquesapi:test-backend
   dependencies:
-    - compile
+    - photosobliquesapi:compile
   script:
     - >
       mvn package
@@ -126,8 +116,8 @@ package-backend:
 .sonar:
   stage: test
   needs:
-    - compile
-    - test-backend
+    - photosobliquesapi:compile
+    - photosobliquesapi:test-backend
   dependencies:
     - compile
     - test-backend
@@ -152,7 +142,7 @@ package-backend:
 #      ${BRANCH}
   interruptible: true
 
-sonar:
+photosobliquesapi:sonar:
   extends: .sonar
   except:
     refs:
@@ -162,19 +152,19 @@ sonar:
 #    BRANCH: -Dsonar.branch.name=$CI_COMMIT_REF_NAME
 
 # On master, do not use branch parameter
-sonar:master:
+photosobliquesapi:sonar:master:
   extends: .sonar
   only:
     refs:
       - open/master
 
 # Copie des artifacts dans les répertoires des images dockers
-pre_docker:
+photosobliquesapi:pre_docker:
   stage: pre_docker
   needs:
-    - package-backend
+    - photosobliquesapi:package-backend
   dependencies:
-    - package-backend
+    - photosobliquesapi:package-backend
   only:
     refs:
       - master
@@ -189,12 +179,12 @@ pre_docker:
       - '$CI_PROJECT_DIR/docker/**/**.zip'
       - '$CI_PROJECT_DIR/docker/**/**.jar'
 
-docker2:build:
+photosobliquesapi:docker2:build:
   extends: ['.docker:build']
   needs:
-    - pre_docker
+    - photosobliquesapi:pre_docker
   dependencies:
-    - pre_docker
+    - photosobliquesapi:pre_docker
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /.*develop/ || $CI_COMMIT_BRANCH =~ /.*master/ || $CI_COMMIT_BRANCH =~ /^release.*/'
   timeout: 3h
