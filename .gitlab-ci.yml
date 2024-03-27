@@ -197,7 +197,7 @@ photosobliquesapi:docker2:build:
   dependencies:
     - photosobliquesapi:compile
   script:
-    - cp -f $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/ansible/dockerize/files/photosobliques.jar
+    - cp -f $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/ansible/dockerize/photosobliques.jar
     - cd $CI_PROJECT_DIR/ansible
     - chmod og-rw key/id_rsa
     - cp photos-obliques_dev_var.yml $HOME/photos-obliques_var.yml
