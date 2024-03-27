@@ -172,6 +172,7 @@ photosobliquesapi:pre_docker:
   script:
     - ls $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/
     - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/photosobliques
+    - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/template/photosobliques
   artifacts:
     paths:
       - '$CI_PROJECT_DIR/docker/**/**.zip'
@@ -185,5 +186,5 @@ photosobliquesapi:docker2:build:
     - photosobliquesapi:pre_docker
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /.*develop/ || $CI_COMMIT_BRANCH =~ /.*master/ || $CI_COMMIT_BRANCH =~ /^release.*/'
-  timeout: 3h
+  timeout: 1h
 
