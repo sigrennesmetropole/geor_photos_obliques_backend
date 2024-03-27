@@ -43,6 +43,7 @@ stages:
   - sast
   - pre_docker
   - docker
+  - deploy
 
 # Build job with maven plugin execution policies define in parent pom
 photosobliquesapi:compile:
@@ -188,3 +189,36 @@ photosobliquesapi:docker2:build:
     - if: '$CI_COMMIT_BRANCH =~ /.*develop/ || $CI_COMMIT_BRANCH =~ /.*master/ || $CI_COMMIT_BRANCH =~ /^release.*/'
   timeout: 1h
 
+.photosobliquesapi:deploy:
+  stage: deploy
+  tags: 
+   - iaas
+  image: glregistry.boost.open.global/boost/docker/mvn-node-jdk11-ansible:latest
+  dependencies:
+    - photosobliquesapi:compile
+  script:
+    - cp -f $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/ansible/dockerize/files/photosobliques.jar
+    - cd $CI_PROJECT_DIR/ansible
+    - chmod og-rw key/id_rsa
+    - cp photos-obliques_dev_var.yml $HOME/photos-obliques_var.yml
+    - ansible-playbook photos-obliques-docker.yml -v -i "${TARGET_ENV}," -u root --private-key=key/id_rsa --ssh-common-args=-oStrictHostKeyChecking=no
+
+
+photosobliquesapi:deploy:
+  extends: .photosobliquesapi:deploy
+  stage: deploy
+  only:
+    refs:
+      - open/develop
+  variables:
+    TARGET_ENV: REN1VML0096
+    
+photosobliquesapi:deploy:master:
+  extends: .photosobliquesapi:deploy
+  stage: deploy
+  only:
+    refs:
+      - open/master
+  variables:
+    TARGET_ENV: REN1VML0095    
+ 
