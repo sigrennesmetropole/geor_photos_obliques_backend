@@ -1,6 +1,8 @@
 package org.georchestra.photosobliques.facade.configuration.security;
 
-import jakarta.servlet.Filter;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.georchestra.photosobliques.facade.configuration.BasicSecurityConstants;
 import org.georchestra.photosobliques.facade.configuration.filter.PreAuthenticationFilter;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,15 +24,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
+import jakarta.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig {
-
-
 
 	private static final String[] SB_PERMIT_ALL_URL = {
 			// URL public
@@ -43,18 +43,19 @@ public class WebSecurityConfig {
 	@Value("${security.authentication.disabled:false}")
 	private boolean disableAuthentification = false;
 
-
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http)
-			throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		if (!disableAuthentification) {
-			http.cors().and().authorizeHttpRequests()
-					.requestMatchers(SB_PERMIT_ALL_URL).permitAll()
-					.anyRequest().fullyAuthenticated().and()
-					.addFilterAfter(createPreAuthenticationFilter(), BasicAuthenticationFilter.class).sessionManagement()
-					.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().csrf().disable();
+			http.cors(Customizer.withDefaults()).csrf(csrf -> csrf.disable())
+					.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+							.requestMatchers(SB_PERMIT_ALL_URL).permitAll().anyRequest().fullyAuthenticated())
+					.exceptionHandling(Customizer.withDefaults())
+					.sessionManagement(sessionManagement -> sessionManagement
+							.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+					.addFilterAfter(createPreAuthenticationFilter(), BasicAuthenticationFilter.class);
 		} else {
-			http.cors().and().csrf().disable().authorizeHttpRequests().anyRequest().permitAll();
+			http.cors(Customizer.withDefaults()).csrf(csrf -> csrf.disable())
+					.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().permitAll());
 		}
 		return http.build();
 	}
@@ -74,6 +75,7 @@ public class WebSecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
+
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication().withUser("admin").password("{noop}4dM1nApp!").roles("ADMIN");
 		auth.authenticationProvider(createPreAuthenticationProvider());
@@ -82,7 +84,6 @@ public class WebSecurityConfig {
 	private AuthenticationProvider createPreAuthenticationProvider() {
 		return new PreAuthenticationProvider();
 	}
-
 
 	@Bean
 	protected GrantedAuthorityDefaults grantedAuthorityDefaults() {
