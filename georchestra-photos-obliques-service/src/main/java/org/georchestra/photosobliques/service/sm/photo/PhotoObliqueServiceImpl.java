@@ -4,6 +4,7 @@ import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.ehcache.shadow.org.terracotta.offheapstore.storage.allocator.IntegerBestFitAllocator;
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.core.bean.photo.PhotoObliqueSearchCriteria;
 import org.georchestra.photosobliques.core.common.DocumentContent;
@@ -13,6 +14,7 @@ import org.georchestra.photosobliques.service.helper.common.FileHelper;
 import org.georchestra.photosobliques.service.helper.common.GeometryHelper;
 import org.georchestra.photosobliques.service.mapper.PhotoObliqueMapper;
 import org.georchestra.photosobliques.service.sm.configuration.ConfigurationService;
+import org.georchestra.photosobliques.service.st.generator.datamodel.GenerationFormat;
 import org.georchestra.photosobliques.storage.entity.PhotoObliqueEntity;
 import org.georchestra.photosobliques.storage.repository.photo.PhotoObliqueCustomRepository;
 import org.georchestra.photosobliques.storage.repository.photo.PhotoObliqueRepository;
@@ -98,7 +100,10 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 	@Override
 	public DocumentContent downloadPhotos(List<String> photoIds, String zipName, String prefix) throws AppServiceException {
 		String path = configurationService.getApplicationConfiguration().getAccesPhotosHD();
-
+		Integer maxCartSize = configurationService.getApplicationConfiguration().getMaxCartSize();
+		if(photoIds.size() > maxCartSize) {
+			throw new AppServiceException("Le nombre de photo est supérieur au maximum autorisé (" + maxCartSize + ")", AppServiceExceptionsStatus.BAD_REQUEST);
+		}
 		String fileName;
 		if(StringUtils.isEmpty(zipName)) {
 			// Formater la date et l'heure en une chaîne de caractères
@@ -146,11 +151,11 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 				newFileName = prefix + searchedFileName;
 			}
 			fileNames.add(searchedFileName);
-			DocumentContent documentContent = new DocumentContent(newFileName, "image/png", file);
+			DocumentContent documentContent = new DocumentContent(newFileName, GenerationFormat.JPEG.getTypeMime(), file);
 
 			//generation du fichier text mention portant le même nom que la photo
 			String mention = (String) tuple.get(1);
-			String mentionName = newFileName.split("\\.")[0] + ".txt";
+			String mentionName = GenerationFormat.TEXT.generateFileName(newFileName.split("\\.")[0]);
 
 			File mentionFile = fileHelper.createTemporaryFile(mentionName, ".txt");
 
@@ -164,7 +169,7 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 				log.warn("photo ( " + searchedFileName + " ) introuvable" + "dans le dossier : " + path);
 				writeTextToFile("Fichier introuvable", mentionFile);
 			}
-			documentContents.add(new DocumentContent(mentionName, "text/plain", mentionFile));
+			documentContents.add(new DocumentContent(mentionName, GenerationFormat.TEXT.getTypeMime(), mentionFile));
 		}
 		return documentContents;
 	}
