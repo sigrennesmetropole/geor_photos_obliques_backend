@@ -3,14 +3,13 @@ proxy:
   ports:
     - "8080:8080"
   links:
-    - mapfishapp
-    - pluievolution
+    - photosobliques
     - header
   environment:
     - XMX=512M
 
-pluievolution:
-  build: pluievolution
+photosobliques:
+  build: photosobliques
   environment:
     - ADD_JAVA_OPTS=-Dgeorchestra.datadir=/etc/georchestra
 

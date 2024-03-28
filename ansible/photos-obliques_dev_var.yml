@@ -18,7 +18,7 @@ ldap_port: 389
 ldap_username: cn=admin,dc=georchestra,dc=org
 ldap_password: secret
 
-backend_url: https://georchestra.open-dev.com/pluievolution/
+backend_url: https://georchestra.open-dev.com/photosobliques/
 
 domain_name: georchestra.open-dev.com
 
