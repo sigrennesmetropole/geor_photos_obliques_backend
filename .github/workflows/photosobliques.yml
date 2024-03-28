@@ -1,0 +1,59 @@
+name: "photosobliques"
+
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Checking out"
+      uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'      
+
+    - name: "Setting up Java"
+      uses: actions/setup-java@v1
+      with:
+        java-version: '17.x'
+
+    - name: "Maven repository caching"
+      uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: photosobliques-${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: "Calculating docker image tag"
+      id: version
+      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+
+    - name: "Build a docker image for back-office"
+      run: mvn -B clean package -Pdocker,prod -DskipTests -DskipDockerPush -DdockerImageName=sigrennesmetropole/geor_photos_obliques_backend:${{ steps.version.outputs.VERSION }}
+
+    - name: "Logging in docker.io"
+      uses: azure/docker-login@v1
+      with:
+        username: '${{ secrets.DOCKER_HUB_USERNAME }}'
+        password: '${{ secrets.DOCKER_HUB_PASSWORD }}'
+
+    - name: "Pushing latest to docker.io"
+      if: github.ref == 'refs/heads/master'
+      run: |
+        docker tag sigrennesmetropole/geor_photos_obliques_backend:${{ steps.version.outputs.VERSION }} sigrennesmetropole/geor_photos_obliques_backend:latest
+        #docker push sigrennesmetropole/geor_photos_obliques_backend:latest
+
+    - name: "Pushing release tag to docker.io"
+      if: contains(github.ref, 'refs/tags/')
+      run: |
+        docker push sigrennesmetropole/geor_photos_obliques_backend:${{ steps.version.outputs.VERSION }}
+
+    - name: "Remove SNAPSHOT jars from repository"
+      run: |
+        find .m2/repository -name "*SNAPSHOT*" -type d | xargs rm -rf {}
+ 
+
