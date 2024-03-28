@@ -8,6 +8,7 @@
   with_items:
     - "{{photosobliques_image_directory}}/"
     - "{{photosobliques_config_directory}}/photos-obliques"
+    - "{{photosobliques_config_directory}}/photos-obliques/RennesMetropole/Photos_Obliques/HD"
 
 # update security proxy
 - name: Check whether targets-mapping.properties contains photosobliques

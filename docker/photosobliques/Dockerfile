@@ -19,5 +19,5 @@ CMD [ "sh", "-c", "exec java --add-opens java.base/java.util=ALL-UNNAMED \
       -Dspring.config.additional-location=file:/etc/georchestra/config/ \
       ${ADD_JAVA_OPTS}                                   \
       -Xmx${XMX:-1G} -Xms${XMX:-1G}                      \
-      -jar /opt/search/service.jar" ]  
+      -jar /opt/photosobliques/service.jar" ]  
 
