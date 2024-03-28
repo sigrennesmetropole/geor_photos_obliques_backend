@@ -1,0 +1,23 @@
+FROM openjdk:17.0.2-jdk-bullseye
+MAINTAINER sigsupport@rennesmetropole.fr
+ENV TZ=Europe/Paris
+
+RUN mkdir /tmp/jetty
+RUN chmod 777 -R /tmp && chmod o+t -R /tmp
+
+RUN mkdir -p /etc/georchestra
+RUN chmod 777 -R /etc/georchestra
+
+RUN mkdir -p /opt/photosobliques
+ADD georchestra-photos-obliques-facade.jar /opt/photosobliques/service.jar
+RUN chmod 777 -R /opt/photosobliques
+
+CMD [ "sh", "-c", "exec java --add-opens java.base/java.util=ALL-UNNAMED \
+      -Duser.language=fr -Duser.country=FR \
+      -Djava.io.tmpdir=/tmp/jetty \
+      -Dgeorchestra.datadir=/etc/georchestra \
+      -Dspring.config.additional-location=file:/etc/georchestra/config/ \
+      ${ADD_JAVA_OPTS}                                   \
+      -Xmx${XMX:-1G} -Xms${XMX:-1G}                      \
+      -jar /opt/search/service.jar" ]  
+

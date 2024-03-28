@@ -17,3 +17,8 @@
 /.m2
 
 .env
+georchestra-photos-obliques-core/target
+georchestra-photos-obliques-storage/target
+georchestra-photos-obliques-service/target
+georchestra-photos-obliques-facade/target
+/.project
