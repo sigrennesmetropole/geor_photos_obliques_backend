@@ -10,8 +10,8 @@ photosobliques_db_password: consult
 
 # installation
 photosobliques_image_directory: /opt/images/photosobliques
-photosobliques_war_name: georchestra-photos-obliques.war
-photosobliques_jar_name: georchestra-photos-obliques-facade.jar
+photosobliques_war_name: photosobliques.war
+photosobliques_jar_name: photosobliques.jar
 photosobliques_docker_directory: /opt/georchestra/docker
 photosobliques_config_directory: '{{photosobliques_docker_directory}}/config/'
 photosobliques_server_port: 8080
