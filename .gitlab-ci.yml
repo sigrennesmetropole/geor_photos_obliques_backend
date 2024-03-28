@@ -196,12 +196,15 @@ photosobliquesapi:docker2:build:
   image: glregistry.boost.open.global/boost/docker/mvn-node-jdk11-ansible:latest
   dependencies:
     - photosobliquesapi:compile
+  before_script:
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$ansible_private_key" | base64 -d)    
   script:
     - cp -f $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/ansible/dockerize/photosobliques.jar
     - cd $CI_PROJECT_DIR/ansible
-    - chmod og-rw key/id_rsa
+    #- chmod og-rw key/id_rsa
     - cp photos-obliques_dev_var.yml $HOME/photos-obliques_var.yml
-    - ansible-playbook photos-obliques-docker.yml -v -i "${TARGET_ENV}," -u root --private-key=key/id_rsa --ssh-common-args=-oStrictHostKeyChecking=no
+    - ansible-playbook photos-obliques-docker.yml -v -i "${TARGET_ENV}," -u root --ssh-common-args=-oStrictHostKeyChecking=no
 
 
 photosobliquesapi:deploy:
