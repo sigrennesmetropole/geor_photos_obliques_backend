@@ -133,5 +133,9 @@
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
     </dependencies>
 </project>

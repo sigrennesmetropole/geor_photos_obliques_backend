@@ -87,6 +87,7 @@
         <plugin.maven-assembly-plugin.version>3.7.1</plugin.maven-assembly-plugin.version>
         <h2gis.org.version>2.2.1</h2gis.org.version>
         <spring-boot-test.version>3.1.5</spring-boot-test.version>
+        <freemarker.version>2.3.32</freemarker.version>
     </properties>
     <!-- Modules du projet -->
     <modules>
@@ -360,6 +361,11 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
             </dependency>
             <!-- Melody supervision VM -->
             <dependency>

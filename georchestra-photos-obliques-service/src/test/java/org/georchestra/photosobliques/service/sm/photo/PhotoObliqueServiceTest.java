@@ -19,12 +19,14 @@ import org.springframework.data.domain.Pageable;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @PhotosObliquesSpringBootTest
@@ -273,6 +275,23 @@ public class PhotoObliqueServiceTest {
             assertTrue(returnedFile.getName().contains("prefix"));
         }
 
+    }
+
+    @Test
+    void testMaxCartDownloadPhotos() throws AppServiceException {
+        List<String> photoIDs = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            photoIDs.add("Photo-00" + i);
+        }
+        DocumentContent documentContent = photoObliqueService.downloadPhotos(photoIDs, null, "prefix");
+        documentContent.getFile().deleteOnExit();
+
+        assertNotNull(documentContent);
+        assertNotNull(documentContent.getFile());
+
+        photoIDs.add("Photo-0021");
+
+        assertThrows(AppServiceException.class, () -> photoObliqueService.downloadPhotos(photoIDs, null, null));
     }
 
 }
