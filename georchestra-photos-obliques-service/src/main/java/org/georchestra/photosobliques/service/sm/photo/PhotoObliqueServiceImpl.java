@@ -4,6 +4,7 @@ import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.ehcache.shadow.org.terracotta.offheapstore.storage.allocator.IntegerBestFitAllocator;
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.core.bean.photo.PhotoObliqueSearchCriteria;
 import org.georchestra.photosobliques.core.common.DocumentContent;
@@ -168,7 +169,7 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 				log.warn("photo ( " + searchedFileName + " ) introuvable" + "dans le dossier : " + path);
 				writeTextToFile("Fichier introuvable", mentionFile);
 			}
-			documentContents.add(new DocumentContent(mentionName, "text/plain", mentionFile));
+			documentContents.add(new DocumentContent(mentionName, GenerationFormat.TEXT.getTypeMime(), mentionFile));
 		}
 		return documentContents;
 	}
