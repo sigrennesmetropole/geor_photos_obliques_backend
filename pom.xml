@@ -69,7 +69,7 @@
 		<graalvm.version>23.0.3</graalvm.version>
 		<httpclient5.version>5.3.1</httpclient5.version>
 		<sonar.projectName>${project.artifactId}</sonar.projectName>
-		<jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.coverage.exclusions>
 			**/*Entity.java,
