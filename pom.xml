@@ -43,7 +43,7 @@
         <opencsv.version>5.9</opencsv.version>
         <freemarker.version>2.3.32</freemarker.version>
         <xdocreport.version>2.0.4</xdocreport.version>
-        <tika.version>2.9.1</tika.version>
+        <tika.version>2.9.2</tika.version>
         <jackson-datatype-threetenbp.version>2.15.2</jackson-datatype-threetenbp.version>
         <servlet-api.version>2.5</servlet-api.version>
         <findbugs.version>3.0.2</findbugs.version>
@@ -250,17 +250,6 @@
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
             </dependency>
-            <!-- Swagger dependencies -->
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
-                <version>${openapi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-data-rest</artifactId>
-                <version>${openapi.version}</version>
-            </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-boot-starter</artifactId>
@@ -296,7 +285,8 @@
                 <artifactId>cas-client-support-springboot</artifactId>
                 <version>${jasig.cas.client.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/com.google.code.maven-replacer-plugin/maven-replacer-plugin -->
+            <!--
+            https://mvnrepository.com/artifact/com.google.code.maven-replacer-plugin/maven-replacer-plugin -->
             <dependency>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>maven-replacer-plugin</artifactId>
@@ -362,11 +352,6 @@
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.freemarker</groupId>
-                <artifactId>freemarker</artifactId>
-                <version>${freemarker.version}</version>
-            </dependency>
             <!-- Melody supervision VM -->
             <dependency>
                 <groupId>net.bull.javamelody</groupId>
@@ -390,7 +375,8 @@
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.document -->
+            <!--
+             https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.document -->
             <dependency>
                 <groupId>fr.opensagres.xdocreport</groupId>
                 <artifactId>fr.opensagres.xdocreport.document</artifactId>
@@ -460,7 +446,8 @@
                 <artifactId>jsr305</artifactId>
                 <version>${findbugs.version}</version>
             </dependency>
-            <!-- Bouncy Castle : https://www.bouncycastle.org/latest_releases.html -->
+            <!-- Bouncy Castle :
+             https://www.bouncycastle.org/latest_releases.html -->
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcpkix-jdk15to18</artifactId>
@@ -506,6 +493,11 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.orbisgis</groupId>
+                <artifactId>h2gis</artifactId>
+                <version>2.2.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -610,7 +602,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
-                        <argLine>-Dfile.encoding=UTF-8 --add-opens java.base/java.util=ALL-UNNAMED </argLine>
+                        <argLine>-Dfile.encoding=UTF-8 --add-opens java.base/java.util=ALL-UNNAMED</argLine>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -618,6 +610,11 @@
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco-maven-plugin.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                </plugin>
+
             </plugins>
         </pluginManagement>
         <plugins>
@@ -665,7 +662,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>@{argLine} --add-opens java.base/java.util=ALL-UNNAMED</argLine>
+                    <argLine>@{argLine} --add-opens
+                        java.base/java.util=ALL-UNNAMED</argLine>
                 </configuration>
             </plugin>
         </plugins>
