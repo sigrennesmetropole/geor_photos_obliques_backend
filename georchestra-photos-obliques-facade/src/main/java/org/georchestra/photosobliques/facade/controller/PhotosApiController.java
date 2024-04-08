@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.core.bean.PhotosCount;
 import org.georchestra.photosobliques.core.bean.photo.PhotoObliqueSearchCriteria;
+import org.georchestra.photosobliques.core.common.DocumentContent;
 import org.georchestra.photosobliques.facade.controller.api.PhotosApi;
+import org.georchestra.photosobliques.facade.helper.ControllerHelper;
 import org.georchestra.photosobliques.facade.util.AbstractController;
 import org.georchestra.photosobliques.facade.util.UtilPageable;
 import org.georchestra.photosobliques.service.sm.photo.PhotoObliqueService;
@@ -24,6 +26,7 @@ import java.util.List;
 public class PhotosApiController extends AbstractController implements PhotosApi {
 
     private final PhotoObliqueService photoObliqueService;
+    private final ControllerHelper controllerHelper;
 
     private final UtilPageable utilPageable;
 
@@ -40,7 +43,9 @@ public class PhotosApiController extends AbstractController implements PhotosApi
 
     @Override
     public ResponseEntity<Resource> downloadPhotos(List<String> photoIds, String zipName, String prefix) throws Exception {
-        return PhotosApi.super.downloadPhotos(photoIds, zipName, prefix);
+        DocumentContent zipContent = photoObliqueService.downloadPhotos(photoIds, zipName, prefix);
+
+        return controllerHelper.downloadableResponseEntity(zipContent);
     }
 
     @Override
