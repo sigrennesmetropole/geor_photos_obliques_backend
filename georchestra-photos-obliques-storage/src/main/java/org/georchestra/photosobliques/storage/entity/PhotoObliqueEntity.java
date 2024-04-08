@@ -68,7 +68,7 @@ public class PhotoObliqueEntity implements Serializable {
 	 @Column(name="commune")
 	 private String town;
 
-	 @Column(name="shape")
+	 @Column(name="shape", columnDefinition = "Geometry")
 	 private Geometry shape;
 
 	 @Column(name="objectid")
