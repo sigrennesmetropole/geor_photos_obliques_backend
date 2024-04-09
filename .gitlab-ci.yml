@@ -98,7 +98,6 @@ photosobliquesapi:package-backend:
   extends: .package
   needs:
     - photosobliquesapi:compile
-    - photosobliquesapi:test-backend
   dependencies:
     - photosobliquesapi:compile
   script:
