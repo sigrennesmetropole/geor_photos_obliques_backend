@@ -37,8 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class PhotoObliqueServiceTest {
 
     @Autowired
-    PhotoObliqueRepository photoObliqueRepository;
-    @Autowired
     PhotoObliqueService photoObliqueService;
     @Autowired
     FileHelper fileHelper;
