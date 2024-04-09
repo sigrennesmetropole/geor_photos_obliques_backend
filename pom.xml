@@ -47,7 +47,7 @@
         <jackson-datatype-threetenbp.version>2.15.2</jackson-datatype-threetenbp.version>
         <servlet-api.version>2.5</servlet-api.version>
         <findbugs.version>3.0.2</findbugs.version>
-        <bouncy.version>1.77</bouncy.version>
+        <bouncy.version>1.78</bouncy.version>
         <jasig.cas.client.version>3.6.4</jasig.cas.client.version>
         <nimbus.jose.jwt.version>9.37.3</nimbus.jose.jwt.version>
         <s3.version>2.5.0</s3.version>
