@@ -4,7 +4,7 @@
 package org.georchestra.photosobliques.service.processor;
 
 import org.georchestra.photosobliques.service.exception.AppServiceBadRequestException;
-import org.georchestra.photosobliques.storage.entity.AbstractLongIdEntity;
+import org.georchestra.photosobliques.storage.common.entity.AbstractLongIdEntity;
 
 import java.util.UUID;
 

@@ -4,7 +4,6 @@ import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.ehcache.shadow.org.terracotta.offheapstore.storage.allocator.IntegerBestFitAllocator;
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.core.bean.photo.PhotoObliqueSearchCriteria;
 import org.georchestra.photosobliques.core.common.DocumentContent;
@@ -15,12 +14,15 @@ import org.georchestra.photosobliques.service.helper.common.GeometryHelper;
 import org.georchestra.photosobliques.service.mapper.PhotoObliqueMapper;
 import org.georchestra.photosobliques.service.sm.configuration.ConfigurationService;
 import org.georchestra.photosobliques.service.st.generator.datamodel.GenerationFormat;
-import org.georchestra.photosobliques.storage.entity.PhotoObliqueEntity;
-import org.georchestra.photosobliques.storage.repository.photo.PhotoObliqueCustomRepository;
-import org.georchestra.photosobliques.storage.repository.photo.PhotoObliqueRepository;
+import org.georchestra.photosobliques.storage.phototheque.entity.PhotoObliqueEntity;
+import org.georchestra.photosobliques.storage.phototheque.repository.photo.PhotoObliqueCustomRepository;
+import org.georchestra.photosobliques.storage.phototheque.repository.photo.PhotoObliqueRepository;
 import org.locationtech.jts.geom.Geometry;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
@@ -38,16 +40,27 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 @Slf4j
 public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 
-	private final PhotoObliqueRepository photoObliqueRepository;
 	private final PhotoObliqueCustomRepository photoObliqueCustomRepository;
 	private final PhotoObliqueMapper photoObliqueMapper;
 	private final GeometryHelper geometryHelper;
 	private final ConfigurationService configurationService;
 	private final FileHelper fileHelper;
+
+	public PhotoObliqueServiceImpl(PhotoObliqueCustomRepository photoObliqueCustomRepository,
+								   PhotoObliqueMapper photoObliqueMapper,
+								   GeometryHelper geometryHelper,
+								   ConfigurationService configurationService,
+								   FileHelper fileHelper,
+								   @Qualifier("photothequeTransactionManager") TransactionManager transactionManager) {
+		this.photoObliqueCustomRepository = photoObliqueCustomRepository;
+		this.photoObliqueMapper = photoObliqueMapper;
+		this.geometryHelper = geometryHelper;
+		this.configurationService = configurationService;
+		this.fileHelper = fileHelper;
+	}
 
 	@Override
 	public List<PhotoOblique> searchPhotoOblique(PhotoObliqueSearchCriteria photoObliqueSearchCriteria, Pageable pageable) throws AppServiceException {

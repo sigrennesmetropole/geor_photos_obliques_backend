@@ -1,26 +1,26 @@
 package org.georchestra.photosobliques.facade.aop;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.hc.core5.http.HttpStatus;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.georchestra.photosobliques.core.bean.statistiques.Statistiques;
 import org.georchestra.photosobliques.core.security.AuthenticatedUser;
+import org.georchestra.photosobliques.service.exception.AppServiceException;
 import org.georchestra.photosobliques.service.helper.acl.ACLHelper;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.georchestra.photosobliques.service.sm.statistiques.StatistiquesServices;
+import org.georchestra.photosobliques.service.sm.statistiques.visitor.StatistiquesVisitor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Aspect
 @Component
@@ -28,140 +28,144 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class FacadeAspect {
 
-	private static final Map<Class<?>, Method> PAGE_RESULT_MAP = new HashMap<>();
+    private static final Map<Class<?>, Method> PAGE_RESULT_MAP = new HashMap<>();
 
-	private static final Map<Class<?>, Method> GET_RESTRICTED_MAP = new HashMap<>();
+    private static final Map<Class<?>, Method> GET_RESTRICTED_MAP = new HashMap<>();
 
-	private static final Map<Class<?>, Method> UUID_MAP = new HashMap<>();
+    private static final Map<Class<?>, Method> UUID_MAP = new HashMap<>();
 
-	private final ACLHelper utilContextHelper;
+    private final ACLHelper utilContextHelper;
 
-	// Pour chaque entrée dans un controller
-	@Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
-	public void businessMethods() {
-		// Nothing to do
-	}
+    private StatistiquesServices statistiquesServices;
 
-	@Around("businessMethods()")
-	public Object profile(final ProceedingJoinPoint pjp) throws Throwable {
-		Object output = pjp.proceed();
+    private List<StatistiquesVisitor> visitors;
 
-		final AuthenticatedUser authenticatedUser = utilContextHelper.getAuthenticatedUser();
-		final String accountname = authenticatedUser != null ? authenticatedUser.getLogin() : "ANONYMOUS";
-		if (log.isInfoEnabled()) {
-			log.info(String.format("by(%s) - %s.%s(%s)", accountname, pjp.getSignature().getDeclaringType().getName(),
-					pjp.getSignature().getName(), Arrays.toString(pjp.getArgs())));
-		}
-		if (authenticatedUser != null && !authenticatedUser.isRestricted()
-				&& output instanceof @SuppressWarnings("rawtypes") ResponseEntity response) {
-			Object body = response.getBody();
-			if (body != null) {
-				// données non nulle et utilisateur authentifié sans accès aux données
-				// restreintes
-				try {
-					if (body instanceof Collection) {
-						handleCollection((Collection<?>) body);
-					} else if (body.getClass().getName().endsWith("PageResult")) {
-						handleCollection(lookupItems(body));
-					} else if (hasRestricted(body)) {
-						handleRestrictedItem(body);
-					}
-				} catch (InvalidDataAccessApiUsageException e) {
-					log.error("ALERT user " + accountname + " try to access restricted data", e);
-					output = ResponseEntity.status(HttpStatus.SC_FORBIDDEN).headers(response.getHeaders()).build();
-				}
-			}
-		}
-		return output;
-	}
+    private final Map<String, List<String>> methodParametersMap = new HashMap<>();
+    private final Map<String, String> methodPathMap = new HashMap<>();
 
-	private void handleRestrictedItem(Object restrictedItem) {
-		Method m = GET_RESTRICTED_MAP.get(restrictedItem.getClass());
-		if (m != null) {
-			try {
-				Boolean value = Boolean.class.cast(m.invoke(restrictedItem));
-				if (value == null || Boolean.TRUE.equals(value)) {
-					// il doit toujours y avoir cette information
-					final AuthenticatedUser authenticatedUser = utilContextHelper.getAuthenticatedUser();
-					builError(authenticatedUser, restrictedItem, null);
-				}
-			} catch (InvalidDataAccessApiUsageException e1) {
-				throw e1;
-			} catch (Exception e) {
-				final AuthenticatedUser authenticatedUser = utilContextHelper.getAuthenticatedUser();
-				builError(authenticatedUser, restrictedItem, e);
-			}
-		}
-	}
 
-	private void builError(final AuthenticatedUser authenticatedUser, Object restrictedItem, Exception e) {
-		throw new InvalidDataAccessApiUsageException(String.format("User %s try to access restricted data %s",
-				authenticatedUser.getLogin(), lookupIdentifier(restrictedItem)), e);
-	}
 
-	private void handleCollection(Collection<?> items) {
-		if (CollectionUtils.isNotEmpty(items)) {
-			for (Object item : items) {
-				if (hasRestricted(item)) {
-					handleRestrictedItem(item);
-				}
-			}
-		}
-	}
+    // Pour chaque entrée dans un controller
+    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
+    public void businessMethods() {
+        // Nothing to do
+    }
 
-	private boolean hasRestricted(Object object) {
-		try {
-			Method m = null;
-			if (GET_RESTRICTED_MAP.containsKey(object.getClass())) {
-				m = GET_RESTRICTED_MAP.get(object.getClass());
-			} else {
-				m = object.getClass().getMethod("getRestricted");
-				GET_RESTRICTED_MAP.put(object.getClass(), m);
-			}
-			return m != null;
-		} catch (Exception e) {
-			log.warn("Can't get getRestricted method", e);
-		}
-		return false;
-	}
+    @Around("businessMethods()")
+    public Object profile(final ProceedingJoinPoint pjp) throws Throwable {
 
-	private List<?> lookupItems(Object pageResultObject) {
-		try {
-			Method m = null;
-			if (PAGE_RESULT_MAP.containsKey(pageResultObject.getClass())) {
-				m = PAGE_RESULT_MAP.get(pageResultObject.getClass());
-			} else {
-				m = pageResultObject.getClass().getMethod("getElements");
-				PAGE_RESULT_MAP.put(pageResultObject.getClass(), m);
-			}
-			if (m != null) {
-				return List.class.cast(m.invoke(pageResultObject));
-			}
-		} catch (Exception e) {
-			log.warn("Can't get elements method", e);
-		}
-		return List.of();
-	}
+        Object output;
+        final AuthenticatedUser authenticatedUser = utilContextHelper.getAuthenticatedUser();
+        long startTimeMs = System.currentTimeMillis();
+        try {
+            output = pjp.proceed();
 
-	private String lookupIdentifier(Object item) {
-		try {
-			Method m = null;
-			if (UUID_MAP.containsKey(item.getClass())) {
-				m = UUID_MAP.get(item.getClass());
-			} else {
-				m = item.getClass().getMethod("getUuid");
-				UUID_MAP.put(item.getClass(), m);
-			}
-			Object value = m.invoke(item);
-			if (value != null) {
-				return value.toString();
-			}
-		} catch (Exception e) {
-			log.warn("Can't get getUuid method", e);
-		}
+            final String accountName = authenticatedUser != null ? authenticatedUser.getLogin() : "ANONYMOUS";
 
-		return "unkown identifier";
+            if (log.isInfoEnabled()) {
+                log.info(String.format("by(%s) - %s.%s(%s)", accountName, pjp.getSignature().getDeclaringType().getName(),
+                        pjp.getSignature().getName(), Arrays.toString(pjp.getArgs())));
+            }
+        } catch (AppServiceException appServiceException) {
+            output = appServiceException;
+        }
 
-	}
+        storeAPIStatistics(pjp, output, authenticatedUser, System.currentTimeMillis() - startTimeMs);
+        if (output instanceof AppServiceException serviceException) {
+            throw serviceException;
+        }
+        return output;
+    }
 
+
+    private void storeAPIStatistics(ProceedingJoinPoint pjp, Object object, AuthenticatedUser authenticatedUser, Long serviceDuration) {
+
+        Statistiques statistiques = new Statistiques();
+        statistiques.setWho(authenticatedUser != null ? authenticatedUser.getLogin() : "ANONYMOUS");
+        statistiques.setWhen(LocalDateTime.now());
+        statistiques.setDuration(serviceDuration);
+
+        //récupération de la target et de la méthode
+        Object target = pjp.getTarget();
+        MethodSignature signature = (MethodSignature) pjp.getSignature();
+
+        //extraction des paramètres et du path
+        Method method = findMethod(target, signature.getName());
+        if(method != null) {
+            List<String> parameters = getMethodParametersName(method);
+            String query = mapParameters(parameters, pjp.getArgs());
+            statistiques.setQuery(query);
+            statistiques.setUrl(getMethodPath(method));
+        }
+
+        //génération des données supplémentaires en fonction de la méthode appelée
+        visitors.stream().findFirst().filter(visitor -> visitor.accept(signature.getName()))
+                .ifPresent(visitor -> statistiques.setData(visitor.process(object)));
+
+        if (object instanceof ResponseEntity<?> response) {
+            statistiques.setResult(response.getStatusCode().toString());
+        } else if (object instanceof AppServiceException exception) {
+            statistiques.setResult(exception.getAppExceptionStatusCode().getStringValue());
+        }
+        statistiquesServices.saveStatistiques(statistiques);
+    }
+
+    private Method findMethod(Object target, String methodName) {
+        Class<?>[] interfaces = target.getClass().getInterfaces();
+        return Arrays.stream(interfaces[0].getDeclaredMethods()).filter(method -> method.getName().equals(methodName)).findFirst().orElse(null);
+    }
+
+
+    /**
+     * Extrait le nom des paramètre d'une méthode dans l'ordre dans lequel ils ont été déclarés
+     * @param method la methode dont on souhaite extraire les paramètres
+     * @return la liste des paramètres
+     */
+    private List<String> getMethodParametersName(Method method) {
+        if(methodParametersMap.get(method.getName()) != null && !methodParametersMap.get(method.getName()).isEmpty() ) {
+            return methodParametersMap.get(method.getName());
+        }
+        List<String> parameters = new ArrayList<>();
+        try {
+            parameters = Arrays.stream(method.getParameters()).map(p -> p.getAnnotation(io.swagger.v3.oas.annotations.Parameter.class).name()).toList();
+        } catch (Exception e) {
+            log.warn("Les paramètres de la méthode {} n'ont pas pu être récupérés", method.getName());
+        }
+        methodParametersMap.put(method.getName(), parameters);
+        return parameters;
+    }
+
+    /**
+     * Extrait le path d'une méthode
+     * @param method la methode dont on souhaite extraire les paramètres
+     * @return la liste des paramètres
+     */
+    private String getMethodPath(Method method) {
+        if(methodPathMap.get(method.getName()) != null && StringUtils.isNotEmpty(methodPathMap.get(method.getName()))) {
+            return methodPathMap.get(method.getName());
+        }
+        try {
+            RequestMapping mapping = (RequestMapping) Arrays.stream(method.getDeclaredAnnotations()).filter(RequestMapping.class::isInstance).findFirst().orElse(null);
+            if(mapping != null) {
+                methodPathMap.put(method.getName(), mapping.value()[0]);
+                return mapping.value()[0];
+            }
+        } catch (Exception e) {
+            log.warn("Les paramètres de la méthode {} n'ont pas pu être récupérés", method.getName());
+        }
+        return "";
+    }
+
+    private String mapParameters(List<String> parameters, Object[] args) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < parameters.size(); i++) {
+            stringBuilder.append(parameters.get(i))
+                    .append("=")
+                    .append((args[i] != null)? args[i]:"null");
+            if(i<parameters.size()-1) {
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
+    }
 }

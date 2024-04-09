@@ -3,7 +3,7 @@ package org.georchestra.photosobliques.service.exception;
 import jakarta.persistence.Table;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
-import org.georchestra.photosobliques.storage.entity.AbstractLongIdEntity;
+import org.georchestra.photosobliques.storage.common.entity.AbstractLongIdEntity;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.UUID;

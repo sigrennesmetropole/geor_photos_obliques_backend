@@ -1,5 +1,6 @@
 package org.georchestra.photosobliques.service.sm.photo;
 
+import jakarta.persistence.EntityManager;
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.core.bean.photo.PhotoObliqueSearchCriteria;
 import org.georchestra.photosobliques.core.common.DocumentContent;
@@ -7,15 +8,17 @@ import org.georchestra.photosobliques.service.PhotosObliquesSpringBootTest;
 import org.georchestra.photosobliques.service.exception.AppServiceException;
 import org.georchestra.photosobliques.service.helper.common.FileHelper;
 import org.georchestra.photosobliques.service.helper.common.GeometryHelper;
-import org.georchestra.photosobliques.storage.entity.PhotoObliqueEntity;
-import org.georchestra.photosobliques.storage.repository.photo.PhotoObliqueRepository;
+import org.georchestra.photosobliques.storage.phototheque.entity.PhotoObliqueEntity;
+import org.georchestra.photosobliques.storage.phototheque.repository.photo.PhotoObliqueRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.TransactionManager;
 
 import java.io.File;
 import java.time.LocalDateTime;

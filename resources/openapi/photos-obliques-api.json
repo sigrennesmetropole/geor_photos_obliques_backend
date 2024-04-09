@@ -19,7 +19,7 @@
 			"description": "Georchestra - Plugin Photos Obliques API",
 			"variables": {
 				"basePath": {
-					"default": "api/v1"
+					"default": "photosobliques"
 				}
 			}
 		}
