@@ -40,9 +40,6 @@ public class StoragePhotothequeBeanConfiguration {
     @Value("${spring.phototheque.datasource.hibernate.format_sql}")
     private String hibernateFormatSql;
 
-//    @Value("${spring.phototheque.datasource.hibernate.hbm2ddl.auto}")
-//    private String hibernateHbm2ddlAuto;
-
     @Value("${spring.phototheque.datasource.hibernate.dialect}")
     private String hibernateDialect;
 
