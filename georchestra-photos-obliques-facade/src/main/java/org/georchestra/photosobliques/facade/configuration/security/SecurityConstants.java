@@ -13,17 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SecurityConstants {
 
-	public static final String GEOSERVER_URL = "/geoserver/**";
+	public static final String HEALTH_CHECK_URL = "/photosobliques/healthCheck";
 
-	public static final String LOGOUT_URL = "/api/v1/users/logout";
+	public static final String CONFIGURATION_URL = "/photosobliques/configuration";
 
-	public static final String AUTHENTICATE_URL = "/api/v1/users/authenticate";
-
-	public static final String AUTHENTICATED_URL = "/api/v1/users/authenticated";
-
-	public static final String HEALTH_CHECK_URL = "/api/v1/healthCheck";
-
-	public static final String CONFIGURATION_URL = "/api/v1/configuration";
-	public static final String PHOTO_URL = "/api/v1/photos";
+	public static final String PHOTO_URL = "/photosobliques/photos";
 
 }

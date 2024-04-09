@@ -3,7 +3,7 @@ package org.georchestra.photosobliques.service.mapper;
 import com.ibm.icu.text.SimpleDateFormat;
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.service.sm.configuration.ConfigurationService;
-import org.georchestra.photosobliques.storage.entity.PhotoObliqueEntity;
+import org.georchestra.photosobliques.storage.phototheque.entity.PhotoObliqueEntity;
 import org.locationtech.jts.geom.Geometry;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Context;

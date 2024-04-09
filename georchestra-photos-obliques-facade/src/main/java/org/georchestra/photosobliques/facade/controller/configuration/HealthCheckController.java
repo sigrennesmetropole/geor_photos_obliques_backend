@@ -11,19 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author FNI18300
- *
  */
 @RestController
 public class HealthCheckController implements HealthCheckApi, HealthIndicator {
 
-	@Override
-	public ResponseEntity<Void> checkHealth() {
-		return ResponseEntity.ok().build();
-	}
+    @Override
+    public ResponseEntity<Void> checkHealth() {
+        return ResponseEntity.ok().build();
+    }
 
-	@Override
-	public Health health() {
-		return Health.up().build();
-	}
+    @Override
+    public Health health() {
+        return Health.up().build();
+    }
 
 }

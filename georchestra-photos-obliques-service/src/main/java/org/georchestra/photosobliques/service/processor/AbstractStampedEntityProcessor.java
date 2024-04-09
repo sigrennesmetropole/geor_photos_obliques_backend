@@ -4,7 +4,7 @@
 package org.georchestra.photosobliques.service.processor;
 
 import org.georchestra.photosobliques.service.exception.AppServiceBadRequestException;
-import org.georchestra.photosobliques.storage.entity.AbstractStampedEntity;
+import org.georchestra.photosobliques.storage.common.entity.AbstractStampedEntity;
 
 import java.time.LocalDateTime;
 

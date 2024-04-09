@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BasicSecurityConstants {
 
-	public static final String SWAGGER_RESOURCES_URL = "/api/swagger-resources/**";
+	public static final String SWAGGER_RESOURCES_URL = "/photosobliques/swagger-resources/**";
 
-	public static final String SWAGGER_UI_HTML_URL = "/api/swagger-ui.html";
+	public static final String SWAGGER_UI_HTML_URL = "/photosobliques/swagger-ui.html";
 
-	public static final String SWAGGER_UI_URL = "/api/swagger-ui/**";
+	public static final String SWAGGER_UI_URL = "/photosobliques/swagger-ui/**";
 
-	public static final String V3_API_DOCS_URL = "/api/v3/api-docs/**";
+	public static final String V3_API_DOCS_URL = "/photosobliques/v3/api-docs/**";
 
 	public static final String ACTUATOR_URL = "/actuator/**";
 
@@ -31,14 +31,6 @@ public final class BasicSecurityConstants {
 
 	public static final String CONFIGURATION_UI_URL = "/configuration/ui";
 
-	public static final String REFRESH_TOKEN_URL = "/api/v1/users/refreshToken";
-
 	public static final int SC_498 = 498;
-
-	public static final String ACCESS_TOKEN_PARAMETER = "token";
-
-	public static final String HEADER_AUTHENTIZATION_KEY = "Authorization";
-
-	public static final String HEADER_REFRESH_TOKEN_KEY = "X-TOKEN";
 
 }
