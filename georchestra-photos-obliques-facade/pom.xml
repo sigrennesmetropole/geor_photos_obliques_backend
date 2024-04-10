@@ -12,7 +12,6 @@
     <name>georchestra-photos-obliques-facade</name>
     
     <properties>
-		<finalName>photosobliques</finalName>
         <resource-directory>${project.basedir}/../resources/openapi</resource-directory>
         <resource-generation-directory>${project.basedir}/../resources/openapi/generation</resource-generation-directory>
         <infinispan.version>10.1.8.Final</infinispan.version>
@@ -221,6 +220,7 @@
 							<goal>war</goal>
 						</goals>
 						<configuration>
+							<finalName>${project.artifactId}</finalName>
 							<failOnMissingWebXml>false</failOnMissingWebXml>
 							<packagingExcludes>
 								%regex[WEB-INF/lib/mapstruct-.*\.jar],
