@@ -1,6 +1,5 @@
 package org.georchestra.photosobliques.service.sm.photo;
 
-import jakarta.persistence.EntityManager;
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.core.bean.photo.PhotoObliqueSearchCriteria;
 import org.georchestra.photosobliques.core.common.DocumentContent;
@@ -10,15 +9,10 @@ import org.georchestra.photosobliques.service.helper.common.FileHelper;
 import org.georchestra.photosobliques.service.helper.common.GeometryHelper;
 import org.georchestra.photosobliques.storage.phototheque.entity.PhotoObliqueEntity;
 import org.georchestra.photosobliques.storage.phototheque.repository.photo.PhotoObliqueRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.TransactionManager;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -26,18 +20,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @PhotosObliquesSpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PhotoObliqueServiceTest {
+class PhotoObliqueServiceTest {
 
     @Autowired
     PhotoObliqueService photoObliqueService;
+
+    @Autowired
+    PhotoObliqueRepository photoObliqueRepository;
+
+    @Autowired
+    GeometryHelper geometryHelper;
+
     @Autowired
     FileHelper fileHelper;
 
@@ -50,9 +47,8 @@ public class PhotoObliqueServiceTest {
     private static final String WKT_RENNES_METROPOLE = "POLYGON ((-1.812948 47.982568, -1.807456 48.089088, -1.892589 48.197218, -1.686622 48.257599, -1.524595 48.228332, -1.439462 48.155093, -1.51361 48.04871, -1.51361 47.971537, -1.694861 47.967859, -1.812948 47.982568))";
 
 
-    @BeforeAll
-    public static void setup(@Autowired PhotoObliqueRepository photoObliqueRepository,
-                             @Autowired GeometryHelper geometryHelper) {
+    @BeforeEach
+    public void setup() {
         PhotoObliqueEntity photoOblique1 = new PhotoObliqueEntity();
         photoOblique1.setId("Photo-0001");
         photoOblique1.setFile("Photo-0001.png");
