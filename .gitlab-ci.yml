@@ -125,19 +125,18 @@ photosobliquesapi:package-backend:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - .m2/repository
-      - search-application/angular-project/node_modules
   script:
     - >
-      mvn compile sonar:sonar
+      mvn -U compile sonar:sonar
       $MAVEN_CLI_OPTS
       -Dmaven.source.skip=true
       -Dmaven.main.skip
       -Dsonar.host.url=$SONAR_URL
       -Dsonar.login=$SONAR_TOKEN
-#      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA
-#      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-#      -Dsonar.gitlab.project_id=$CI_PROJECT_ID
-#      ${BRANCH}
+      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA
+      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+      -Dsonar.gitlab.project_id=$CI_PROJECT_ID
+      ${BRANCH}
   interruptible: true
 
 photosobliquesapi:sonar:
@@ -146,8 +145,8 @@ photosobliquesapi:sonar:
     refs:
       - master
       - open/master
-#  variables:
-#    BRANCH: -Dsonar.branch.name=$CI_COMMIT_REF_NAME
+  variables:
+    BRANCH: -Dsonar.branch.name=$CI_COMMIT_REF_NAME
 
 # On master, do not use branch parameter
 photosobliquesapi:sonar:master:
@@ -155,6 +154,7 @@ photosobliquesapi:sonar:master:
   only:
     refs:
       - open/master
+      - master
 
 # Copie des artifacts dans les répertoires des images dockers
 photosobliquesapi:pre_docker:
