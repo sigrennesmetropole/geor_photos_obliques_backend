@@ -34,13 +34,16 @@ import java.util.Map;
 @Configuration
 public class StoragePhotothequeBeanConfiguration {
 
-    @Value("${spring.phototheque.datasource.hibernate.show_sql}")
+    @Value("${spring.phototheque.datasource.hibernate.show_sql:false}")
     private String hibernateShowSql;
 
-    @Value("${spring.phototheque.datasource.hibernate.format_sql}")
+    @Value("${spring.phototheque.datasource.hibernate.format_sql:false}")
     private String hibernateFormatSql;
+    
+    @Value("${spring.stats.datasource.hibernate.hbm2ddl.auto:none}")
+    private String hibernateHbm2ddlAuto;
 
-    @Value("${spring.phototheque.datasource.hibernate.dialect}")
+    @Value("${spring.phototheque.datasource.hibernate.dialect:org.hibernate.dialect.PostgreSQLDialect}")
     private String hibernateDialect;
 
     @Bean(name = "photothequeDataSource")
@@ -84,6 +87,7 @@ public class StoragePhotothequeBeanConfiguration {
         hibernateProperties.put("hibernate.show_sql", hibernateFormatSql);
         hibernateProperties.put("hibernate.format_sql", hibernateShowSql);
         hibernateProperties.put("hibernate.dialect", hibernateDialect);
+        hibernateProperties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
 
         return hibernateProperties;
     }
