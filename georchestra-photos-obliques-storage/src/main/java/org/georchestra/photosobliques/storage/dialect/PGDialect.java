@@ -14,8 +14,6 @@ public class PGDialect extends PostgreSQLDialect {
 
 	public PGDialect() {
 		super(DatabaseVersion.make(11, 0));
-		// registerFunction("string_agg", new
-		// SQLFunctionTemplate(StandardBasicTypes.STRING, "string_agg(?1, ?2)"));
 	}
 
 }

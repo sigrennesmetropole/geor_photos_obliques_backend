@@ -77,7 +77,7 @@ public class ACLHelper {
 		boolean result = false;
 		AuthenticatedUser authenticatedUser = getAuthenticatedUser();
 		if (authenticatedUser != null && CollectionUtils.isNotEmpty(authenticatedUser.getRoles())) {
-			List<String> lowerRoleCodes = roleCodes.stream().map(r -> r.toLowerCase()).toList();
+			List<String> lowerRoleCodes = roleCodes.stream().map(String::toLowerCase).toList();
 			result = authenticatedUser.getRoles().stream().anyMatch(r -> lowerRoleCodes.contains(r.toLowerCase()));
 		}
 		return result;

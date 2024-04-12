@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.tika.Tika;
 import org.georchestra.photosobliques.core.common.DocumentContent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
