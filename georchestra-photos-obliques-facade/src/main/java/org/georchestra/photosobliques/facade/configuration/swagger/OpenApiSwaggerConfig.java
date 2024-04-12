@@ -1,11 +1,15 @@
 package org.georchestra.photosobliques.facade.configuration.swagger;
 
+import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,9 +20,22 @@ import java.util.List;
  */
 public class OpenApiSwaggerConfig {
 
+	@Value("${swagger-server:"+
+			"https://sigeo-srv.sig.rennesmetopole.fr:8443/photosobliques,"+
+			"http://sigeo-srv.sig.rennesmetopole.fr:8080/photosobliques,"+
+			"https://portail.sig.rennesmetropole.fr/photosobliques,"+
+			"http://localhost:8082/photosobliques,"+
+			"https://georchestra.open-dev.com/photosobliques"+
+			"}")
+	private List<String> serverUrls;
 	@Bean
 	public OpenAPI springOpenAPI() {
-		return new OpenAPI().openapi("3.0.0").info(apiInfo()).components(apiComponents()).security(apiSecurityRequirements());
+		OpenAPI openAPI = new OpenAPI().openapi("3.0.0").info(apiInfo()).components(apiComponents()).security(apiSecurityRequirements());
+
+		if( CollectionUtils.isNotEmpty(serverUrls)) {
+			openAPI.servers(computeServers());
+		}
+		return openAPI;
 	}
 
 	protected Info apiInfo() {
@@ -36,4 +53,13 @@ public class OpenApiSwaggerConfig {
 		return Collections.singletonList(new SecurityRequirement().addList("basicauth"));
 	}
 
+	protected List<Server> computeServers() {
+		List<Server> result = new ArrayList<>();
+		for (String serverUrl : serverUrls) {
+			Server server = new Server();
+			server.setUrl(serverUrl);
+			result.add(server);
+		}
+		return result;
+	}
 }
