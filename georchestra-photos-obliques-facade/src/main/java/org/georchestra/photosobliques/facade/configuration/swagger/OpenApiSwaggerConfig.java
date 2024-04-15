@@ -21,11 +21,11 @@ import java.util.List;
 public class OpenApiSwaggerConfig {
 
 	@Value("${swagger-server:"+
-			"https://sigeo-srv.sig.rennesmetopole.fr:8443/photosobliques,"+
-			"http://sigeo-srv.sig.rennesmetopole.fr:8080/photosobliques,"+
-			"https://portail.sig.rennesmetropole.fr/photosobliques,"+
-			"http://localhost:8082/photosobliques,"+
-			"https://georchestra.open-dev.com/photosobliques"+
+			"https://sigeo-srv.sig.rennesmetopole.fr:8443/,"+
+			"http://sigeo-srv.sig.rennesmetopole.fr:8080/,"+
+			"https://portail.sig.rennesmetropole.fr/,"+
+			"http://localhost:8082/,"+
+			"https://georchestra.open-dev.com/"+
 			"}")
 	private List<String> serverUrls;
 	@Bean
