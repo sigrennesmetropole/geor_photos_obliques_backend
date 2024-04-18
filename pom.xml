@@ -38,7 +38,7 @@
         <log4j2.version>2.23.1</log4j2.version>
         <geotools.version>28.2</geotools.version>
         <javamelody.version>2.1.0</javamelody.version>
-        <commons-cli.version>1.6.0</commons-cli.version>
+        <commons-cli.version>1.7.0</commons-cli.version>
         <commons.text.version>1.11.0</commons.text.version>
         <opencsv.version>5.9</opencsv.version>
         <freemarker.version>2.3.32</freemarker.version>
