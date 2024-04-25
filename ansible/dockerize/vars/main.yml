@@ -18,6 +18,15 @@ photosobliques_server_port: 8080
 photosobliques_server_expose_port: 8087
 #photosobliques_backend_url: http://photosobliques:{{photosobliques_server_port}}/photosobliques/
 
+# filename du certificat (à déposer dans ansible/dockerize/files/)
+photosobliques_server_keystore_cert: ''
+# nom de l'alias du certificat à insérer dans le keystore
+photosobliques_server_keystore_alias: ''
+# chemin absolu du keystore dans le container docker
+photosobliques_server_keystore_store: ''
+# mot de passe du keystore
+photosobliques_server_keystore_password: ''
+
 photosobliques_admin_password: 4dM1nApp!
 
 photosobliques_smtp_host: REN1VML0096
