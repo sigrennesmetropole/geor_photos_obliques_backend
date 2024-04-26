@@ -48,7 +48,7 @@ public class PhotoObliqueEntity implements Serializable {
 	 private String comment;
 
 	 @Column(name="angle_deg")
-	 private BigDecimal angleDegre;
+	 private BigDecimal angleDegree;
 
 	 @Column(name="angle_grd")
 	 private BigDecimal angleGradient;

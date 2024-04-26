@@ -211,11 +211,11 @@ public class PhotoObliqueCustomRepositoryImpl
 
             if (searchCriteria.getOwner() != null) {
 
-                predicateStringCriteria(searchCriteria.getOwner(), FIELD_OWNER, true, predicates, builder, root);
+                predicateStringCriteria(searchCriteria.getOwner(), FIELD_OWNER, false, predicates, builder, root);
             }
 
             if (searchCriteria.getProvider() != null) {
-                predicateStringCriteria(searchCriteria.getProvider(), FIELD_PROVIDER, true, predicates, builder, root);
+                predicateStringCriteria(searchCriteria.getProvider(), FIELD_PROVIDER, false, predicates, builder, root);
             }
 
             if(searchCriteria.getAngleDegre() != null) {
