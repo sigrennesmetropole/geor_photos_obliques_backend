@@ -28,7 +28,7 @@ public class DownloadStatistiquesVisitor extends AbstractStatistiquesVisitor {
             try {
                 data.put("zipSize", sizeInMegaBytes(response.getBody().getFile()));
                 return new StatistiquesData(data);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("Echec lors de la lecture du fichier temporaire");
             }
         }

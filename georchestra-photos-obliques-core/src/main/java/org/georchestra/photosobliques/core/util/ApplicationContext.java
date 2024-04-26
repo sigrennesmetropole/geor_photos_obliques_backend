@@ -14,30 +14,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationContext implements ApplicationContextAware {
 
-	private static org.springframework.context.ApplicationContext applicationContext;
+	private static org.springframework.context.ApplicationContext context;
 
 	private static void initializeApplicationContext(
-			org.springframework.context.ApplicationContext applicationContext) {
-		ApplicationContext.applicationContext = applicationContext;
+			org.springframework.context.ApplicationContext context) {
+		ApplicationContext.context = context;
 	}
 
 	@Override
-	public void setApplicationContext(org.springframework.context.ApplicationContext applicationContext)
+	public void setApplicationContext(org.springframework.context.ApplicationContext context)
 			throws BeansException {
-		initializeApplicationContext(applicationContext);
+		initializeApplicationContext(context);
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(String name) {
-		return (T) applicationContext.getBean(name);
+		return (T) context.getBean(name);
 	}
 
 	public static <T> T getBean(Class<T> clazz) {
-		return applicationContext.getBean(clazz);
+		return context.getBean(clazz);
 	}
 
 	public static String[] getBeanNames() {
-		return applicationContext.getBeanDefinitionNames();
+		return context.getBeanDefinitionNames();
 	}
 
 }

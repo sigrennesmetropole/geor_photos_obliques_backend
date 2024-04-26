@@ -32,7 +32,6 @@ public class PhotosApiController extends AbstractController implements PhotosApi
 
     @Override
     public ResponseEntity<PhotosCount> countPhotos(String geometry, Integer startDate, Integer endDate, Double angleDegre, String provider, String owner) throws Exception {
-
         PhotoObliqueSearchCriteria searchCriteria = new PhotoObliqueSearchCriteria(geometry, startDate, endDate, angleDegre, provider, owner);
 
         Integer count = photoObliqueService.countPhotoObliques(searchCriteria);
