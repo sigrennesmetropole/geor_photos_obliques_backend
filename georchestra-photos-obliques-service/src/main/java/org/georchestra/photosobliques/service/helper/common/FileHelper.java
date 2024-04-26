@@ -3,18 +3,8 @@
  */
 package org.georchestra.photosobliques.service.helper.common;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
-
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.georchestra.photosobliques.core.common.DocumentContent;
@@ -23,8 +13,13 @@ import org.georchestra.photosobliques.service.exception.UnzipException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @author FNI18300
@@ -202,7 +197,8 @@ public class FileHelper {
 	 */
 	public DocumentContent zipFiles(String fileName, List<DocumentContent> documentContents) throws IOException {
 		File zipFile = createTemporaryFile(fileName, DocumentFormat.ZIP.getExtension());
-		DocumentContent result = new DocumentContent(fileName, DocumentFormat.ZIP.getTypeMime(), zipFile);
+		long fileSize = documentContents.stream().map(DocumentContent::getFileSize).reduce(0L, Long::sum);
+		DocumentContent result = new DocumentContent(fileName, DocumentFormat.ZIP.getTypeMime(), fileSize, zipFile);
 		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile))) {
 			byte[] buffer = new byte[1024];
 			if (CollectionUtils.isNotEmpty(documentContents)) {

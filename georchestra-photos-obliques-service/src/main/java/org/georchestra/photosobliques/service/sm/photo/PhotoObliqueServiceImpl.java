@@ -170,7 +170,7 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 				newFileName = prefix + searchedFileName;
 			}
 			fileNames.add(searchedFileName);
-			DocumentContent documentContent = new DocumentContent(newFileName, GenerationFormat.JPEG.getTypeMime(), file);
+			DocumentContent documentContent = new DocumentContent(newFileName, GenerationFormat.JPEG.getTypeMime(), file.length(), file);
 
 			//generation du fichier text mention portant le même nom que la photo
 			String mention = (String) tuple.get(1);
@@ -188,7 +188,7 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 				log.warn("photo ( " + searchedFileName + " ) introuvable" + "dans le dossier : " + path);
 				writeTextToFile("Fichier introuvable", mentionFile);
 			}
-			documentContents.add(new DocumentContent(mentionName, GenerationFormat.TEXT.getTypeMime(), mentionFile));
+			documentContents.add(new DocumentContent(mentionName, GenerationFormat.TEXT.getTypeMime(), mentionFile.length(), mentionFile));
 		}
 		return documentContents;
 	}

@@ -104,7 +104,7 @@ public class FacadeAspect {
 
 			//génération des données supplémentaires en fonction de la méthode appelée
 			visitors.stream().findFirst().filter(visitor -> visitor.accept(signature.getName()))
-					.ifPresent(visitor -> statistiques.setData(visitor.process(object)));
+					.ifPresent(visitor -> statistiques.setData(visitor. process(object)));
 
 			if (object instanceof ResponseEntity<?> response) {
 				statistiques.setResult(response.getStatusCode().toString());
