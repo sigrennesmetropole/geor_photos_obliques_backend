@@ -1,12 +1,12 @@
 package org.georchestra.photosobliques.service.sm.photo;
 
 import jakarta.persistence.Tuple;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.core.bean.photo.PhotoObliqueSearchCriteria;
 import org.georchestra.photosobliques.core.common.DocumentContent;
+import org.georchestra.photosobliques.service.exception.AppServiceBadRequestException;
 import org.georchestra.photosobliques.service.exception.AppServiceException;
 import org.georchestra.photosobliques.service.exception.AppServiceExceptionsStatus;
 import org.georchestra.photosobliques.service.helper.common.FileHelper;
@@ -16,12 +16,10 @@ import org.georchestra.photosobliques.service.sm.configuration.ConfigurationServ
 import org.georchestra.photosobliques.service.st.generator.datamodel.GenerationFormat;
 import org.georchestra.photosobliques.storage.phototheque.entity.PhotoObliqueEntity;
 import org.georchestra.photosobliques.storage.phototheque.repository.photo.PhotoObliqueCustomRepository;
-import org.georchestra.photosobliques.storage.phototheque.repository.photo.PhotoObliqueRepository;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,10 +62,7 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 
 	@Override
 	public List<PhotoOblique> searchPhotoOblique(PhotoObliqueSearchCriteria photoObliqueSearchCriteria, Pageable pageable) throws AppServiceException {
-		Geometry geometry = geometryHelper.convertGeometry(photoObliqueSearchCriteria.getGeometry());
-		if(geometry == null) {
-			throw new AppServiceException("Aucune géométrie n'a été trouvée");
-		}
+		checkGeometry(photoObliqueSearchCriteria.getGeometry());
 		List<Tuple> photosObliquesEntities = photoObliqueCustomRepository.searchPhotosObliquesWithRelevance(photoObliqueSearchCriteria,
 				configurationService.getApplicationConfiguration().getToleranceAngle(), pageable);
 
@@ -92,21 +87,32 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 
 	@Override
 	public Integer countPhotoObliques(PhotoObliqueSearchCriteria photoObliqueSearchCriteria) throws AppServiceException {
+		checkGeometry(photoObliqueSearchCriteria.getGeometry());
 		return photoObliqueCustomRepository.countPhotosObliques(photoObliqueSearchCriteria, configurationService.getApplicationConfiguration().getToleranceAngle());
+	}
+
+	private void checkGeometry(String wkt) throws AppServiceBadRequestException {
+		Geometry geometry = geometryHelper.convertGeometry(wkt);
+		if(geometry == null) {
+			throw new AppServiceBadRequestException("Aucune géométrie n'a été trouvée");
+		}
 	}
 
 	@Override
 	public List<String> searchOwners(String geometryWKT) throws AppServiceException {
+		checkGeometry(geometryWKT);
 		return photoObliqueCustomRepository.searchOwners(geometryWKT);
 	}
 
 	@Override
 	public List<String> searchProviders(String geometryWKT) throws AppServiceException {
+		checkGeometry(geometryWKT);
 		return photoObliqueCustomRepository.searchProviders(geometryWKT);
 	}
 
 	@Override
 	public List<Integer> searchYears(String geometryWKT) throws AppServiceException {
+		checkGeometry(geometryWKT);
 		return photoObliqueCustomRepository.searchYears(geometryWKT);
 	}
 
@@ -115,7 +121,7 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 		String path = configurationService.getApplicationConfiguration().getAccesPhotosHD();
 		Integer maxCartSize = configurationService.getApplicationConfiguration().getMaxCartSize();
 		if(photoIds.size() > maxCartSize) {
-			throw new AppServiceException("Le nombre de photo est supérieur au maximum autorisé (" + maxCartSize + ")", AppServiceExceptionsStatus.BAD_REQUEST);
+			throw new AppServiceBadRequestException("Le nombre de photo est supérieur au maximum autorisé (" + maxCartSize + ")");
 		}
 		String fileName;
 		if(StringUtils.isEmpty(zipName)) {
@@ -200,4 +206,5 @@ public class PhotoObliqueServiceImpl implements PhotoObliqueService {
 			fOutput.write(strToBytes);
 		}
 	}
+
 }
