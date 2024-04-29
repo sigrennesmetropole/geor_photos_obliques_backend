@@ -204,6 +204,7 @@
 						</goals>
 						<configuration>
 							<executable>true</executable>
+                    		<finalName>${project.artifactId}</finalName>
 						</configuration>
 					</execution>
                 </executions>
