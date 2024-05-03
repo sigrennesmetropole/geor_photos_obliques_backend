@@ -12,7 +12,6 @@
     <name>georchestra-photos-obliques-facade</name>
     
     <properties>
-        <finalName>${project.artifactId}</finalName>
         <resource-directory>${project.basedir}/../resources/openapi</resource-directory>
         <resource-generation-directory>${project.basedir}/../resources/openapi/generation</resource-generation-directory>
         <infinispan.version>10.1.8.Final</infinispan.version>
@@ -187,6 +186,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
+					<finalName>${project.artifactId}</finalName>
                     <excludes>
                         <exclude>**/log4j2.xml</exclude>
                         <exclude>**/photos-obliques.properties</exclude>
@@ -220,7 +220,8 @@
 						<goals>
 							<goal>war</goal>
 						</goals>
-						<configuration>							
+						<configuration>			
+							<finalName>${project.artifactId}</finalName>				
 							<failOnMissingWebXml>false</failOnMissingWebXml>
 							<packagingExcludes>
 								%regex[WEB-INF/lib/mapstruct-.*\.jar],
