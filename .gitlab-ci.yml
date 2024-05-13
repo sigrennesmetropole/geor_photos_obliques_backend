@@ -208,6 +208,11 @@ photosobliquesapi:docker2:build:
     #- chmod og-rw key/id_rsa
     - cp photos-obliques_dev_var.yml $HOME/photos-obliques_var.yml
     - ansible-playbook photos-obliques-docker.yml -v -i "${TARGET_ENV}," -u root --ssh-common-args=-oStrictHostKeyChecking=no
+  artifacts:
+    paths:
+      - '**/target/**/*.war'
+      - '**/target/**/*.jar'
+      - '**/target/**/*.zip'
 
 
 photosobliquesapi:deploy:
