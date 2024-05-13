@@ -38,7 +38,7 @@ public class PhotoObliqueCustomRepositoryImpl
     private static final String FIELD_SHAPE = "shape";
     private static final String FIELD_OWNER = "owner";
     private static final String FIELD_PROVIDER = "provider";
-    private static final String FIELD_ANGLE = "angleDegre";
+    private static final String FIELD_ANGLE = "angleDegree";
     private static final String FIELD_DOWNLOADABLE = "downloadable";
     private static final String FIELD_RELEVANCE = "relevance";
     private static final String FIELD_ID = "id";
@@ -218,8 +218,8 @@ public class PhotoObliqueCustomRepositoryImpl
                 predicateStringCriteria(searchCriteria.getProvider(), FIELD_PROVIDER, false, predicates, builder, root);
             }
 
-            if(searchCriteria.getAngleDegre() != null) {
-                predicateAngleCriteria(searchCriteria.getAngleDegre(), tolerence, FIELD_ANGLE, predicates, builder, root);
+            if(searchCriteria.getAngleDegree() != null) {
+                predicateAngleCriteria(searchCriteria.getAngleDegree(), tolerence, FIELD_ANGLE, predicates, builder, root);
             }
 
             if (CollectionUtils.isNotEmpty(predicates)) {
