@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 @Component
 public class ControllerHelper {
 
+	private static final String HEADER_FILESIZE = "File-Size";
 	private static final String ATTACHMENT_FILENAME = "attachment; filename=";
 
 	public ResponseEntity<Resource> downloadableResponseEntity(@Nullable DocumentContent documentContent) throws FileNotFoundException {
@@ -25,6 +26,7 @@ public class ControllerHelper {
 			responseHeaders.add(HttpHeaders.CONTENT_TYPE, documentContent.getContentType());
 			responseHeaders.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
 			responseHeaders.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.CONTENT_TYPE);
+			responseHeaders.add(HEADER_FILESIZE, ""+documentContent.getFileSize());
 			InputStreamResource inputStreamResource = new InputStreamResource(documentContent.getFileStream());
 
 			return new ResponseEntity<>(inputStreamResource, responseHeaders, HttpStatus.OK);

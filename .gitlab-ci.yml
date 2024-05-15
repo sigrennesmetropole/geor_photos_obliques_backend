@@ -107,8 +107,10 @@ photosobliquesapi:package-backend:
       -Dmaven.source.skip=true
       -Dmaven.main.skip
       -Dmaven.test.skip=true
+    - ls -l $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/
   artifacts:
     paths:
+      - '**/target/**/*.war'
       - '**/target/**/*.jar'
       - '**/target/**/*.zip'
 
@@ -170,11 +172,12 @@ photosobliquesapi:pre_docker:
       - open/develop
       - /^release.*/
   script:
-    - ls $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/
+    - ls -l $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/
     - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/photosobliques
     - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/template/photosobliques
   artifacts:
     paths:
+      - '$CI_PROJECT_DIR/docker/**/**.war'
       - '$CI_PROJECT_DIR/docker/**/**.zip'
       - '$CI_PROJECT_DIR/docker/**/**.jar'
 
@@ -199,11 +202,17 @@ photosobliquesapi:docker2:build:
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$ansible_private_key" | base64 -d)    
   script:
+    - ls -l $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/*
     - cp -f $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/ansible/dockerize/photosobliques.jar
     - cd $CI_PROJECT_DIR/ansible
     #- chmod og-rw key/id_rsa
     - cp photos-obliques_dev_var.yml $HOME/photos-obliques_var.yml
     - ansible-playbook photos-obliques-docker.yml -v -i "${TARGET_ENV}," -u root --ssh-common-args=-oStrictHostKeyChecking=no
+  artifacts:
+    paths:
+      - '**/target/**/*.war'
+      - '**/target/**/*.jar'
+      - '**/target/**/*.zip'
 
 
 photosobliquesapi:deploy:
