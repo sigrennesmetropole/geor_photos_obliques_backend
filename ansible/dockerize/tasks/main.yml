@@ -42,6 +42,19 @@
     dest: "{{ photosobliques_config_directory }}/photos-obliques/photos-obliques.properties"
     mode: 0770
 
+- name: Copy certificate
+  copy:
+    src: "{{ photosobliques_server_keystore_cert }}"
+    dest: "{{ photosobliques_config_directory }}/photos-obliques/{{ photosobliques_server_keystore_cert }}"
+    mode: 0770
+  when: photosobliques_server_keystore_cert | length > 0
+
+- name: Copy entrypoint shell script
+  copy:
+    src: "entrypoint.sh"
+    dest: "{{ photosobliques_image_directory }}/entrypoint.sh"
+    mode: 0770
+
 - name: Copy default api properties file
   template:
     src: default.properties.j2

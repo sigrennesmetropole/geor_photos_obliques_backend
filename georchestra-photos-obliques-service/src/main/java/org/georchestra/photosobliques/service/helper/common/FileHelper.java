@@ -4,6 +4,7 @@
 package org.georchestra.photosobliques.service.helper.common;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.georchestra.photosobliques.core.common.DocumentContent;
@@ -12,14 +13,12 @@ import org.georchestra.photosobliques.service.exception.UnzipException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -27,6 +26,7 @@ import java.util.zip.ZipOutputStream;
  *
  */
 @Component
+@Slf4j
 public class FileHelper {
 
 	public static final String DOUBLE_POINT = "..";
@@ -34,6 +34,15 @@ public class FileHelper {
 	public static final String TEMP_FILE_EXTENSION = ".gen";
 
 	public static final String TEMP_FILE_PREFIX = "tmp";
+
+	@Value("${zipfile.thresholder.entries:10000}")
+	protected int thresholderEntries = 10000;
+
+	@Value("${zipfile.thresholder.size:1000000000}")
+	protected int thresholderSize = 1000000000; // 1 GB
+
+	@Value("${zipfile.thresholder.ratio:10}")
+	protected double thresholderRatio = 10;
 
 	@Value("${photos_obliques.temporary.directory:}")
 	@Getter
@@ -64,35 +73,28 @@ public class FileHelper {
 	 * @param zipFile le nom du ZIP
 	 * @return un tableau contenant l'ensemble des File extraits
 	 */
-	public List<File> unzipFile(File zipFile) throws UnzipException {
+	public List<File> unzipFile(File zippedFile) throws UnzipException {
 
 		// On vérifie que le ZIP sera extrait là où on le pense
-		try {
-			if (zipFile.getCanonicalPath().contains(DOUBLE_POINT)) {
-				throw new UnzipException(
-						"Erreur, le zip fourni ne sera pas extrait là où il est sensé arriver, ceci est uen attaque");
-			}
-		} catch (IOException e) {
-			throw new UnzipException("Erreur, lors du contrôle de la destination d'extraction", e);
-		}
+		checkUnzipPath(zippedFile);
 
+		int totalSizeArchive = 0;
+		int totalEntryArchive = 0;
 		List<File> files = new ArrayList<>();
 
 		// Ouverture des flux
-		try (FileInputStream fInput = new FileInputStream(zipFile);
-				ZipInputStream zipInput = new ZipInputStream(fInput)) {
+		try (ZipFile zipFile = new ZipFile(zippedFile)) {
 
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
 			// Parcours de toutes les entrées dans le ZIP
-			ZipEntry entry = zipInput.getNextEntry();
-			while (entry != null) {
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
 
-				// Parse de l'entrée
 				String entryName = entry.getName();
 				File file = new File(temporaryDirectory + File.separator + entryName);
 
 				// Si répertoire
 				if (entry.isDirectory()) {
-
 					// On créée le sous répertoire s'il n'existe pas pour extraire les fichiers
 					// dedans
 					File newDir = new File(file.getAbsolutePath());
@@ -105,23 +107,49 @@ public class FileHelper {
 									"Impossible de créer le sous répertoire d'une entrée du zip à extraire");
 						}
 					}
-				}
-				// Si fichier on l'extrait
-				else {
-					extractFileFromZip(file, zipInput);
+				} else {
+					// Si fichier on l'extrait
+					totalSizeArchive += extractFileFromZip(file, zipFile, entry);
 					files.add(file);
 				}
 
-				// Passage à l'entrée suivante
-				zipInput.closeEntry();
-				entry = zipInput.getNextEntry();
-			}
+				totalEntryArchive++;
 
-			zipInput.closeEntry();
-			return files;
+				if (checkUnzipBomb(zippedFile, totalSizeArchive, totalEntryArchive)) {
+					break;
+				}
+			}
 
 		} catch (IOException e) {
 			throw new UnzipException("Erreur lors du dézippage, une exception s'est produite", e);
+		}
+		return files;
+	}
+
+	private boolean checkUnzipBomb(File zippedFile, int totalSizeArchive, int totalEntryArchive) {
+		boolean result = false;
+		if (totalSizeArchive > thresholderSize) {
+			// the uncompressed data size is too much for the application resource capacity
+			log.warn("the uncompressed data size is too much for the application resource capacity:" + zippedFile);
+			result = true;
+		}
+
+		if (totalEntryArchive > thresholderEntries) {
+			// too much entries in this archive, can lead to inodes exhaustion of the system
+			log.warn("too much entries in this archive, can lead to inodes exhaustion of the system:" + zippedFile);
+			result = true;
+		}
+		return result;
+	}
+
+	private void checkUnzipPath(File zippedFile) throws UnzipException {
+		try {
+			if (zippedFile.getCanonicalPath().contains(DOUBLE_POINT)) {
+				throw new UnzipException(
+						"Erreur, le zip fourni ne sera pas extrait là où il est sensé arriver, ceci est uen attaque");
+			}
+		} catch (IOException e) {
+			throw new UnzipException("Erreur, lors du contrôle de la destination d'extraction", e);
 		}
 	}
 
@@ -131,20 +159,32 @@ public class FileHelper {
 	 * @param file     fichier de destination
 	 * @param zipInput le zip extrait
 	 * @throws UnzipException si echec
+	 * @throws IOException
 	 */
-	private void extractFileFromZip(File file, ZipInputStream zipInput) throws UnzipException {
+	private int extractFileFromZip(File file, ZipFile zipFile, ZipEntry zipEntry) throws UnzipException, IOException {
+		int nBytes = -1;
+		byte[] buffer = new byte[2048];
+		int totalSizeEntry = 0;
+		int totalSizeArchive = 0;
 
 		// Ouverture des flux
-		byte[] buffer = new byte[2048];
+		try (InputStream zipInput = new BufferedInputStream(zipFile.getInputStream(zipEntry));
+				FileOutputStream fOutput = new FileOutputStream(file)) {
+			while ((nBytes = zipInput.read(buffer)) > 0) { // Compliant
+				fOutput.write(buffer, 0, nBytes);
+				totalSizeEntry += nBytes;
+				totalSizeArchive += nBytes;
 
-		try (FileOutputStream fOutput = new FileOutputStream(file)) {
-			int count;
-			while ((count = zipInput.read(buffer)) > 0) {
-				fOutput.write(buffer, 0, count);
+				double compressionRatio = (double) totalSizeEntry / zipEntry.getCompressedSize();
+				if (compressionRatio > thresholderRatio) {
+					log.warn("Looks like zipbomb (ratio)");
+					break;
+				}
 			}
 		} catch (Exception e) {
 			throw new UnzipException("Erreur lors de l'extraction d'un élément du ShapeFile", e);
 		}
+		return totalSizeArchive;
 	}
 
 	/**
@@ -157,7 +197,8 @@ public class FileHelper {
 	 */
 	public DocumentContent zipFiles(String fileName, List<DocumentContent> documentContents) throws IOException {
 		File zipFile = createTemporaryFile(fileName, DocumentFormat.ZIP.getExtension());
-		DocumentContent result = new DocumentContent(fileName, DocumentFormat.ZIP.getTypeMime(), zipFile);
+		long fileSize = documentContents.stream().map(DocumentContent::getFileSize).reduce(0L, Long::sum);
+		DocumentContent result = new DocumentContent(fileName, DocumentFormat.ZIP.getTypeMime(), fileSize, zipFile);
 		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile))) {
 			byte[] buffer = new byte[1024];
 			if (CollectionUtils.isNotEmpty(documentContents)) {

@@ -136,8 +136,8 @@ public final class DataModelUtils {
 			try {
 				if (map instanceof HashAdapter) {
 					TemplateHashModel templateModel = (TemplateHashModel) ((HashAdapter) map).getTemplateModel();
-					if (templateModel instanceof SimpleHash) {
-						Map<?, ?> innerMap = ((SimpleHash) templateModel).toMap();
+					if (templateModel instanceof SimpleHash simpleHash) {
+						Map<?, ?> innerMap = simpleHash.toMap();
 						result = innerMap.get(key);
 					}
 				}

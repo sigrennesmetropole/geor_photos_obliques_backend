@@ -33,16 +33,16 @@ import java.util.Map;
 @Configuration
 public class StorageStatistiquesBeanConfiguration {
 
-    @Value("${spring.stats.datasource.hibernate.show_sql}")
+    @Value("${spring.stats.datasource.hibernate.show_sql:false}")
     private String hibernateShowSql;
 
-    @Value("${spring.stats.datasource.hibernate.format_sql}")
+    @Value("${spring.stats.datasource.hibernate.format_sql:false}")
     private String hibernateFormatSql;
 
-    @Value("${spring.stats.datasource.hibernate.hbm2ddl.auto}")
+    @Value("${spring.stats.datasource.hibernate.hbm2ddl.auto:none}")
     private String hibernateHbm2ddlAuto;
 
-    @Value("${spring.stats.datasource.hibernate.dialect}")
+    @Value("${spring.stats.datasource.hibernate.dialect:org.hibernate.dialect.PostgreSQLDialect}")
     private String hibernateDialect;
 
     @Bean(name = "statsDataSource")

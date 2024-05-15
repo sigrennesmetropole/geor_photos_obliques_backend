@@ -18,7 +18,7 @@ public class PhotoObliqueSearchCriteria {
     private String geometry;
     private Integer startDate;
     private Integer endDate;
-    private Double angleDegre;
+    private Double angleDegree;
     private String provider;
     private String owner;
 
