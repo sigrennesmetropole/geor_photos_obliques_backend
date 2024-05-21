@@ -708,4 +708,30 @@
 			<id>prod</id>
 		</profile>
 	</profiles>
+    <repositories>
+        <!-- Maven Central repository -->
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- Terretis repository -->
+        <repository>
+            <id>terretis</id>
+            <name>Terretis Repository</name>
+            <url>https://nexus.terrestris.de/repository/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
