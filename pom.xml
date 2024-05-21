@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.georchestra</groupId>
     <artifactId>georchestra-photos-obliques-backend</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
     <name>georchestra-photos-obliques-backend</name>
     <description>Plugin Georchestra Photos Obliques Backend</description>
@@ -29,7 +29,7 @@
         <springfox.version>3.0.0</springfox.version>
         <openapi.version>1.8.0</openapi.version>
         <openapi-web.version>2.5.0</openapi-web.version>
-        <openapi.plugin.version>7.5.0</openapi.plugin.version>
+        <openapi.plugin.version>7.6.0</openapi.plugin.version>
         <openapi.jackson.version>0.2.6</openapi.jackson.version>
         <apache.directory.api.version>2.1.6</apache.directory.api.version>
         <jsonwebtoken.version>0.12.5</jsonwebtoken.version>
@@ -49,7 +49,7 @@
         <findbugs.version>3.0.2</findbugs.version>
         <bouncy.version>1.78.1</bouncy.version>
         <jasig.cas.client.version>3.6.4</jasig.cas.client.version>
-        <nimbus.jose.jwt.version>9.39</nimbus.jose.jwt.version>
+        <nimbus.jose.jwt.version>9.39.1</nimbus.jose.jwt.version>
         <s3.version>2.5.0</s3.version>
         <gson.version>2.10.1</gson.version>
         <activiti.version>7.1.0.M6</activiti.version>
@@ -58,14 +58,14 @@
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <compiler.plugin.version>3.13.0</compiler.plugin.version>
         <ant.plugin.version>3.1.0</ant.plugin.version>
-        <hibernate-spatial.version>6.5.1.Final</hibernate-spatial.version>
+        <hibernate-spatial.version>6.5.2.Final</hibernate-spatial.version>
         <ehcache.version>3.10.8</ehcache.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
         <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
         <jaxb-impl.version>4.0.5</jaxb-impl.version>
-        <swagger.version>2.2.21</swagger.version>
+        <swagger.version>2.2.22</swagger.version>
         <graalvm.version>23.0.4</graalvm.version>
         <httpclient5.version>5.3.1</httpclient5.version>
         <!-- Configuration SONAR -->
@@ -708,4 +708,30 @@
 			<id>prod</id>
 		</profile>
 	</profiles>
+    <repositories>
+        <!-- Maven Central repository -->
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- Terretis repository -->
+        <repository>
+            <id>terretis</id>
+            <name>Terretis Repository</name>
+            <url>https://nexus.terrestris.de/repository/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
