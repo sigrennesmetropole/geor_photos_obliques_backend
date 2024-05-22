@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.georchestra</groupId>
         <artifactId>georchestra-photos-obliques-backend</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.0</version>
     </parent>
     
     <artifactId>georchestra-photos-obliques-facade</artifactId>
@@ -242,6 +242,7 @@
 				<dockerImageName>sigrennesmetropole/geor_photos_obliques_backend</dockerImageName>
 				<dockerDatadirScmUrl>scm:git:https://github.com/georchestra/datadir.git</dockerDatadirScmUrl>
 				<dockerDatadirScmVersion>docker-${packageDatadirScmVersion}</dockerDatadirScmVersion>
+				<finalName>${project.artifactId}</finalName>
 			</properties>
 			<build>
 				<plugins>
@@ -275,6 +276,15 @@
 							<!-- chemin relatif depuis le target du présent projet -->
 							<dockerDirectory>${project.basedir}/../docker/photosobliques</dockerDirectory>
 
+							<!-- copy the service's jar file from target into the root directory
+								of the image -->
+							<resources>
+								<resource>
+									<targetPath>/</targetPath>
+									<directory>${project.build.directory}</directory>
+									<include>${finalName}.jar</include>
+								</resource>
+							</resources>
 							<!-- This will require to set up the docker-hub credentials correctly
 								into your ~/.m2/settings.xml, see: https://github.com/spotify/docker-maven-plugin#authenticating-with-private-registries -->
 							<serverId>docker-hub</serverId>
