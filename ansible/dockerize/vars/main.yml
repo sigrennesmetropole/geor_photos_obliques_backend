@@ -18,6 +18,8 @@ photosobliques_server_port: 8080
 photosobliques_server_expose_port: 8087
 #photosobliques_backend_url: http://photosobliques:{{photosobliques_server_port}}/photosobliques/
 
+# path du certificat sur le serveur
+photosobliques_server_keystore_path: '/etc/georchestra/photos-obliques/'
 # filename du certificat (à déposer dans ansible/dockerize/files/)
 photosobliques_server_keystore_cert: ''
 # nom de l'alias du certificat à insérer dans le keystore
