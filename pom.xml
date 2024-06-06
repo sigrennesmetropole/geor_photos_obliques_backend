@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.georchestra</groupId>
 	<artifactId>georchestra-photos-obliques-backend</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1.SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>georchestra-photos-obliques-backend</name>
 	<description>Plugin Georchestra Photos Obliques Backend</description>
@@ -20,7 +20,7 @@
 		<jdk.cible>17</jdk.cible>
 		<java.version>17</java.version>
 		<!-- Configuration librairies -->
-		<springframework.boot.version>3.2.5</springframework.boot.version>
+		<springframework.boot.version>3.3.0</springframework.boot.version>
 		<commons.io.version>2.16.1</commons.io.version>
 		<commons.collections4.version>4.4</commons.collections4.version>
 		<commons.lang3.version>3.14.0</commons.lang3.version>
@@ -36,12 +36,12 @@
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<lombok.version>1.18.26</lombok.version>
 		<log4j2.version>2.23.1</log4j2.version>
-		<geotools.version>28.2</geotools.version>
+		<geotools.version>31.1</geotools.version>
 		<javamelody.version>2.2.0</javamelody.version>
 		<commons-cli.version>1.7.0</commons-cli.version>
 		<commons.text.version>1.12.0</commons.text.version>
 		<opencsv.version>5.9</opencsv.version>
-		<freemarker.version>2.3.32</freemarker.version>
+		<freemarker.version>2.3.33</freemarker.version>
 		<xdocreport.version>2.0.6</xdocreport.version>
 		<tika.version>2.9.2</tika.version>
 		<jackson-datatype-threetenbp.version>2.15.2</jackson-datatype-threetenbp.version>
