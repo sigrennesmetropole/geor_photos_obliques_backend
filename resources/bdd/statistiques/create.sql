@@ -15,7 +15,8 @@ $do$
                 INHERIT
                 NOCREATEDB
                 NOCREATEROLE
-                NOREPLICATION;
+                NOREPLICATION
+                PASSWORD 'stats';
             EXCEPTION
                 WHEN duplicate_object THEN
                     RAISE NOTICE 'Role "stats" was just created by a concurrent transaction. Skipping.';
@@ -23,6 +24,7 @@ $do$
         END IF;
     END
 $do$;
+
 CREATE SCHEMA photos_obliques_stats AUTHORIZATION georchestra;
 GRANT ALL ON SCHEMA photos_obliques_stats TO stats;
 ALTER USER stats SET search_path TO photos_obliques_stats, public;

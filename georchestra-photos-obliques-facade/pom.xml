@@ -189,6 +189,7 @@
 					<finalName>${project.artifactId}</finalName>
                     <excludes>
                         <exclude>**/log4j2.xml</exclude>
+                         <exclude>**/default.properties</exclude>
                         <exclude>**/photos-obliques.properties</exclude>
                     </excludes>
                 </configuration>
@@ -274,7 +275,7 @@
 								<imageTag>latest</imageTag>
 							</imageTags>
 							<!-- chemin relatif depuis le target du présent projet -->
-							<dockerDirectory>${project.basedir}/../docker/photosobliques</dockerDirectory>
+							<dockerDirectory>${project.basedir}/../docker/rennes-metropole</dockerDirectory>
 
 							<!-- copy the service's jar file from target into the root directory
 								of the image -->

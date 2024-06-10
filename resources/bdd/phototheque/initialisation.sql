@@ -27,3 +27,5 @@ alter table photo_oblique
 
 alter table photo_oblique
     add constraint UK_a0qmi8htvty1idedoo8dlxf99 unique (id);
+    
+    
