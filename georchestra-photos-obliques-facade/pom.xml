@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.georchestra</groupId>
         <artifactId>georchestra-photos-obliques-backend</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
     
     <artifactId>georchestra-photos-obliques-facade</artifactId>
@@ -189,6 +189,7 @@
 					<finalName>${project.artifactId}</finalName>
                     <excludes>
                         <exclude>**/log4j2.xml</exclude>
+                         <exclude>**/default.properties</exclude>
                         <exclude>**/photos-obliques.properties</exclude>
                     </excludes>
                 </configuration>
@@ -254,7 +255,7 @@
 							<dependency>
 								<groupId>com.google.guava</groupId>
 								<artifactId>guava</artifactId>
-								<version>33.2.0-jre</version>
+								<version>33.2.1-jre</version>
 							</dependency>
 						</dependencies>
 						<executions>
@@ -274,7 +275,7 @@
 								<imageTag>latest</imageTag>
 							</imageTags>
 							<!-- chemin relatif depuis le target du présent projet -->
-							<dockerDirectory>${project.basedir}/../docker/photosobliques</dockerDirectory>
+							<dockerDirectory>${project.basedir}/../docker/rennes-metropole</dockerDirectory>
 
 							<!-- copy the service's jar file from target into the root directory
 								of the image -->

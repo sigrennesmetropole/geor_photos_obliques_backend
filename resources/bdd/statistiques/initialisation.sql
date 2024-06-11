@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS photos_obliques_stats.statistiques
     who varchar(50),
     duration bigint,
     data varchar(100)
-)
+);

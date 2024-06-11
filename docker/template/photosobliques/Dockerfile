@@ -1,4 +1,5 @@
 FROM openjdk:17.0.2-jdk-bullseye
+USER root
 MAINTAINER sigsupport@rennesmetropole.fr
 ENV TZ=Europe/Paris
 
@@ -11,6 +12,11 @@ RUN chmod 777 -R /etc/georchestra
 RUN mkdir -p /opt/photosobliques
 ADD georchestra-photos-obliques-facade.jar /opt/photosobliques/service.jar
 RUN chmod 777 -R /opt/photosobliques
+
+ENV PROPERTIES_PATH /etc/georchestra/photos-obliques/photos-obliques.properties
+
+ADD entrypoint.sh /opt/photosobliques/entrypoint.sh
+ENTRYPOINT [ "/bin/bash", "/opt/photosobliques/entrypoint.sh" ]
 
 CMD [ "sh", "-c", "exec java --add-opens java.base/java.util=ALL-UNNAMED \
       -Duser.language=fr -Duser.country=FR \

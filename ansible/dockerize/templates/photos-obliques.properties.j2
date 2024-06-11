@@ -1,9 +1,12 @@
-## Version de l'application
-application.version=@project.version@
-application.comment=Photos Obliques @project.version@
+# SERVER
+server.port=8080
 
-georchestra.role.administrator=ROLE_ADMINISTRATOR
+server.trustcert.keystore.cert={{photosobliques_server_keystore_cert}}
+server.trustcert.keystore.alias={{photosobliques_server_keystore_alias}}
+server.trustcert.keystore.store={{photosobliques_server_keystore_store}}
+server.trustcert.keystore.password={{photosobliques_server_keystore_password}}
 
+# PROPRIETES APPLICATIVES
 photos-obliques.tolerance.angle=20
 photos-obliques.url.vignette=https://public.sig.rennesmetropole.fr/ressources/donnees/photosobliques/vignettes2/
 photos-obliques.url.apercu=https://public.sig.rennesmetropole.fr/ressources/donnees/photosobliques/apercus2/
@@ -12,14 +15,6 @@ photos-obliques.acces.photohd=/etc/georchestra/photos-obliques/RennesMetropole/P
 photos-obliques.panier.max.photos=200
 
 photos-obliques.geometries.srid=EPSG:3948
-
-# SERVER
-server.port=8080
-
-server.trustcert.keystore.cert={{photosobliques_server_keystore_cert}}
-server.trustcert.keystore.alias={{photosobliques_server_keystore_alias}}
-server.trustcert.keystore.store={{photosobliques_server_keystore_store}}
-server.trustcert.keystore.password={{photosobliques_server_keystore_password}}
 
 spring.security.user.name=admin
 spring.security.user.password={noop}4dM1nApp!

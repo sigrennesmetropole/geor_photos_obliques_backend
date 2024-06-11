@@ -1,4 +1,4 @@
--- create user search if not exists;
+-- create user photos_obliques if not exists;
 DO
 $do$
     BEGIN
@@ -16,7 +16,8 @@ $do$
                 INHERIT
                 NOCREATEDB
                 NOCREATEROLE
-                NOREPLICATION;
+                NOREPLICATION
+                PASSWORD 'photos_obliques';
             EXCEPTION
                 WHEN duplicate_object THEN
                     RAISE NOTICE 'Role "photos_obliques" was just created by a concurrent transaction. Skipping.';
@@ -42,7 +43,8 @@ $do$
                 INHERIT
                 NOCREATEDB
                 NOCREATEROLE
-                NOREPLICATION;
+                NOREPLICATION
+                PASSWORD 'consult';
             EXCEPTION
                 WHEN duplicate_object THEN
                     RAISE NOTICE 'Role "consult" was just created by a concurrent transaction. Skipping.';
@@ -52,13 +54,15 @@ $do$
 $do$;
 
 CREATE SCHEMA phototheque AUTHORIZATION photos_obliques;
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS postgis_topology;
+CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder;
+CREATE EXTENSION IF NOT EXISTS unaccent;
+
 GRANT ALL ON SCHEMA phototheque TO photos_obliques;
+
+GRANT USAGE ON SCHEMA phototheque TO consult;
 ALTER USER consult SET search_path TO photos_obliques, public;
 
-
-CREATE EXTENSION IF NOT EXISTS postgis;-- SCHEMA gaspar_geo;
-CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;-- SCHEMA gaspar_geo;
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";-- SCHEMA gaspar_geo;
-CREATE EXTENSION IF NOT EXISTS postgis_topology;-- SCHEMA gaspar_geo;
-CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder;-- SCHEMA gaspar_geo;
-CREATE EXTENSION IF NOT EXISTS unaccent;
