@@ -19,7 +19,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @PropertySource(value = { "classpath:photos-obliques-common.properties" })
 @PropertySource(value = { "file:${georchestra.datadir}/default.properties" }, ignoreResourceNotFound = false)
 @PropertySource(value = { "file:${georchestra.datadir}/photos-obliques/photos-obliques.properties" }, ignoreResourceNotFound = false)
-@PropertySource(value = { "classpath:photos-obliques-common.properties" }, ignoreResourceNotFound = false)
 @EnableScheduling
 @EntityScan("org.georchestra.photosobliques.storage")
 public class AppFacadeApplication extends SpringBootServletInitializer {

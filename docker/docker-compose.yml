@@ -1,19 +1,20 @@
-proxy:
-  build: proxy
-  ports:
-    - "8080:8080"
-  links:
-    - photosobliques
-    - header
-  environment:
-    - XMX=512M
+---
+version: "3"
 
-photosobliques:
-  build: photosobliques
-  environment:
-    - ADD_JAVA_OPTS=-Dgeorchestra.datadir=/etc/georchestra
+volumes:
+  photosobliques_data:
 
-header:
-  environment:
-    - XMX=512M
-  image: georchestra/header
+services:
+
+  photosobliques:
+    image: photos-obliques-image
+    ports:
+      - "{{photosobliques_server_expose_port}}:{{photosobliques_server_port}}"      
+    volumes:
+      - ./config:/etc/georchestra
+      - ./photosobliques_data:/opt/photosobliques/data
+    environment:
+      - JAVA_OPTIONS=-Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
+      - ADD_JAVA_OPTS=
+      - XMX=1G
+

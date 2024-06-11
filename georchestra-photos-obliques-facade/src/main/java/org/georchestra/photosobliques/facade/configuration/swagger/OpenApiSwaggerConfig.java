@@ -21,11 +21,7 @@ import java.util.List;
 public class OpenApiSwaggerConfig {
 
 	@Value("${swagger-server:"+
-			"https://sigeo-srv.sig.rennesmetopole.fr:8443/,"+
-			"http://sigeo-srv.sig.rennesmetopole.fr:8080/,"+
-			"https://portail.sig.rennesmetropole.fr/,"+
-			"http://localhost:8082/,"+
-			"https://georchestra.open-dev.com/"+
+			"http://localhost:8082/"+
 			"}")
 	private List<String> serverUrls;
 	@Bean

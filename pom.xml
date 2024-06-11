@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.georchestra</groupId>
 	<artifactId>georchestra-photos-obliques-backend</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>pom</packaging>
 	<name>georchestra-photos-obliques-backend</name>
 	<description>Plugin Georchestra Photos Obliques Backend</description>
@@ -20,7 +20,7 @@
 		<jdk.cible>17</jdk.cible>
 		<java.version>17</java.version>
 		<!-- Configuration librairies -->
-		<springframework.boot.version>3.2.5</springframework.boot.version>
+		<springframework.boot.version>3.3.0</springframework.boot.version>
 		<commons.io.version>2.16.1</commons.io.version>
 		<commons.collections4.version>4.4</commons.collections4.version>
 		<commons.lang3.version>3.14.0</commons.lang3.version>
@@ -36,12 +36,12 @@
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<lombok.version>1.18.26</lombok.version>
 		<log4j2.version>2.23.1</log4j2.version>
-		<geotools.version>28.2</geotools.version>
-		<javamelody.version>2.1.0</javamelody.version>
+		<geotools.version>31.1</geotools.version>
+		<javamelody.version>2.2.0</javamelody.version>
 		<commons-cli.version>1.7.0</commons-cli.version>
 		<commons.text.version>1.12.0</commons.text.version>
 		<opencsv.version>5.9</opencsv.version>
-		<freemarker.version>2.3.32</freemarker.version>
+		<freemarker.version>2.3.33</freemarker.version>
 		<xdocreport.version>2.0.6</xdocreport.version>
 		<tika.version>2.9.2</tika.version>
 		<jackson-datatype-threetenbp.version>2.15.2</jackson-datatype-threetenbp.version>
@@ -49,7 +49,7 @@
 		<findbugs.version>3.0.2</findbugs.version>
 		<bouncy.version>1.78.1</bouncy.version>
 		<jasig.cas.client.version>3.6.4</jasig.cas.client.version>
-		<nimbus.jose.jwt.version>9.39.1</nimbus.jose.jwt.version>
+		<nimbus.jose.jwt.version>9.39.3</nimbus.jose.jwt.version>
 		<s3.version>2.5.0</s3.version>
 		<gson.version>2.10.1</gson.version>
 		<activiti.version>7.1.0.M6</activiti.version>
@@ -85,7 +85,7 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<plugin.dependency.check.maven.version>5.3.2</plugin.dependency.check.maven.version>
 		<plugin.maven-jar-plugin.version>3.4.1</plugin.maven-jar-plugin.version>
-		<plugin.maven-javadoc-plugin.version>3.6.3</plugin.maven-javadoc-plugin.version>
+		<plugin.maven-javadoc-plugin.version>3.7.0</plugin.maven-javadoc-plugin.version>
 		<plugin.maven-assembly-plugin.version>3.7.1</plugin.maven-assembly-plugin.version>
 		<h2gis.org.version>2.2.1</h2gis.org.version>
 		<spring-boot-test.version>3.1.5</spring-boot-test.version>
