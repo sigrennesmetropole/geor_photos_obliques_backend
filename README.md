@@ -203,7 +203,7 @@ Ajouter dans le fichier *security-mapping.xml* une ligne permettant de configure
 <intercept-url pattern="/photosobliques/.*" access=<Liste des rôles>/>
 ```
 
-Le Swagger sera accessible sur ```https://<serveur_georchestra>:<port>/photosobliques/swagger-ui.html"```. 
+Le Swagger sera accessible sur ```https://<serveur_georchestra>:<port>/photosobliques/swagger-ui.html```. 
 Il n'est pas possible de configurer cet url.
 
 
