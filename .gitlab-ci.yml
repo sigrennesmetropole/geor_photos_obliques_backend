@@ -172,7 +172,7 @@ photosobliquesapi:pre_docker:
       - /^release.*/
   script:
     - ls -l $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/
-    - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/photosobliques
+    - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/rennes-metropole
     - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/template/photosobliques
   artifacts:
     paths:
