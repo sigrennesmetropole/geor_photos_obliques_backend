@@ -109,9 +109,9 @@ photosobliquesapi:package-backend:
     - ls -l $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/
   artifacts:
     paths:
-      - '**/target/**/*.war'
-      - '**/target/**/*.jar'
-      - '**/target/**/*.zip'
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**/*.war'
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**/*.jar'
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**/*.zip'
 
 # Sonar code quality analysis - note a full test coverage report through a jacoco.exec merged file in base project folder
 .sonar:
@@ -176,9 +176,9 @@ photosobliquesapi:pre_docker:
     - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/template/photosobliques
   artifacts:
     paths:
-      - '**/target/**/*.war'
-      - '**/target/**/*.jar'
-      - '**/target/**/*.zip'    
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**.war'
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**.jar'
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/*.zip'
       - '$CI_PROJECT_DIR/docker/**/**.war'
       - '$CI_PROJECT_DIR/docker/**/**.zip'
       - '$CI_PROJECT_DIR/docker/**/**.jar'
@@ -194,9 +194,9 @@ photosobliquesapi:docker2:build:
   timeout: 1h
   artifacts:
     paths:
-      - '**/target/**/*.war'
-      - '**/target/**/*.jar'
-      - '**/target/**/*.zip'    
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**.war'
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**.jar'
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/*.zip'   
       - '$CI_PROJECT_DIR/docker/**/**.war'
       - '$CI_PROJECT_DIR/docker/**/**.zip'
       - '$CI_PROJECT_DIR/docker/**/**.jar'  
@@ -206,8 +206,10 @@ photosobliquesapi:docker2:build:
   tags: 
    - iaas
   image: glregistry.boost.open.global/boost/docker/mvn-node-jdk11-ansible:latest
+  needs:
+    - photosobliquesapi:docker2:build
   dependencies:
-    - photosobliquesapi:compile
+    - photosobliquesapi:docker2:build
   before_script:
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$ansible_private_key" | base64 -d)    
@@ -220,10 +222,12 @@ photosobliquesapi:docker2:build:
     - ansible-playbook photos-obliques-docker.yml -v -i "${TARGET_ENV}," -u root --ssh-common-args=-oStrictHostKeyChecking=no
   artifacts:
     paths:
-      - '**/target/**/*.war'
-      - '**/target/**/*.jar'
-      - '**/target/**/*.zip'
-
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**.war'
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**.jar'
+      - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/*.zip'   
+      - '$CI_PROJECT_DIR/docker/**/**.war'
+      - '$CI_PROJECT_DIR/docker/**/**.zip'
+      - '$CI_PROJECT_DIR/docker/**/**.jar'
 
 photosobliquesapi:deploy:
   extends: .photosobliquesapi:deploy
