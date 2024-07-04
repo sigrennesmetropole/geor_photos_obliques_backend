@@ -9,3 +9,7 @@ CREATE TABLE IF NOT EXISTS backend_stats.statistiques_photos_obliques
     duration bigint,
     data varchar(100)
 );
+
+
+GRANT ALL ON SEQUENCE backend_stats.statistiques_id_seq TO stats;
+GRANT ALL ON TABLE backend_stats.statistiques_photos_obliques TO stats;
