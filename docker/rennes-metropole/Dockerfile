@@ -22,7 +22,7 @@ CMD [ "sh", "-c", "exec java --add-opens java.base/java.util=ALL-UNNAMED \
       -Duser.language=fr -Duser.country=FR \
       -Djava.io.tmpdir=/tmp/jetty \
       -Dgeorchestra.datadir=/etc/georchestra \
-      -Dspring.config.additional-location=file:/etc/georchestra/config/ \
+      -Dspring.config.additional-location=file:/etc/georchestra/ \
       ${ADD_JAVA_OPTS}                                   \
       -Xmx${XMX:-1G} -Xms${XMX:-1G}                      \
       -jar /opt/photosobliques/service.jar" ]  
