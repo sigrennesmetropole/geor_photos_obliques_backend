@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS photos_obliques_stats.statistiques
+CREATE TABLE IF NOT EXISTS backend_stats.statistiques_photos_obliques
 (
     id bigserial NOT NULL PRIMARY KEY,
     result varchar(50),
