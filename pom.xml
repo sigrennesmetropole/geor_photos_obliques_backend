@@ -36,7 +36,7 @@
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<lombok.version>1.18.26</lombok.version>
 		<log4j2.version>2.23.1</log4j2.version>
-		<geotools.version>31.2</geotools.version>
+		<geotools.version>31.3</geotools.version>
 		<javamelody.version>2.2.0</javamelody.version>
 		<commons-cli.version>1.7.0</commons-cli.version>
 		<commons.text.version>1.12.0</commons.text.version>
