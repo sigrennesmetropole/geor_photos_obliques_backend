@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.georchestra</groupId>
 	<artifactId>georchestra-photos-obliques-backend</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>georchestra-photos-obliques-backend</name>
 	<description>Plugin Georchestra Photos Obliques Backend</description>
@@ -20,15 +20,15 @@
 		<jdk.cible>17</jdk.cible>
 		<java.version>17</java.version>
 		<!-- Configuration librairies -->
-		<springframework.boot.version>3.3.1</springframework.boot.version>
+		<springframework.boot.version>3.3.2</springframework.boot.version>
 		<commons.io.version>2.16.1</commons.io.version>
 		<commons.collections4.version>4.4</commons.collections4.version>
-		<commons.lang3.version>3.14.0</commons.lang3.version>
+		<commons.lang3.version>3.15.0</commons.lang3.version>
 		<httpclient.version>4.5.14</httpclient.version>
 		<json.simple.version>1.1.1</json.simple.version>
 		<springfox.version>3.0.0</springfox.version>
 		<openapi.version>1.8.0</openapi.version>
-		<openapi-web.version>2.5.0</openapi-web.version>
+		<openapi-web.version>2.6.0</openapi-web.version>
 		<openapi.plugin.version>7.7.0</openapi.plugin.version>
 		<openapi.jackson.version>0.2.6</openapi.jackson.version>
 		<apache.directory.api.version>2.1.6</apache.directory.api.version>
@@ -83,7 +83,7 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<plugin.dependency.check.maven.version>5.3.2</plugin.dependency.check.maven.version>
 		<plugin.maven-jar-plugin.version>3.4.2</plugin.maven-jar-plugin.version>
-		<plugin.maven-javadoc-plugin.version>3.7.0</plugin.maven-javadoc-plugin.version>
+		<plugin.maven-javadoc-plugin.version>3.8.0</plugin.maven-javadoc-plugin.version>
 		<plugin.maven-assembly-plugin.version>3.7.1</plugin.maven-assembly-plugin.version>
 		<h2gis.org.version>2.2.1</h2gis.org.version>
 		<spring-boot-test.version>3.1.5</spring-boot-test.version>

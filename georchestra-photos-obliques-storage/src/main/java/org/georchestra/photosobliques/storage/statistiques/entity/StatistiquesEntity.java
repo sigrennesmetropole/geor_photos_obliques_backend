@@ -22,7 +22,7 @@
  * User entity
  */
 
-@Table(name = "statistiques", schema = "photos_obliques_stats")
+@Table(name = "statistiques_photos_obliques")
 @Setter
 @Getter
 @ToString
@@ -31,6 +31,7 @@
 @Entity
 public class StatistiquesEntity implements Serializable {
 
+	private static final long serialVersionUID = 8103560742221958895L;
 
 	@Id
 	@Column(name="id")
