@@ -23,7 +23,7 @@
 		<springframework.boot.version>3.3.1</springframework.boot.version>
 		<commons.io.version>2.16.1</commons.io.version>
 		<commons.collections4.version>4.4</commons.collections4.version>
-		<commons.lang3.version>3.14.0</commons.lang3.version>
+		<commons.lang3.version>3.15.0</commons.lang3.version>
 		<httpclient.version>4.5.14</httpclient.version>
 		<json.simple.version>1.1.1</json.simple.version>
 		<springfox.version>3.0.0</springfox.version>
