@@ -28,7 +28,7 @@
 		<json.simple.version>1.1.1</json.simple.version>
 		<springfox.version>3.0.0</springfox.version>
 		<openapi.version>1.8.0</openapi.version>
-		<openapi-web.version>2.5.0</openapi-web.version>
+		<openapi-web.version>2.6.0</openapi-web.version>
 		<openapi.plugin.version>7.6.0</openapi.plugin.version>
 		<openapi.jackson.version>0.2.6</openapi.jackson.version>
 		<apache.directory.api.version>2.1.6</apache.directory.api.version>
