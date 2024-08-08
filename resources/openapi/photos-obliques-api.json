@@ -102,8 +102,8 @@
 				"tags": [
 					"photos"
 				],
-				"summary": "Recherche photos",
-				"description": "Recherche des photos",
+				"summary": "Recherche photos. Attention, les champs null en base de données ne sont pas retournés.",
+				"description": "Recherche des photos. Attention, les champs null en base de données ne sont pas retournés.",
 				"operationId": "searchPhotos",
 				"parameters": [
 					{

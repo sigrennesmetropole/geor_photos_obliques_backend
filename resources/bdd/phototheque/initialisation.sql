@@ -22,10 +22,8 @@ create table if not exists photo_oblique
     primary key (id)
 );
 
-alter table photo_oblique
-    drop constraint if exists UK_a0qmi8htvty1idedoo8dlxf99;
+alter table photo_oblique drop constraint if exists UK_a0qmi8htvty1idedoo8dlxf99;
 
-alter table photo_oblique
-    add constraint UK_a0qmi8htvty1idedoo8dlxf99 unique (id);
+alter table photo_oblique add constraint UK_a0qmi8htvty1idedoo8dlxf99 unique (id);
     
     
