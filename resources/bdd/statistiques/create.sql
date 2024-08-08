@@ -26,5 +26,5 @@ $do$
 $do$;
 
 CREATE SCHEMA backend_stats AUTHORIZATION georchestra;
-GRANT ALL ON SCHEMA photos_obliques_stats TO stats;
+GRANT ALL ON SCHEMA backend_stats TO stats;
 ALTER USER stats SET search_path TO backend_stats, public;
