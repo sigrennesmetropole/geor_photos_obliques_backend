@@ -15,14 +15,16 @@
  import org.georchestra.photosobliques.core.bean.statistiques.StatistiquesData;
  import org.georchestra.photosobliques.storage.statistiques.converter.StatistiquesAttributeConverter;
 
+ import java.io.Serial;
  import java.io.Serializable;
  import java.time.LocalDateTime;
+ import java.util.Objects;
 
  /**
  * User entity
  */
 
-@Table(name = "statistiques_photos_obliques")
+@Table(name = "statistiques_photos_obliques", schema = "backend_stats")
 @Setter
 @Getter
 @ToString
@@ -31,6 +33,7 @@
 @Entity
 public class StatistiquesEntity implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = 8103560742221958895L;
 
 	@Id
@@ -68,7 +71,7 @@ public class StatistiquesEntity implements Serializable {
 
 		 StatistiquesEntity that = (StatistiquesEntity) o;
 
-		 return id != null ? id.equals(that.id) : that.id == null;
+		 return Objects.equals(id, that.id);
 	 }
 
 	 @Override

@@ -11,9 +11,11 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.locationtech.jts.geom.Geometry;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * User entity
@@ -27,6 +29,7 @@ import java.time.LocalDateTime;
 @Entity
 public class PhotoObliqueEntity implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = 6229807753841014436L;
 
 	@Id
@@ -89,7 +92,7 @@ public class PhotoObliqueEntity implements Serializable {
 
 		if (objectId != entity.objectId)
 			return false;
-		return id != null ? id.equals(entity.id) : entity.id == null;
+		return Objects.equals(id, entity.id);
 	}
 
 	@Override
