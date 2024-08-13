@@ -33,7 +33,7 @@
 		<openapi.jackson.version>0.2.6</openapi.jackson.version>
 		<apache.directory.api.version>2.1.7</apache.directory.api.version>
 		<jsonwebtoken.version>0.12.6</jsonwebtoken.version>
-		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<mapstruct.version>1.6.0</mapstruct.version>
 		<lombok.version>1.18.26</lombok.version>
 		<log4j2.version>2.23.1</log4j2.version>
 		<geotools.version>31.3</geotools.version>
