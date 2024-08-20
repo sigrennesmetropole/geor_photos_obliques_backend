@@ -24,7 +24,7 @@ include:
   - project: 'boost/template-ci/pipelines/common'
     file: 'securite/oss-index/oss-index-template.yml'
   - project: 'bots/trivy-script'
-    file: '/trivy-template-test.yml'    
+    file: '/trivy-template-job.yml'    
 
 # - local: '.docker-build.yml'
 
