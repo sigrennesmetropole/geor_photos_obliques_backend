@@ -20,14 +20,14 @@ import java.util.Objects;
 /**
  * User entity
  */
-@Table(name = "photooblique_emprise", schema = "phototheque")
+@Table(name = "v_photooblique_emprise", schema = "phototheque")
 @Setter
 @Getter
 @ToString
 @NoArgsConstructor
 @SuperBuilder
 @Entity
-public class PhotoObliqueEntity implements Serializable {
+public class  PhotoObliqueEntity implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 6229807753841014436L;
@@ -75,9 +75,6 @@ public class PhotoObliqueEntity implements Serializable {
 	@Column(name = "shape", columnDefinition = "public.geometry")
 	private Geometry shape;
 
-	@Column(name = "objectid")
-	private int objectId;
-
 	@Column(name = "taille_fichier")
 	private Integer fileSize;
 
@@ -90,15 +87,13 @@ public class PhotoObliqueEntity implements Serializable {
 
 		PhotoObliqueEntity entity = (PhotoObliqueEntity) o;
 
-		if (objectId != entity.objectId)
-			return false;
 		return Objects.equals(id, entity.id);
 	}
 
 	@Override
 	public int hashCode() {
 		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + objectId;
+		result = 31 * result;
 		return result;
 	}
 }

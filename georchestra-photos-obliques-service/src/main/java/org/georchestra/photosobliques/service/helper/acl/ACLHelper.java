@@ -2,7 +2,7 @@ package org.georchestra.photosobliques.service.helper.acl;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.georchestra.photosobliques.core.security.AuthenticatedUser;
+import org.georchestra.photosobliques.core.bean.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -25,10 +25,10 @@ public class ACLHelper {
 	 *
 	 * @return connectedUser
 	 */
-	public AuthenticatedUser getAuthenticatedUser() {
+	public User getAuthenticatedUser() {
 
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		AuthenticatedUser result = null;
+		User result = null;
 		if (auth == null) {
 			LOGGER.error("Null authentification");
 		} else {
@@ -36,7 +36,7 @@ public class ACLHelper {
 			if (detail == null) {
 				LOGGER.error("User detail is null");
 			} else {
-				if (detail instanceof AuthenticatedUser authenticatedUser) {
+				if (detail instanceof User authenticatedUser) {
 					result = authenticatedUser;
 				} else {
 					LOGGER.error("Unknown authenticated user {}", auth.getPrincipal());
@@ -47,16 +47,8 @@ public class ACLHelper {
 		return result;
 	}
 
-	public boolean isRestricted() {
-		AuthenticatedUser authenticatedUser = getAuthenticatedUser();
-		if (authenticatedUser != null) {
-			return authenticatedUser.isRestricted();
-		}
-		return false;
-	}
-
 	public String getAuthenticatedUserLogin() {
-		AuthenticatedUser authenticatedUser = getAuthenticatedUser();
+		User authenticatedUser = getAuthenticatedUser();
 		if (authenticatedUser != null) {
 			return authenticatedUser.getLogin();
 		} else {
@@ -66,7 +58,7 @@ public class ACLHelper {
 
 	public boolean hasRole(String roleCode) {
 		boolean result = false;
-		AuthenticatedUser authenticatedUser = getAuthenticatedUser();
+		User authenticatedUser = getAuthenticatedUser();
 		if (authenticatedUser != null && CollectionUtils.isNotEmpty(authenticatedUser.getRoles())) {
 			result = authenticatedUser.getRoles().stream().anyMatch(r -> r.equalsIgnoreCase(roleCode));
 		}
@@ -75,7 +67,7 @@ public class ACLHelper {
 
 	public boolean hasAnyRole(List<String> roleCodes) {
 		boolean result = false;
-		AuthenticatedUser authenticatedUser = getAuthenticatedUser();
+		User authenticatedUser = getAuthenticatedUser();
 		if (authenticatedUser != null && CollectionUtils.isNotEmpty(authenticatedUser.getRoles())) {
 			List<String> lowerRoleCodes = roleCodes.stream().map(String::toLowerCase).toList();
 			result = authenticatedUser.getRoles().stream().anyMatch(r -> lowerRoleCodes.contains(r.toLowerCase()));
@@ -83,30 +75,11 @@ public class ACLHelper {
 		return result;
 	}
 
-	public String getFeatureScope(String featureName) {
-		AuthenticatedUser authenticatedUser = getAuthenticatedUser();
-		if (authenticatedUser != null) {
-			return getAuthenticatedUser().getFeatureScope(featureName);
-		} else {
-			return null;
-		}
-	}
-
 	public List<String> getOrganizations() {
 		List<String> codes = new ArrayList<>();
-		AuthenticatedUser authenticatedUser = getAuthenticatedUser();
-		if (authenticatedUser != null) {
-			if (StringUtils.isNotEmpty(authenticatedUser.getMainOrganization())) {
-				codes.add(authenticatedUser.getMainOrganization());
-			}
-			if (CollectionUtils.isNotEmpty(authenticatedUser.getOrganizations())) {
-				for (String code : authenticatedUser.getOrganizations()) {
-					if (StringUtils.isNotEmpty(code)) {
-						codes.add(code);
-					}
-
-				}
-			}
+		User authenticatedUser = getAuthenticatedUser();
+		if (authenticatedUser != null && StringUtils.isNotEmpty(authenticatedUser.getOrganization())) {
+				codes.add(authenticatedUser.getOrganization());
 		}
 		return codes;
 	}
