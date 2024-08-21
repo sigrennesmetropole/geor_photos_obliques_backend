@@ -8,10 +8,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.georchestra.photosobliques.core.bean.User;
 import org.georchestra.photosobliques.core.bean.statistiques.Statistiques;
-import org.georchestra.photosobliques.core.security.AuthenticatedUser;
-import org.georchestra.photosobliques.facade.controller.configuration.ConfigurationController;
-import org.georchestra.photosobliques.facade.controller.configuration.HealthCheckController;
 import org.georchestra.photosobliques.facade.controller.phototheque.OwnersApiController;
 import org.georchestra.photosobliques.facade.controller.phototheque.PhotosApiController;
 import org.georchestra.photosobliques.facade.controller.phototheque.ProvidersApiController;
@@ -35,7 +33,7 @@ import java.util.*;
 public class FacadeAspect {
 
 	private static final List<Class<?>> ALLOWED_CLASSES = List.of(OwnersApiController.class, PhotosApiController.class,
-			ProvidersApiController.class, YearsApiController.class, ConfigurationController.class, HealthCheckController.class);
+			ProvidersApiController.class, YearsApiController.class);
 
 	private final ACLHelper utilContextHelper;
 
@@ -57,7 +55,7 @@ public class FacadeAspect {
 	public Object profile(final ProceedingJoinPoint pjp) throws Throwable {
 
 		Object output;
-		final AuthenticatedUser authenticatedUser = utilContextHelper.getAuthenticatedUser();
+		final User authenticatedUser = utilContextHelper.getAuthenticatedUser();
 		long startTimeMs = System.currentTimeMillis();
 		try {
 			output = pjp.proceed();
@@ -80,7 +78,7 @@ public class FacadeAspect {
 	}
 
 
-	private void storeAPIStatistics(ProceedingJoinPoint pjp, Object object, AuthenticatedUser authenticatedUser, Long serviceDuration) {
+	private void storeAPIStatistics(ProceedingJoinPoint pjp, Object object, User authenticatedUser, Long serviceDuration) {
 
 		Statistiques statistiques = new Statistiques();
 		statistiques.setWho(authenticatedUser != null ? authenticatedUser.getLogin() : "ANONYMOUS");

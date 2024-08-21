@@ -24,7 +24,7 @@ org.locationtech.jts.geom.Geometry st_intersection(org.locationtech.jts.geom.Geo
 $$;
 
 
-CREATE TABLE if not exists phototheque.photooblique_emprise
+CREATE TABLE if not exists phototheque.v_photooblique_emprise
 (
     id             varchar(30) not null,
     fichier        varchar(50),
@@ -41,15 +41,13 @@ CREATE TABLE if not exists phototheque.photooblique_emprise
     mention        varchar(500),
     commune        varchar(500),
     shape          geometry,
-    objectId       int         not null,
-    format         varchar(15),
     taille_fichier int4,
     type           varchar(150),
     primary key (id)
 );
 
-alter table phototheque.photooblique_emprise
+alter table phototheque.v_photooblique_emprise
     drop constraint if exists UK_a0qmi8htvty1idedoo8dlxf99;
 
-alter table phototheque.photooblique_emprise
+alter table phototheque.v_photooblique_emprise
     add constraint UK_a0qmi8htvty1idedoo8dlxf99 unique (id);
