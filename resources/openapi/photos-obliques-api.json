@@ -102,37 +102,37 @@
 				"tags": [
 					"photos"
 				],
-				"summary": "Recherche photos. Attention, les champs null en base de données ne sont pas retournés.",
-				"description": "Recherche des photos. Attention, les champs null en base de données ne sont pas retournés.",
+				"summary": "Recherche photos",
+				"description": "Recherche des photos",
 				"operationId": "searchPhotos",
 				"parameters": [
 					{
 						"in": "query",
 						"name": "geometry",
+						"description": "Géométrie WKT de l'emprise de recherche",
 						"required": true,
 						"schema": {
-							"type": "string",
-							"description": "Géométrie WKT de l'emprise de recherche"
+							"type": "string"
 						}
 					},
 					{
 						"in": "query",
 						"name": "startDate",
+						"description" : "La date de début de la recherche (les dates null en base de données ne sont pas retournées)",
 						"required": false,
 						"schema": {
 							"type": "integer",
-							"format": "int4",
-							"description": "Date de début de la recherche"
+							"format": "int4"
 						}
 					},
 					{
 						"in": "query",
 						"name": "endDate",
+						"description" : "La date de fin de la recherche (les dates null en base de données ne sont pas retournées)",
 						"required": false,
 						"schema": {
 							"type": "integer",
-							"format": "int4",
-							"description": "Date de fin de la recherche"
+							"format": "int4"
 						}
 					},
 					{
@@ -166,7 +166,7 @@
 					{
 						"in": "query",
 						"name": "offset",
-						"description": "Index de début",
+						"description": "Index de début (Attention, fonctionne seulement avec le champ limit, limit pagine par groupe de x résultats donc offset doit être un multiple de limit pour que la recherche soit cohérente. Exemple : offset=10 et limit=5 donc on souhaite la 3ème page de taille 5 car on demande à partir du 10ème élément)",
 						"required": false,
 						"schema": {
 							"type": "integer",
@@ -176,7 +176,7 @@
 					{
 						"in": "query",
 						"name": "limit",
-						"description": "Nombre de résultats à retourner",
+						"description": "Nombre de résultats par page à retourner (Attention, par défaut c'est toujours la 1ère page qui est retournée)",
 						"required": false,
 						"schema": {
 							"type": "integer",
@@ -186,10 +186,10 @@
 					{
 						"in": "query",
 						"name": "order",
+						"description": "liste des tris à réaliser. Exemple :  code,-libelle",
 						"required": false,
 						"schema": {
-							"type": "string",
-							"description": "liste des tris à réaliser. Exemple :  code,-libelle"
+							"type": "string"
 						}
 					}
 				],
