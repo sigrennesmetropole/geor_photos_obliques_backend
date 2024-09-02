@@ -20,7 +20,7 @@
 		<jdk.cible>17</jdk.cible>
 		<java.version>17</java.version>
 		<!-- Configuration librairies -->
-		<springframework.boot.version>3.3.2</springframework.boot.version>
+		<springframework.boot.version>3.3.3</springframework.boot.version>
 		<commons.io.version>2.16.1</commons.io.version>
 		<commons.collections4.version>4.4</commons.collections4.version>
 		<commons.lang3.version>3.16.0</commons.lang3.version>
