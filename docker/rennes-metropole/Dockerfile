@@ -3,6 +3,7 @@ USER root
 MAINTAINER sigsupport@rennesmetropole.fr
 ENV TZ=Europe/Paris
 
+RUN apt-get update && apt-get upgrade -y 
 RUN mkdir /tmp/jetty
 RUN chmod 777 -R /tmp && chmod o+t -R /tmp
 
@@ -22,7 +23,7 @@ CMD [ "sh", "-c", "exec java --add-opens java.base/java.util=ALL-UNNAMED \
       -Duser.language=fr -Duser.country=FR \
       -Djava.io.tmpdir=/tmp/jetty \
       -Dgeorchestra.datadir=/etc/georchestra \
-      -Dspring.config.additional-location=file:/etc/georchestra/config/ \
+      -Dspring.config.additional-location=file:/etc/georchestra/ \
       ${ADD_JAVA_OPTS}                                   \
       -Xmx${XMX:-1G} -Xms${XMX:-1G}                      \
       -jar /opt/photosobliques/service.jar" ]  
