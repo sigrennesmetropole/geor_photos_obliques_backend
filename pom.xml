@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.georchestra</groupId>
 	<artifactId>georchestra-photos-obliques-backend</artifactId>
-	<version>1.0.1</version>
+	<version>1.1.0</version>
 	<packaging>pom</packaging>
 	<name>georchestra-photos-obliques-backend</name>
 	<description>Plugin Georchestra Photos Obliques Backend</description>
@@ -20,29 +20,27 @@
 		<jdk.cible>17</jdk.cible>
 		<java.version>17</java.version>
 		<!-- Configuration librairies -->
-		<springframework.boot.version>3.3.0</springframework.boot.version>
+		<springframework.boot.version>3.3.3</springframework.boot.version>
 		<commons.io.version>2.16.1</commons.io.version>
 		<commons.collections4.version>4.4</commons.collections4.version>
-		<commons.lang3.version>3.14.0</commons.lang3.version>
+		<commons.lang3.version>3.16.0</commons.lang3.version>
 		<httpclient.version>4.5.14</httpclient.version>
 		<json.simple.version>1.1.1</json.simple.version>
 		<springfox.version>3.0.0</springfox.version>
 		<openapi.version>1.8.0</openapi.version>
-		<openapi-web.version>2.5.0</openapi-web.version>
-		<openapi.plugin.version>7.6.0</openapi.plugin.version>
+		<openapi-web.version>2.6.0</openapi-web.version>
+		<openapi.plugin.version>7.8.0</openapi.plugin.version>
 		<openapi.jackson.version>0.2.6</openapi.jackson.version>
-		<apache.directory.api.version>2.1.6</apache.directory.api.version>
-		<jsonwebtoken.version>0.12.5</jsonwebtoken.version>
-		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<apache.directory.api.version>2.1.7</apache.directory.api.version>
+		<jsonwebtoken.version>0.12.6</jsonwebtoken.version>
+		<mapstruct.version>1.6.0</mapstruct.version>
 		<lombok.version>1.18.26</lombok.version>
 		<log4j2.version>2.23.1</log4j2.version>
-		<geotools.version>31.1</geotools.version>
+		<geotools.version>31.3</geotools.version>
 		<javamelody.version>2.2.0</javamelody.version>
 		<commons-cli.version>1.7.0</commons-cli.version>
 		<commons.text.version>1.12.0</commons.text.version>
-		<opencsv.version>5.9</opencsv.version>
 		<freemarker.version>2.3.33</freemarker.version>
-		<xdocreport.version>2.0.6</xdocreport.version>
 		<tika.version>2.9.2</tika.version>
 		<jackson-datatype-threetenbp.version>2.15.2</jackson-datatype-threetenbp.version>
 		<servlet-api.version>2.5</servlet-api.version>
@@ -55,17 +53,17 @@
 		<activiti.version>7.1.0.M6</activiti.version>
 		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
 		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-		<maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+		<maven-surefire-plugin.version>3.5.0</maven-surefire-plugin.version>
 		<compiler.plugin.version>3.13.0</compiler.plugin.version>
 		<ant.plugin.version>3.1.0</ant.plugin.version>
-		<hibernate-spatial.version>6.5.2.Final</hibernate-spatial.version>
+		<hibernate-spatial.version>6.6.0.Final</hibernate-spatial.version>
 		<ehcache.version>3.10.8</ehcache.version>
 		<jaxb-api.version>2.3.1</jaxb-api.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 		<javax.annotation-api.version>1.3.2</javax.annotation-api.version>
 		<jaxb-runtime.version>4.0.5</jaxb-runtime.version>
 		<jaxb-impl.version>4.0.5</jaxb-impl.version>
-		<swagger.version>2.2.22</swagger.version>
+		<swagger.version>2.2.23</swagger.version>
 		<graalvm.version>23.0.4</graalvm.version>
 		<httpclient5.version>5.3.1</httpclient5.version>
 		<!-- Configuration SONAR -->
@@ -84,8 +82,8 @@
 		</sonar.cpd.exclusions>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<plugin.dependency.check.maven.version>5.3.2</plugin.dependency.check.maven.version>
-		<plugin.maven-jar-plugin.version>3.4.1</plugin.maven-jar-plugin.version>
-		<plugin.maven-javadoc-plugin.version>3.7.0</plugin.maven-javadoc-plugin.version>
+		<plugin.maven-jar-plugin.version>3.4.2</plugin.maven-jar-plugin.version>
+		<plugin.maven-javadoc-plugin.version>3.10.0</plugin.maven-javadoc-plugin.version>
 		<plugin.maven-assembly-plugin.version>3.7.1</plugin.maven-assembly-plugin.version>
 		<h2gis.org.version>2.2.1</h2gis.org.version>
 		<spring-boot-test.version>3.1.5</spring-boot-test.version>
@@ -394,60 +392,11 @@
 				<artifactId>commons-cli</artifactId>
 				<version>${commons-cli.version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
-			<dependency>
-				<groupId>com.opencsv</groupId>
-				<artifactId>opencsv</artifactId>
-				<version>${opencsv.version}</version>
-			</dependency>
 			<!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
 			<dependency>
 				<groupId>org.freemarker</groupId>
 				<artifactId>freemarker</artifactId>
 				<version>${freemarker.version}</version>
-			</dependency>
-			<!--
-			https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.document -->
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.xdocreport.document</artifactId>
-				<version>${xdocreport.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.xdocreport.document.docx</artifactId>
-				<version>${xdocreport.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.xdocreport.converter.docx.xwpf</artifactId>
-				<version>${xdocreport.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.xdocreport.template.freemarker</artifactId>
-				<version>${xdocreport.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.odfdom.converter.pdf</artifactId>
-				<version>${xdocreport.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.odfdom.converter.core</artifactId>
-				<version>${xdocreport.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>xml-apis</groupId>
-						<artifactId>xml-apis</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
-				<version>${xdocreport.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openapitools</groupId>

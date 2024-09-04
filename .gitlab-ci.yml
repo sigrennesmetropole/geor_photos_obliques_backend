@@ -24,7 +24,7 @@ include:
   - project: 'boost/template-ci/pipelines/common'
     file: 'securite/oss-index/oss-index-template.yml'
   - project: 'bots/trivy-script'
-    file: '/trivy-template-test.yml'    
+    file: '/trivy-template-job.yml'    
 
 # - local: '.docker-build.yml'
 
@@ -246,4 +246,13 @@ photosobliquesapi:deploy:master:
       - open/master
   variables:
     TARGET_ENV: REN1VML0095    
- 
+
+trivyscan:back: 
+  extends: 
+    - .trivy-scan
+  stage: docker
+  variables:
+    TRIVY_DOCKER_SCAN: glregistry.boost.open.global/rennes-metropole/photosobliques/geor_photos_obliques_backend/rennes-metropole:open-develop
+  only:
+    refs:
+      - open/develop

@@ -6,7 +6,21 @@ Backend du module Photos Obliques de Rennes Métropole
 
 L'application nécessite la création de deux schémas distincts dans la base de données. 
 Le premier, **phototheque**, contient toutes les informations sur les photos. 
-Le second, **photos_obliques_stats**, permet de stocker les différentes statistiques générées par le backend de l'application.
+Le second, **backend_stats**, permet de stocker les différentes statistiques générées par le backend de l'application.
+
+Ces 2 schémas utilisent respectivement des rôles nommés "photos_obliques" et "georchestra".
+Si vous ne les posséder pas, vous pouvez :
+- les créer dans votre base de données et leur donner tous les privilèges.
+- sinon remplacer dans les scripts *[create.sql](resources/bdd/phototheque/create.sql)* et
+*[create.sql](resources/bdd/statistiques/create.sql)* la ligne de création avec d'autres rôles comme ici
+"CREATE SCHEMA le_schema AUTHORIZATION votre_nouveau_role;"
+
+**/!\L'utilisation d'une base de données nommée "geochestra" avec les rôles propriétaires "photos_obliques" et "georchestra" est recommandée pour l'utilisation de plugin mais n'est pas obligatoire.**
+
+Vous pouvez ultérieurement ajouter des rôles et leur céder des privilèges avec des GRANT comme ici:
+- GRANT ALL ON TABLE photos_obliques_stats.statistiques TO votre_role;
+
+Cependant soyez prudent car cela peut créer des failles de sécurité si les permissions ne sont pas attribuées avec précaution.
 
 ### I.1 Phototheque
 
@@ -24,10 +38,10 @@ Le script *[initialisation.sql](resources/bdd/phototheque/initialisation.sql)* p
 
 ### I.2 Statistiques
 
-De la même façon que pour le schéma phototheque, éxécutez les scripts du dossier 'resources/bdd/phototheque' pour créer le schéma **photos_obliques_stats** 
+De la même façon que pour le schéma phototheque, éxécutez les scripts du dossier 'resources/bdd/phototheque' pour créer le schéma **backend_stats** 
 puis initialiser la table *statiques*.
 
-Les ressources nécessaires à la création des éléments relatifs à **photos_obliques_stats** se trouvent dans le dossier *resources/bdd/statistiques*.
+Les ressources nécessaires à la création des éléments relatifs à **backend_stats** se trouvent dans le dossier *resources/bdd/statistiques*.
 
 Le script *[create.sql](resources/bdd/statistiques/create.sql)* permet de créer :
 
@@ -36,8 +50,13 @@ Le script *[create.sql](resources/bdd/statistiques/create.sql)* permet de créer
 
 Vous pouvez modifier ce script pour changer le nom d'utilisateur et le mot de passe par défaut.
 
+Le user configuré pour accéder à la source de données des statistiques (spring.stats.datasource.username), doit être configuré de manière à ce que le schéma dans lequel se trouve la table statistique soit son schéma par défaut. Ceci peut-être réalisé comme suit :
+- ALTER USER stats SET search_path TO backend_stats, public;
 
-Le script *[initialisation.sql](resources/bdd/statistiques/initialisation.sql)* permet de créer la table *statistiques* dans le schéma précédemment créé.
+Vérifiez que le fichier *[create.sql](resources/bdd/statistiques/create.sql)* qui contient cette ligne est donc à jour vis-à-vis de votre infrastructure.
+
+Le script *[initialisation.sql](resources/bdd/statistiques/initialisation.sql)* permet de créer la table *statistiques* 
+dans le schéma précédemment créé.
 
 ## II Configuration de l'application
 
@@ -53,7 +72,7 @@ Les propriétés suivantes permettent de configurer l'accès aux 2 schémas util
   spring.phototheque.datasource.password=<à définir>
 
   spring.stats.datasource.jdbc-url=jdbc:postgresql://${pgsqlHost}:${pgsqlPort}/${pgsqlDatabase}?currentSchema=stats&ApplicationName=georchestra
-  spring.stats.datasource.username=<username en accès sur le schéma photos_obliques_stats>
+  spring.stats.datasource.username=<username en accès sur le schéma backend_stats>
   spring.stats.datasource.password=<à définir>
 
 ```
