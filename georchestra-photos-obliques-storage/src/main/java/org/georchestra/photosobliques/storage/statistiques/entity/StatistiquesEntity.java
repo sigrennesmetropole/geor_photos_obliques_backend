@@ -24,7 +24,7 @@
  * User entity
  */
 
-@Table(name = "statistiques_photos_obliques", schema = "backend_stats")
+@Table(name = "statistiques_photos_obliques")
 @Setter
 @Getter
 @ToString
