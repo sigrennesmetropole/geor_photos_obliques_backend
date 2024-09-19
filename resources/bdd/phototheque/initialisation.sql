@@ -48,7 +48,7 @@ SELECT photooblique_emprise.id,
        photooblique_emprise.mention,
        photooblique_emprise.commune,
        photooblique_emprise.type,
-       st_centroid(photooblique_emprise.shape)::geometry(Point, 3948) AS shape,
+       photooblique_emprise.shape AS shape,
        photooblique_emprise.taille_fichier
 FROM phototheque.photooblique_emprise;
 

@@ -20,7 +20,7 @@ import java.util.Objects;
 /**
  * User entity
  */
-@Table(name = "v_photooblique_emprise", schema = "phototheque")
+@Table(name = "v_photooblique_emprise")
 @Setter
 @Getter
 @ToString
