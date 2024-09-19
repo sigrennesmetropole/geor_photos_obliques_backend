@@ -1,6 +1,3 @@
-CREATE SCHEMA if not exists phototheque;
-GRANT ALL ON SCHEMA phototheque TO consult;
-
 CREATE ALIAS if not exists public.st_intersects AS $$
 boolean st_intersects(org.locationtech.jts.geom.Geometry geom1, org.locationtech.jts.geom.Geometry geom2) throws java.sql.SQLException { try {return org.h2gis.functions.spatial.predicates.ST_Intersects.isIntersects(geom1, geom2);} catch (java.sql.SQLException ignored) {}; return false;}
 $$;
@@ -24,7 +21,7 @@ org.locationtech.jts.geom.Geometry st_intersection(org.locationtech.jts.geom.Geo
 $$;
 
 
-CREATE TABLE if not exists phototheque.v_photooblique_emprise
+CREATE TABLE if not exists v_photooblique_emprise
 (
     id             varchar(30) not null,
     fichier        varchar(50),
@@ -46,8 +43,5 @@ CREATE TABLE if not exists phototheque.v_photooblique_emprise
     primary key (id)
 );
 
-alter table phototheque.v_photooblique_emprise
-    drop constraint if exists UK_a0qmi8htvty1idedoo8dlxf99;
-
-alter table phototheque.v_photooblique_emprise
-    add constraint UK_a0qmi8htvty1idedoo8dlxf99 unique (id);
+alter table v_photooblique_emprise drop constraint if exists UK_a0qmi8htvty1idedoo8dlxf99;
+alter table v_photooblique_emprise add constraint UK_a0qmi8htvty1idedoo8dlxf99 unique (id);

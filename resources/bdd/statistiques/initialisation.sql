@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS backend_stats.statistiques_photos_obliques
 );
 
 
-GRANT ALL ON SEQUENCE backend_stats.statistiques_id_seq TO stats;
+GRANT ALL ON SEQUENCE backend_stats.statistiques_photos_obliques_id_seq TO stats;
 GRANT ALL ON TABLE backend_stats.statistiques_photos_obliques TO stats;
