@@ -71,7 +71,7 @@ Les propriétés suivantes permettent de configurer l'accès aux 2 schémas util
   spring.phototheque.datasource.username=<username en consultation sur le schema photos_obliques>
   spring.phototheque.datasource.password=<à définir>
 
-  spring.stats.datasource.jdbc-url=jdbc:postgresql://${pgsqlHost}:${pgsqlPort}/${pgsqlDatabase}?currentSchema=stats&ApplicationName=georchestra
+  spring.stats.datasource.jdbc-url=jdbc:postgresql://${pgsqlHost}:${pgsqlPort}/${pgsqlDatabase}?ApplicationName=georchestra
   spring.stats.datasource.username=<username en accès sur le schéma backend_stats>
   spring.stats.datasource.password=<à définir>
 

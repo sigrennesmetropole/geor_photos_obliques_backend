@@ -1,6 +1,9 @@
 package org.georchestra.photosobliques.service.mapper;
 
-import com.ibm.icu.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.georchestra.photosobliques.core.bean.PhotoOblique;
 import org.georchestra.photosobliques.service.sm.configuration.ConfigurationService;
 import org.georchestra.photosobliques.storage.phototheque.entity.PhotoObliqueEntity;
@@ -12,9 +15,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author NCA20245

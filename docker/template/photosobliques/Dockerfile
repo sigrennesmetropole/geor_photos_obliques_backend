@@ -1,4 +1,4 @@
-FROM openjdk:17.0.2-jdk-bullseye
+FROM eclipse-temurin:17.0.14_7-jdk-jammy
 USER root
 MAINTAINER sigsupport@rennesmetropole.fr
 ENV TZ=Europe/Paris

@@ -43,7 +43,9 @@ stages:
   - pre_docker
   - docker
   - deploy
+  - delivering
 
+## #####
 # Build job with maven plugin execution policies define in parent pom
 photosobliquesapi:compile:
   script:
@@ -84,6 +86,8 @@ photosobliquesapi:test-backend:
         - '**/target/surefire-reports/*.txt'        
   interruptible: true
 
+## #####
+# Package
 .package:
   stage: package
   cache:
@@ -113,6 +117,7 @@ photosobliquesapi:package-backend:
       - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**/*.jar'
       - '$CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/**/*.zip'
 
+## #####
 # Sonar code quality analysis - note a full test coverage report through a jacoco.exec merged file in base project folder
 .sonar:
   stage: test
@@ -157,7 +162,8 @@ photosobliquesapi:sonar:master:
       - open/master
       - master
 
-# Copie des artifacts dans les répertoires des images dockers
+## #####
+# Images
 photosobliquesapi:pre_docker:
   stage: pre_docker
   needs:
@@ -170,6 +176,7 @@ photosobliquesapi:pre_docker:
       - open/master
       - open/develop
       - /^release.*/
+      - /.*karbonification.*/ 
   script:
     - ls -l $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/
     - cp $CI_PROJECT_DIR/georchestra-photos-obliques-facade/target/georchestra-photos-obliques-facade.jar $CI_PROJECT_DIR/docker/rennes-metropole
@@ -190,7 +197,7 @@ photosobliquesapi:docker2:build:
   dependencies:
     - photosobliquesapi:pre_docker
   rules:
-    - if: '$CI_COMMIT_BRANCH =~ /.*develop/ || $CI_COMMIT_BRANCH =~ /.*master/ || $CI_COMMIT_BRANCH =~ /^release.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /.*develop/ || $CI_COMMIT_BRANCH =~ /.*master/ || $CI_COMMIT_BRANCH =~ /^release.*/ || $CI_COMMIT_BRANCH =~ /.*karbonification.*/'
   timeout: 1h
   artifacts:
     paths:
@@ -201,6 +208,8 @@ photosobliquesapi:docker2:build:
       - '$CI_PROJECT_DIR/docker/**/**.zip'
       - '$CI_PROJECT_DIR/docker/**/**.jar'  
 
+## #####
+# Déploiement iaas
 .photosobliquesapi:deploy:
   stage: deploy
   tags: 
@@ -210,6 +219,7 @@ photosobliquesapi:docker2:build:
     - photosobliquesapi:docker2:build
   dependencies:
     - photosobliquesapi:docker2:build
+  when: manual
   before_script:
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$ansible_private_key" | base64 -d)    
@@ -245,8 +255,77 @@ photosobliquesapi:deploy:master:
     refs:
       - open/master
   variables:
-    TARGET_ENV: REN1VML0095    
+    TARGET_ENV: REN1VML0095   
 
+## #####
+# Déploiement Karbon
+.photosobliquesapi:deploy-karbon:prepare:
+  stage: pre_docker
+  script:
+    - echo "send automation to georchestra deploiement"
+  artifacts:
+    name: photosobliques-karbon-${TARGET_ENV}
+    paths:
+      - '$CI_PROJECT_DIR/automation/**'
+
+photosobliquesapi:deploy-karbon:prepare:dev:
+  extends: .photosobliquesapi:deploy-karbon:prepare
+  only:
+    refs:
+      - open/develop
+      - /.*karbonification.*/ 
+  variables:
+    TARGET_ENV: dev
+    
+.photosobliquesapi:deploy-karbon:
+  stage: deploy
+  trigger: 
+    project: rennes-metropole/georchestra/georchestra-service-deployment
+    strategy: depend
+    branch: master
+  variables:
+    TRIGGERED_BY: photosobliques
+    PARENT_PIPELINE_ID: $CI_PIPELINE_ID
+  
+photosobliquesapi:deploy-karbon:dev:
+  extends: .photosobliquesapi:deploy-karbon
+  needs:
+    - job: photosobliquesapi:deploy-karbon:prepare:dev
+      artifacts: true
+  only:
+    refs:
+      - open/develop
+      - /.*karbonification.*/      
+  variables:
+    TARGET_ENV: dev
+    FORCE_POD: "true"
+    PARENT_COMMIT_BRANCH: $CI_COMMIT_BRANCH
+    PARENT_SERVICE_LOGIN: $SERVICE_LOGIN
+    PARENT_SERVICE_TOKEN: $SERVICE_TOKEN
+    PARENT_SERVICE_ACCESS_TOKEN: $SERVICE_ACCESS_TOKEN
+    PARENT_PROJECT_ID: $CI_PROJECT_ID
+    PARENT_STAGE_PREFIX: photosobliquesapi:deploy-karbon:prepare
+    
+photosobliquesapi:deploy-karbon:qua:
+  extends: .photosobliquesapi:deploy-karbon
+  needs:
+    - job: photosobliquesapi:deploy-karbon:prepare:dev
+      artifacts: true
+  only:
+    refs:
+      - open/master
+      - /.*karbonification.*/      
+  variables:
+    TARGET_ENV: dev
+    FORCE_POD: "true"
+    PARENT_COMMIT_BRANCH: $CI_COMMIT_BRANCH
+    PARENT_SERVICE_LOGIN: $SERVICE_LOGIN
+    PARENT_SERVICE_TOKEN: $SERVICE_TOKEN
+    PARENT_SERVICE_ACCESS_TOKEN: $SERVICE_ACCESS_TOKEN
+    PARENT_PROJECT_ID: $CI_PROJECT_ID
+    PARENT_STAGE_PREFIX: photosobliquesapi:deploy-karbon:prepare
+  when: manual
+    
 trivyscan:back: 
   extends: 
     - .trivy-scan
@@ -256,3 +335,23 @@ trivyscan:back:
   only:
     refs:
       - open/develop
+
+
+## Livraison Github
+push-to-github:
+  stage: delivering
+  dependencies:
+    - photosobliquesapi:docker2:build
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+  script:
+    - cd ci
+    - apt install -y rsync
+    - chmod +x push-to-github.sh
+    - ./push-to-github.sh
+  variables:
+    SOURCE_REPOSITORY: $CI_PROJECT_DIR
+    # Les variables GITHUB_RM_ACCOUNT, GITHUB_RM_LOGIN et GIT_TOKEN sont à définir manuellement avant de lancer le job
+    GIT_REMOTE: "https://$GITHUB_RM_ACCOUNT:$GIT_TOKEN@github.com/sigrennesmetropole/geor_photos_obliques_backend.git"
+    COMMIT_MESSAGE: $GITHUB_COMMIT_MESSAGE

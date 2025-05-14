@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.georchestra</groupId>
         <artifactId>georchestra-photos-obliques-backend</artifactId>
-        <version>1.1.1</version>
+        <version>1.2.0</version>
     </parent>
     <artifactId>georchestra-photos-obliques-service</artifactId>
     <name>georchestra-photos-obliques-service</name>
@@ -121,16 +121,8 @@
             <artifactId>gson</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.graalvm.js</groupId>
-            <artifactId>js-scriptengine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.graalvm.js</groupId>
-            <artifactId>js</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-        </dependency>
+        </dependency>        
     </dependencies>
 </project>

@@ -1,3 +1,4 @@
 /.classpath
 /.project
 /target/
+/.m2/repository/**

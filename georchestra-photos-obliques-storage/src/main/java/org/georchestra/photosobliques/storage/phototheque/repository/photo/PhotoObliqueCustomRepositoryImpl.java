@@ -172,17 +172,17 @@ public class PhotoObliqueCustomRepositoryImpl
 
         CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
 
-        CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
 
         Root<PhotoObliqueEntity> searchRoot = query.from(PhotoObliqueEntity.class);
 
         buildQueryFromSeachCriteria(searchCriteria, tolerence, builder, query, searchRoot);
 
-        query.select(builder.count(searchRoot).as(Integer.class));
+        query.select(builder.count(searchRoot));
 
-        TypedQuery<Integer> typedQuery = getEntityManager().createQuery(query);
-
-        return typedQuery.getSingleResult();
+        TypedQuery<Long> typedQuery = getEntityManager().createQuery(query);
+        // étrange comportement des tests suite à une modification des librairies spring
+        return typedQuery.getSingleResult().intValue();
     }
 
     /*

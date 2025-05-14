@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.georchestra</groupId>
 	<artifactId>georchestra-photos-obliques-backend</artifactId>
-	<version>1.1.1</version>
+	<version>1.2.0</version>
 	<packaging>pom</packaging>
 	<name>georchestra-photos-obliques-backend</name>
 	<description>Plugin Georchestra Photos Obliques Backend</description>
@@ -20,52 +20,52 @@
 		<jdk.cible>17</jdk.cible>
 		<java.version>17</java.version>
 		<!-- Configuration librairies -->
-		<springframework.boot.version>3.3.3</springframework.boot.version>
-		<commons.io.version>2.16.1</commons.io.version>
-		<commons.collections4.version>4.4</commons.collections4.version>
-		<commons.lang3.version>3.16.0</commons.lang3.version>
+		<springframework.boot.version>3.4.3</springframework.boot.version>
+		<commons.io.version>2.19.0</commons.io.version>
+		<commons.collections4.version>4.5.0</commons.collections4.version>
+		<commons.lang3.version>3.17.0</commons.lang3.version>
 		<httpclient.version>4.5.14</httpclient.version>
 		<json.simple.version>1.1.1</json.simple.version>
 		<springfox.version>3.0.0</springfox.version>
 		<openapi.version>1.8.0</openapi.version>
-		<openapi-web.version>2.6.0</openapi-web.version>
-		<openapi.plugin.version>7.8.0</openapi.plugin.version>
+		<openapi-web.version>2.8.5</openapi-web.version>
+		<openapi.plugin.version>7.12.0</openapi.plugin.version>
 		<openapi.jackson.version>0.2.6</openapi.jackson.version>
 		<apache.directory.api.version>2.1.7</apache.directory.api.version>
 		<jsonwebtoken.version>0.12.6</jsonwebtoken.version>
-		<mapstruct.version>1.6.0</mapstruct.version>
+		<mapstruct.version>1.6.3</mapstruct.version>
 		<lombok.version>1.18.26</lombok.version>
-		<log4j2.version>2.23.1</log4j2.version>
-		<geotools.version>31.3</geotools.version>
-		<javamelody.version>2.2.0</javamelody.version>
+		<log4j2.version>2.24.3</log4j2.version>
+		<geotools.version>32.2</geotools.version>
+		<javamelody.version>2.4.0</javamelody.version>
 		<commons-cli.version>1.7.0</commons-cli.version>
-		<commons.text.version>1.12.0</commons.text.version>
-		<freemarker.version>2.3.33</freemarker.version>
-		<tika.version>2.9.2</tika.version>
-		<jackson-datatype-threetenbp.version>2.15.2</jackson-datatype-threetenbp.version>
+		<commons.text.version>1.13.1</commons.text.version>
+		<freemarker.version>2.3.34</freemarker.version>
+		<tika.version>3.1.0</tika.version>
+		<jackson-datatype-threetenbp.version>2.18.2</jackson-datatype-threetenbp.version>
 		<servlet-api.version>2.5</servlet-api.version>
 		<findbugs.version>3.0.2</findbugs.version>
-		<bouncy.version>1.78.1</bouncy.version>
+		<bouncy.version>1.80</bouncy.version>
 		<jasig.cas.client.version>3.6.4</jasig.cas.client.version>
-		<nimbus.jose.jwt.version>9.39.3</nimbus.jose.jwt.version>
+		<nimbus.jose.jwt.version>10.0.1</nimbus.jose.jwt.version>
 		<s3.version>2.5.0</s3.version>
 		<gson.version>2.10.1</gson.version>
 		<activiti.version>7.1.0.M6</activiti.version>
 		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
 		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-		<maven-surefire-plugin.version>3.5.0</maven-surefire-plugin.version>
-		<compiler.plugin.version>3.13.0</compiler.plugin.version>
+		<maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+		<compiler.plugin.version>3.14.0</compiler.plugin.version>
 		<ant.plugin.version>3.1.0</ant.plugin.version>
-		<hibernate-spatial.version>6.6.0.Final</hibernate-spatial.version>
+		<hibernate-spatial.version>6.6.12.Final</hibernate-spatial.version>
 		<ehcache.version>3.10.8</ehcache.version>
 		<jaxb-api.version>2.3.1</jaxb-api.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 		<javax.annotation-api.version>1.3.2</javax.annotation-api.version>
 		<jaxb-runtime.version>4.0.5</jaxb-runtime.version>
 		<jaxb-impl.version>4.0.5</jaxb-impl.version>
-		<swagger.version>2.2.23</swagger.version>
+		<swagger.version>2.2.29</swagger.version>
 		<graalvm.version>23.0.4</graalvm.version>
-		<httpclient5.version>5.3.1</httpclient5.version>
+		<httpclient5.version>5.4.2</httpclient5.version>
 		<!-- Configuration SONAR -->
 		<sonar.projectKey>${env.SONAR_KEY}${project.artifactId}</sonar.projectKey>
 		<sonar.projectName>${project.artifactId}</sonar.projectName>
@@ -83,7 +83,7 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<plugin.dependency.check.maven.version>5.3.2</plugin.dependency.check.maven.version>
 		<plugin.maven-jar-plugin.version>3.4.2</plugin.maven-jar-plugin.version>
-		<plugin.maven-javadoc-plugin.version>3.10.0</plugin.maven-javadoc-plugin.version>
+		<plugin.maven-javadoc-plugin.version>3.11.2</plugin.maven-javadoc-plugin.version>
 		<plugin.maven-assembly-plugin.version>3.7.1</plugin.maven-assembly-plugin.version>
 		<h2gis.org.version>2.2.1</h2gis.org.version>
 		<spring-boot-test.version>3.1.5</spring-boot-test.version>
@@ -228,57 +228,7 @@
 				<artifactId>javax.annotation-api</artifactId>
 				<version>${javax.annotation-api.version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/org.apache.jclouds.api/ec2 -->
-			<dependency>
-				<groupId>org.apache.jclouds.api</groupId>
-				<artifactId>s3</artifactId>
-				<version>${s3.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.jclouds</groupId>
-				<artifactId>jclouds-blobstore</artifactId>
-				<version>${s3.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>com.google.code.gson</groupId>
-						<artifactId>gson</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.sun.xml.bind</groupId>
-						<artifactId>jaxb-impl</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.jclouds</groupId>
-				<artifactId>jclouds-allblobstore</artifactId>
-				<version>${s3.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.jclouds.driver</groupId>
-				<artifactId>jclouds-netty</artifactId>
-				<version>${s3.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.jclouds.driver</groupId>
-				<artifactId>jclouds-apachehc</artifactId>
-				<version>${s3.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.jclouds.driver</groupId>
-				<artifactId>jclouds-log4j</artifactId>
-				<version>${s3.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.jclouds.driver</groupId>
-				<artifactId>jclouds-slf4j</artifactId>
-				<version>${s3.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.code.gson</groupId>
-				<artifactId>gson</artifactId>
-				<version>${gson.version}</version>
-			</dependency>
+			
 			<dependency>
 				<groupId>io.springfox</groupId>
 				<artifactId>springfox-boot-starter</artifactId>
@@ -369,23 +319,11 @@
 				<artifactId>jjwt</artifactId>
 				<version>${jsonwebtoken.version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt -->
-			<dependency>
-				<groupId>com.nimbusds</groupId>
-				<artifactId>nimbus-jose-jwt</artifactId>
-				<version>${nimbus.jose.jwt.version}</version>
-			</dependency>
 			<!-- Map Struct -->
 			<dependency>
 				<groupId>org.mapstruct</groupId>
 				<artifactId>mapstruct</artifactId>
 				<version>${mapstruct.version}</version>
-			</dependency>
-			<!-- Melody supervision VM -->
-			<dependency>
-				<groupId>net.bull.javamelody</groupId>
-				<artifactId>javamelody-spring-boot-starter</artifactId>
-				<version>${javamelody.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-cli</groupId>
@@ -438,21 +376,6 @@
 				<artifactId>json-simple</artifactId>
 				<version>${json.simple.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.activiti</groupId>
-				<artifactId>activiti-spring-boot-starter</artifactId>
-				<version>${activiti.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.graalvm.js</groupId>
-				<artifactId>js</artifactId>
-				<version>${graalvm.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.graalvm.js</groupId>
-				<artifactId>js-scriptengine</artifactId>
-				<version>${graalvm.version}</version>
-			</dependency>
 			<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
@@ -477,7 +400,7 @@
 			<dependency>
 				<groupId>org.orbisgis</groupId>
 				<artifactId>h2gis</artifactId>
-				<version>2.2.1</version>
+				<version>2.2.3</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -21,7 +21,7 @@ jobs:
         java-version: '17.x'
 
     - name: "Maven repository caching"
-      uses: actions/cache@v1
+      uses: actions/cache@v4
       with:
         path: ~/.m2/repository
         key: photosobliques-${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -30,7 +30,7 @@ jobs:
 
     - name: "Calculating docker image tag"
       id: version
-      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+      run: echo "VERSION=$(echo $GITHUB_REF | cut -d / -f 3)" >> $GITHUB_OUTPUT
 
     - name: "Build a docker image for back-office"
       run: mvn -B clean package -Pdocker,prod -DskipTests -DskipDockerPush -DdockerImageName=sigrennesmetropole/geor_photos_obliques_backend:${{ steps.version.outputs.VERSION }}
