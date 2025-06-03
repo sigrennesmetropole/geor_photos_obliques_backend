@@ -125,7 +125,7 @@ server.trustcert.keystore.password=<mot de passe du keystore>
 server.trustcert.keystore.path=/etc/georchestra/
 server.trustcert.keystore.cert=photobliques.crt
 server.trustcert.keystore.alias=certificat-photobliques
-server.trustcert.keystore.store=/usr/local/openjdk-11/lib/security/cacerts
+server.trustcert.keystore.store=/opt/java/openjdk/lib/security/cacerts
 server.trustcert.keystore.password=changeit
 ```
 
